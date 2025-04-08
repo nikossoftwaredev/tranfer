@@ -2,6 +2,8 @@ import { Users, Briefcase } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "../../lib/utils";
+import { useTranslations } from "next-intl";
+import SectionHeading from "../ui/SectionHeading";
 
 type VehicleProps = {
   image: string;
@@ -22,6 +24,8 @@ const VehicleCard = ({
   features,
   tags = [],
 }: VehicleProps) => {
+  const t = useTranslations("Fleet.card");
+
   return (
     <div className="bg-background border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
       {/* Vehicle Image */}
@@ -66,7 +70,7 @@ const VehicleCard = ({
         </div>
 
         <div className="border-t border-border pt-4">
-          <h4 className="text-sm font-medium mb-2">Features:</h4>
+          <h4 className="text-sm font-medium mb-2">{t("features")}:</h4>
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-1 text-sm text-muted-foreground">
             {features.map((feature, index) => (
               <li key={index} className="flex items-center gap-1">
@@ -87,7 +91,7 @@ const VehicleCard = ({
             "bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
           )}
         >
-          Book This Vehicle
+          {t("bookButton")}
         </Link>
       </div>
     </div>
@@ -95,6 +99,8 @@ const VehicleCard = ({
 };
 
 const FleetSection = () => {
+  const t = useTranslations("Fleet");
+
   const vehicles = [
     {
       image: "/images/fleet/mercedes-s-class.png",
@@ -149,15 +155,11 @@ const FleetSection = () => {
   return (
     <section id="fleet" className="section-padding bg-muted">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Our Greek Luxury Fleet
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Experience premium transportation throughout Greece with our
-            exceptional collection of meticulously maintained vehicles.
-          </p>
-        </div>
+        <SectionHeading
+          title={t("title")}
+          description={t("description")}
+          className="mb-12"
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {vehicles.map((vehicle, index) => (

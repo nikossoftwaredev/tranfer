@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Clock } from "lucide-react";
 import { tours } from "../../types/tours";
+import { useTranslations, useLocale } from "next-intl";
+import SectionHeading from "../ui/SectionHeading";
 
 type TourCardProps = {
   title: string;
@@ -20,9 +22,12 @@ const TourCard = ({
   price,
   slug,
 }: TourCardProps) => {
+  const t = useTranslations("Tours.card");
+  const locale = useLocale();
+
   return (
     <Link
-      href={`/tour/${slug}`}
+      href={`/${locale}/tour/${slug}`}
       className="bg-background rounded-lg overflow-hidden border border-border hover:bg-background/60 hover:border-primary/50 transition-colors flex flex-col h-full"
     >
       {/* Tour Image */}
@@ -39,7 +44,7 @@ const TourCard = ({
         {/* Duration Badge */}
         <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm flex items-center">
           <Clock className="h-3.5 w-3.5 mr-1" />
-          {duration} hours
+          {duration} {t("hours")}
         </div>
       </div>
 
@@ -54,7 +59,7 @@ const TourCard = ({
         <div className="flex justify-between items-center">
           <span className="font-medium text-primary text-lg">€{price}</span>
           <span className="px-4 py-2 bg-primary/10 text-primary hover:bg-primary/20 transition-colors rounded-md text-sm font-medium">
-            Book This Tour
+            {t("bookButton")}
           </span>
         </div>
       </div>
@@ -63,19 +68,17 @@ const TourCard = ({
 };
 
 const ToursSection = () => {
+  const t = useTranslations("Tours");
+  const locale = useLocale();
+
   return (
     <section id="tours" className="section-padding">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Greek Tour Packages
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Explore the stunning beauty and rich history of Greece with our
-            premium private tours, tailored to provide unforgettable
-            experiences.
-          </p>
-        </div>
+        <SectionHeading
+          title={t("title")}
+          description={t("description")}
+          className="mb-12"
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {tours.map((tour, index) => (
@@ -92,12 +95,12 @@ const ToursSection = () => {
         </div>
 
         <div className="text-center mt-10">
-          <p className="text-muted-foreground mb-4">
-            Looking for a custom tour experience in Greece? We can create a
-            personalized itinerary just for you.
-          </p>
-          <Link href="/#contact" className="cta-button inline-block">
-            Request Custom Tour
+          <p className="text-muted-foreground mb-4">{t("customTourText")}</p>
+          <Link
+            href={`/${locale}/#contact`}
+            className="cta-button inline-block"
+          >
+            {t("requestCustom")}
           </Link>
         </div>
       </div>
