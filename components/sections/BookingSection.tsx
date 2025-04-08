@@ -1,7 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Users } from "lucide-react";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Label } from "../ui/label";
+import { DatePicker } from "../ui/date-picker";
+import { Button } from "../ui/button";
+import { Select } from "../ui/select";
 
 type FormState = {
   fullName: string;
@@ -9,7 +14,7 @@ type FormState = {
   phone: string;
   pickupLocation: string;
   dropoffLocation: string;
-  date: string;
+  date: Date | undefined;
   time: string;
   passengers: string;
   vehicle: string;
@@ -23,7 +28,7 @@ const BookingSection = () => {
     phone: "",
     pickupLocation: "",
     dropoffLocation: "",
-    date: "",
+    date: undefined,
     time: "",
     passengers: "",
     vehicle: "",
@@ -45,6 +50,23 @@ const BookingSection = () => {
     }));
   };
 
+  const handleDateChange = (date: Date | undefined) => {
+    setFormState((prev) => ({
+      ...prev,
+      date,
+    }));
+  };
+
+  const handleSelectChange = (
+    name: keyof Pick<FormState, "passengers" | "vehicle">,
+    value: string
+  ) => {
+    setFormState((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -59,7 +81,7 @@ const BookingSection = () => {
         phone: "",
         pickupLocation: "",
         dropoffLocation: "",
-        date: "",
+        date: undefined,
         time: "",
         passengers: "",
         vehicle: "",
@@ -112,12 +134,13 @@ const BookingSection = () => {
                 Thank you for your booking request. Our team will contact you
                 shortly to confirm your reservation.
               </p>
-              <button
+              <Button
                 onClick={() => setSubmitSuccess(false)}
-                className="text-primary font-medium hover:underline"
+                variant="link"
+                className="text-primary font-medium"
               >
                 Make another booking
-              </button>
+              </Button>
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
@@ -128,54 +151,36 @@ const BookingSection = () => {
                     Personal Information
                   </h3>
                   <div className="space-y-4">
-                    <div>
-                      <label
-                        htmlFor="fullName"
-                        className="block text-sm font-medium mb-1"
-                      >
-                        Full Name*
-                      </label>
-                      <input
+                    <div className="space-y-2">
+                      <Label htmlFor="fullName">Full Name*</Label>
+                      <Input
                         type="text"
                         id="fullName"
                         name="fullName"
                         value={formState.fullName}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
                         required
                       />
                     </div>
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-sm font-medium mb-1"
-                      >
-                        Email Address*
-                      </label>
-                      <input
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email Address*</Label>
+                      <Input
                         type="email"
                         id="email"
                         name="email"
                         value={formState.email}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
                         required
                       />
                     </div>
-                    <div>
-                      <label
-                        htmlFor="phone"
-                        className="block text-sm font-medium mb-1"
-                      >
-                        Phone Number*
-                      </label>
-                      <input
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">Phone Number*</Label>
+                      <Input
                         type="tel"
                         id="phone"
                         name="phone"
                         value={formState.phone}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
                         required
                       />
                     </div>
@@ -186,74 +191,47 @@ const BookingSection = () => {
                 <div>
                   <h3 className="text-lg font-semibold mb-4">Trip Details</h3>
                   <div className="space-y-4">
-                    <div>
-                      <label
-                        htmlFor="pickupLocation"
-                        className="block text-sm font-medium mb-1"
-                      >
-                        Pickup Location*
-                      </label>
-                      <input
+                    <div className="space-y-2">
+                      <Label htmlFor="pickupLocation">Pickup Location*</Label>
+                      <Input
                         type="text"
                         id="pickupLocation"
                         name="pickupLocation"
                         value={formState.pickupLocation}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
                         placeholder="Athens Airport, Hotel, Port..."
                         required
                       />
                     </div>
-                    <div>
-                      <label
-                        htmlFor="dropoffLocation"
-                        className="block text-sm font-medium mb-1"
-                      >
-                        Dropoff Location*
-                      </label>
-                      <input
+                    <div className="space-y-2">
+                      <Label htmlFor="dropoffLocation">Dropoff Location*</Label>
+                      <Input
                         type="text"
                         id="dropoffLocation"
                         name="dropoffLocation"
                         value={formState.dropoffLocation}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
                         placeholder="Hotel, Tourist Site, Port..."
                         required
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label
-                          htmlFor="date"
-                          className="block text-sm font-medium mb-1"
-                        >
-                          Date*
-                        </label>
-                        <input
-                          type="date"
-                          id="date"
-                          name="date"
-                          value={formState.date}
-                          onChange={handleChange}
-                          className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                          required
+                      <div className="space-y-2">
+                        <Label htmlFor="date">Date*</Label>
+                        <DatePicker
+                          date={formState.date}
+                          setDate={handleDateChange}
+                          placeholder="Select date"
                         />
                       </div>
-                      <div>
-                        <label
-                          htmlFor="time"
-                          className="block text-sm font-medium mb-1"
-                        >
-                          Time*
-                        </label>
-                        <input
+                      <div className="space-y-2">
+                        <Label htmlFor="time">Time*</Label>
+                        <Input
                           type="time"
                           id="time"
                           name="time"
                           value={formState.time}
                           onChange={handleChange}
-                          className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
                           required
                         />
                       </div>
@@ -267,60 +245,46 @@ const BookingSection = () => {
                     Additional Details
                   </h3>
                   <div className="space-y-4">
-                    <div>
-                      <label
-                        htmlFor="passengers"
-                        className="block text-sm font-medium mb-1"
-                      >
-                        Number of Passengers*
-                      </label>
-                      <div className="relative">
-                        <select
-                          id="passengers"
-                          name="passengers"
-                          value={formState.passengers}
-                          onChange={handleChange}
-                          className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 appearance-none bg-background text-foreground"
-                          required
-                        >
-                          <option value="" disabled>
-                            Select number of passengers
-                          </option>
-                          <option value="1">1 Passenger</option>
-                          <option value="2">2 Passengers</option>
-                          <option value="3">3 Passengers</option>
-                          <option value="4">4 Passengers</option>
-                          <option value="5">5 Passengers</option>
-                          <option value="6">6 Passengers</option>
-                          <option value="7+">7+ Passengers</option>
-                        </select>
-                        <Users className="h-4 w-4 absolute right-3 top-3 text-muted-foreground pointer-events-none" />
-                      </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="passengers">Number of Passengers*</Label>
+                      <Select
+                        value={formState.passengers}
+                        onValueChange={(value: string) =>
+                          handleSelectChange("passengers", value)
+                        }
+                        options={[
+                          { value: "1", label: "1 Passenger" },
+                          { value: "2", label: "2 Passengers" },
+                          { value: "3", label: "3 Passengers" },
+                          { value: "4", label: "4 Passengers" },
+                          { value: "5", label: "5 Passengers" },
+                          { value: "6", label: "6 Passengers" },
+                          { value: "7+", label: "7+ Passengers" },
+                        ]}
+                        required
+                      />
                     </div>
 
-                    <div>
-                      <label
-                        htmlFor="vehicle"
-                        className="block text-sm font-medium mb-1"
-                      >
-                        Preferred Vehicle
-                      </label>
-                      <select
-                        id="vehicle"
-                        name="vehicle"
+                    <div className="space-y-2">
+                      <Label htmlFor="vehicle">Preferred Vehicle</Label>
+                      <Select
                         value={formState.vehicle}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 bg-background text-foreground"
-                      >
-                        <option value="">Select a vehicle (optional)</option>
-                        <option value="Mercedes S-Class">
-                          Mercedes S-Class
-                        </option>
-                        <option value="Mercedes Vito">
-                          Mercedes Vito (up to 7 passengers)
-                        </option>
-                        <option value="Tesla Model S">Tesla Model S</option>
-                      </select>
+                        onValueChange={(value: string) =>
+                          handleSelectChange("vehicle", value)
+                        }
+                        options={[
+                          { value: "", label: "Select a vehicle (optional)" },
+                          {
+                            value: "Mercedes S-Class",
+                            label: "Mercedes S-Class",
+                          },
+                          {
+                            value: "Mercedes Vito",
+                            label: "Mercedes Vito (up to 7 passengers)",
+                          },
+                          { value: "Tesla Model S", label: "Tesla Model S" },
+                        ]}
+                      />
                     </div>
                   </div>
                 </div>
@@ -330,32 +294,26 @@ const BookingSection = () => {
                   <h3 className="text-lg font-semibold mb-4">
                     Special Requests
                   </h3>
-                  <div>
-                    <label
-                      htmlFor="notes"
-                      className="block text-sm font-medium mb-1"
-                    >
-                      Additional Notes
-                    </label>
-                    <textarea
+                  <div className="space-y-2">
+                    <Label htmlFor="notes">Additional Notes</Label>
+                    <Textarea
                       id="notes"
                       name="notes"
                       value={formState.notes}
                       onChange={handleChange}
-                      rows={5}
-                      className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
                       placeholder="Any special requirements, flight details, or Greek island ferry information..."
-                    ></textarea>
+                      className="min-h-[120px]"
+                    />
                   </div>
                 </div>
               </div>
 
               {/* Submit Button */}
               <div className="mt-8 text-center">
-                <button
+                <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="cta-button px-8 py-3 min-w-[200px] relative"
+                  className="px-8 py-3 min-w-[200px] relative"
                 >
                   {isSubmitting ? (
                     <>
@@ -386,7 +344,7 @@ const BookingSection = () => {
                   ) : (
                     "Send Booking Request"
                   )}
-                </button>
+                </Button>
               </div>
             </form>
           )}

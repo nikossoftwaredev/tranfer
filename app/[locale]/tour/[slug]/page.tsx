@@ -1,4 +1,4 @@
-import { tours } from "../../../../types/tours";
+import { tours } from "../../../../lib/data/tours";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Clock, CheckCircle2 } from "lucide-react";

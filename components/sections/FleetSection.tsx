@@ -4,16 +4,17 @@ import Image from "next/image";
 import { cn } from "../../lib/utils";
 import { useTranslations } from "next-intl";
 import SectionHeading from "../ui/SectionHeading";
+import { VehicleConfig, vehicles } from "../../lib/data/vehicles";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+} from "../ui/card";
 
-type VehicleProps = {
-  image: string;
-  model: string;
-  category: string;
-  capacity: string;
-  luggage: string;
-  features: string[];
-  tags?: string[];
-};
+type VehicleProps = VehicleConfig;
 
 const VehicleCard = ({
   image,
@@ -27,7 +28,7 @@ const VehicleCard = ({
   const t = useTranslations("Fleet");
 
   return (
-    <div className="bg-background border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
       {/* Vehicle Image */}
       <div className="h-52 w-full relative overflow-hidden">
         <Image
@@ -54,10 +55,12 @@ const VehicleCard = ({
       )}
 
       {/* Content */}
-      <div className="p-4">
-        <h3 className="text-xl font-bold">{model}</h3>
-        <p className="text-muted-foreground text-sm mb-3">{category}</p>
+      <CardHeader className="pb-0">
+        <CardTitle>{model}</CardTitle>
+        <CardDescription>{category}</CardDescription>
+      </CardHeader>
 
+      <CardContent>
         <div className="flex items-center gap-4 text-sm mb-4">
           <div className="flex items-center gap-1">
             <Users className="h-4 w-4 text-primary" />
@@ -80,10 +83,10 @@ const VehicleCard = ({
             ))}
           </ul>
         </div>
-      </div>
+      </CardContent>
 
       {/* Book Button */}
-      <div className="px-4 pb-4">
+      <CardFooter>
         <Link
           href="/#booking"
           className={cn(
@@ -93,64 +96,13 @@ const VehicleCard = ({
         >
           {t("bookVehicle")}
         </Link>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 };
 
 const FleetSection = () => {
   const t = useTranslations("Fleet");
-
-  const vehicles = [
-    {
-      image: "/images/fleet/mercedes-s-class.png",
-      model: "Mercedes S-Class",
-      category: "Luxury Sedan",
-      capacity: "Up to 3 passengers",
-      luggage: "2 large suitcases",
-      features: [
-        "Professional Greek Driver",
-        "Free WiFi",
-        "Leather Seats",
-        "Climate Control",
-        "Bottled Water",
-        "Charging Outlets",
-      ],
-      tags: ["Business Class", "VIP"],
-    },
-    {
-      image: "/images/fleet/mercedes-vito.png",
-      model: "Mercedes Vito",
-      category: "Luxury Van",
-      capacity: "Up to 7 passengers",
-      luggage: "6 large suitcases",
-      features: [
-        "Professional Greek Driver",
-        "Free WiFi",
-        "Leather Seats",
-        "Climate Control",
-        "Extra Legroom",
-        "Charging Outlets",
-      ],
-      tags: ["Family Friendly", "Group Travel"],
-    },
-    {
-      image: "/images/fleet/tesla-s.png",
-      model: "Tesla Model S",
-      category: "Electric Luxury Sedan",
-      capacity: "Up to 3 passengers",
-      luggage: "2 large suitcases",
-      features: [
-        "Professional Greek Driver",
-        "Free WiFi",
-        "Premium Interior",
-        "Climate Control",
-        "Zero Emissions",
-        "Charging Outlets",
-      ],
-      tags: ["Eco Option", "Premium"],
-    },
-  ];
 
   return (
     <section id="fleet" className="section-padding bg-muted">
@@ -163,16 +115,7 @@ const FleetSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {vehicles.map((vehicle, index) => (
-            <VehicleCard
-              key={index}
-              image={vehicle.image}
-              model={vehicle.model}
-              category={vehicle.category}
-              capacity={vehicle.capacity}
-              luggage={vehicle.luggage}
-              features={vehicle.features}
-              tags={vehicle.tags}
-            />
+            <VehicleCard key={index} {...vehicle} />
           ))}
         </div>
       </div>
