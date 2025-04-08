@@ -7,6 +7,7 @@ import { Label } from "../ui/label";
 import { DatePicker } from "../ui/date-picker";
 import { Button } from "../ui/button";
 import { Select } from "../ui/select";
+import { useTranslations } from "next-intl";
 
 type FormState = {
   fullName: string;
@@ -22,6 +23,7 @@ type FormState = {
 };
 
 const BookingSection = () => {
+  const t = useTranslations("Booking");
   const [formState, setFormState] = useState<FormState>({
     fullName: "",
     email: "",
@@ -99,12 +101,9 @@ const BookingSection = () => {
     <section id="booking" className="section-padding bg-primary/5">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Book Your Greek Transfer
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("title")}</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Complete the form below to request your private transfer in Greece.
-            Our team will get back to you promptly to confirm the details.
+            {t("description")}
           </p>
         </div>
 
@@ -128,18 +127,17 @@ const BookingSection = () => {
                 </svg>
               </div>
               <h3 className="text-xl font-semibold mb-2">
-                Booking Request Received!
+                {t("success.title")}
               </h3>
               <p className="text-muted-foreground mb-4">
-                Thank you for your booking request. Our team will contact you
-                shortly to confirm your reservation.
+                {t("success.message")}
               </p>
               <Button
                 onClick={() => setSubmitSuccess(false)}
                 variant="link"
                 className="text-primary font-medium"
               >
-                Make another booking
+                {t("success.button")}
               </Button>
             </div>
           ) : (
@@ -148,11 +146,11 @@ const BookingSection = () => {
                 {/* Personal Information */}
                 <div>
                   <h3 className="text-lg font-semibold mb-4">
-                    Personal Information
+                    {t("form.personal")}
                   </h3>
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="fullName">Full Name*</Label>
+                      <Label htmlFor="fullName">{t("form.fullName")}</Label>
                       <Input
                         type="text"
                         id="fullName"
@@ -163,7 +161,7 @@ const BookingSection = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email Address*</Label>
+                      <Label htmlFor="email">{t("form.email")}</Label>
                       <Input
                         type="email"
                         id="email"
@@ -174,7 +172,7 @@ const BookingSection = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="phone">Phone Number*</Label>
+                      <Label htmlFor="phone">{t("form.phone")}</Label>
                       <Input
                         type="tel"
                         id="phone"
@@ -189,43 +187,47 @@ const BookingSection = () => {
 
                 {/* Trip Details */}
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">Trip Details</h3>
+                  <h3 className="text-lg font-semibold mb-4">
+                    {t("form.trip")}
+                  </h3>
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="pickupLocation">Pickup Location*</Label>
+                      <Label htmlFor="pickupLocation">{t("form.pickup")}</Label>
                       <Input
                         type="text"
                         id="pickupLocation"
                         name="pickupLocation"
                         value={formState.pickupLocation}
                         onChange={handleChange}
-                        placeholder="Athens Airport, Hotel, Port..."
+                        placeholder={t("form.pickupPlaceholder")}
                         required
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="dropoffLocation">Dropoff Location*</Label>
+                      <Label htmlFor="dropoffLocation">
+                        {t("form.dropoff")}
+                      </Label>
                       <Input
                         type="text"
                         id="dropoffLocation"
                         name="dropoffLocation"
                         value={formState.dropoffLocation}
                         onChange={handleChange}
-                        placeholder="Hotel, Tourist Site, Port..."
+                        placeholder={t("form.dropoffPlaceholder")}
                         required
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="date">Date*</Label>
+                        <Label htmlFor="date">{t("form.date")}</Label>
                         <DatePicker
                           date={formState.date}
                           setDate={handleDateChange}
-                          placeholder="Select date"
+                          placeholder={t("form.date")}
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="time">Time*</Label>
+                        <Label htmlFor="time">{t("form.time")}</Label>
                         <Input
                           type="time"
                           id="time"
@@ -242,38 +244,66 @@ const BookingSection = () => {
                 {/* Additional Details */}
                 <div>
                   <h3 className="text-lg font-semibold mb-4">
-                    Additional Details
+                    {t("form.additional")}
                   </h3>
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="passengers">Number of Passengers*</Label>
+                      <Label htmlFor="passengers">{t("form.passengers")}</Label>
                       <Select
                         value={formState.passengers}
                         onValueChange={(value: string) =>
                           handleSelectChange("passengers", value)
                         }
                         options={[
-                          { value: "1", label: "1 Passenger" },
-                          { value: "2", label: "2 Passengers" },
-                          { value: "3", label: "3 Passengers" },
-                          { value: "4", label: "4 Passengers" },
-                          { value: "5", label: "5 Passengers" },
-                          { value: "6", label: "6 Passengers" },
-                          { value: "7+", label: "7+ Passengers" },
+                          {
+                            value: "1",
+                            label:
+                              "1 " + t("form.selectPassengers").split(" ")[0],
+                          },
+                          {
+                            value: "2",
+                            label:
+                              "2 " + t("form.selectPassengers").split(" ")[1],
+                          },
+                          {
+                            value: "3",
+                            label:
+                              "3 " + t("form.selectPassengers").split(" ")[1],
+                          },
+                          {
+                            value: "4",
+                            label:
+                              "4 " + t("form.selectPassengers").split(" ")[1],
+                          },
+                          {
+                            value: "5",
+                            label:
+                              "5 " + t("form.selectPassengers").split(" ")[1],
+                          },
+                          {
+                            value: "6",
+                            label:
+                              "6 " + t("form.selectPassengers").split(" ")[1],
+                          },
+                          {
+                            value: "7+",
+                            label:
+                              "7+ " + t("form.selectPassengers").split(" ")[1],
+                          },
                         ]}
                         required
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="vehicle">Preferred Vehicle</Label>
+                      <Label htmlFor="vehicle">{t("form.vehicle")}</Label>
                       <Select
                         value={formState.vehicle}
                         onValueChange={(value: string) =>
                           handleSelectChange("vehicle", value)
                         }
                         options={[
-                          { value: "", label: "Select a vehicle (optional)" },
+                          { value: "", label: t("form.selectVehicle") },
                           {
                             value: "Mercedes S-Class",
                             label: "Mercedes S-Class",
@@ -292,16 +322,16 @@ const BookingSection = () => {
                 {/* Special Requests */}
                 <div>
                   <h3 className="text-lg font-semibold mb-4">
-                    Special Requests
+                    {t("form.special")}
                   </h3>
                   <div className="space-y-2">
-                    <Label htmlFor="notes">Additional Notes</Label>
+                    <Label htmlFor="notes">{t("form.notes")}</Label>
                     <Textarea
                       id="notes"
                       name="notes"
                       value={formState.notes}
                       onChange={handleChange}
-                      placeholder="Any special requirements, flight details, or Greek island ferry information..."
+                      placeholder={t("form.notesPlaceholder")}
                       className="min-h-[120px]"
                     />
                   </div>
@@ -317,7 +347,7 @@ const BookingSection = () => {
                 >
                   {isSubmitting ? (
                     <>
-                      <span className="opacity-0">Send Booking Request</span>
+                      <span className="opacity-0">{t("form.submit")}</span>
                       <span className="absolute inset-0 flex items-center justify-center">
                         <svg
                           className="animate-spin h-5 w-5 text-white"
@@ -342,7 +372,7 @@ const BookingSection = () => {
                       </span>
                     </>
                   ) : (
-                    "Send Booking Request"
+                    t("form.submit")
                   )}
                 </Button>
               </div>

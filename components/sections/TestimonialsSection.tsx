@@ -1,5 +1,6 @@
 import { Star } from "lucide-react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 type TestimonialProps = {
   quote: string;
@@ -61,6 +62,8 @@ const TestimonialCard = ({
 };
 
 const TestimonialsSection = () => {
+  const t = useTranslations("Testimonials");
+
   const testimonials = [
     {
       quote:
@@ -89,12 +92,9 @@ const TestimonialsSection = () => {
     <section className="section-padding">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            What Our Clients Say
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("title")}</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Don&apos;t just take our word for it. Here&apos;s what our valued
-            clients have to say about their experience with Poseidon Transfers.
+            {t("description")}
           </p>
         </div>
 

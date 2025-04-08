@@ -27,6 +27,50 @@ const VehicleCard = ({
 }: VehicleProps) => {
   const t = useTranslations("Fleet");
 
+  const getTagTranslation = (tag: string) => {
+    switch (tag) {
+      case "businessClass":
+        return t("tags.businessClass");
+      case "vip":
+        return t("tags.vip");
+      case "familyFriendly":
+        return t("tags.familyFriendly");
+      case "groupTravel":
+        return t("tags.groupTravel");
+      case "ecoOption":
+        return t("tags.ecoOption");
+      case "premium":
+        return t("tags.premium");
+      default:
+        return tag;
+    }
+  };
+
+  const getFeatureTranslation = (feature: string) => {
+    switch (feature) {
+      case "driver":
+        return t("commonFeatures.driver");
+      case "wifi":
+        return t("commonFeatures.wifi");
+      case "leather":
+        return t("commonFeatures.leather");
+      case "climate":
+        return t("commonFeatures.climate");
+      case "water":
+        return t("commonFeatures.water");
+      case "charging":
+        return t("commonFeatures.charging");
+      case "legroom":
+        return t("commonFeatures.legroom");
+      case "premium":
+        return t("commonFeatures.premium");
+      case "zero":
+        return t("commonFeatures.zero");
+      default:
+        return feature;
+    }
+  };
+
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
       {/* Vehicle Image */}
@@ -48,7 +92,7 @@ const VehicleCard = ({
               key={index}
               className="px-2 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary"
             >
-              {tag}
+              {getTagTranslation(tag)}
             </span>
           ))}
         </div>
@@ -78,7 +122,7 @@ const VehicleCard = ({
             {features.map((feature, index) => (
               <li key={index} className="flex items-center gap-1">
                 <span className="h-1.5 w-1.5 rounded-full bg-primary flex-shrink-0" />
-                {feature}
+                {getFeatureTranslation(feature)}
               </li>
             ))}
           </ul>
