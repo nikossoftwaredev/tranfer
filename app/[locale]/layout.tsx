@@ -1,4 +1,5 @@
 import "./globals.css";
+import "react-day-picker/dist/style.css";
 import Header from "../../components/layout/Header";
 import Footer from "../../components/layout/Footer";
 import { NextIntlClientProvider, hasLocale } from "next-intl";

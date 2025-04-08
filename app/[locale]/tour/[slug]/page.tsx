@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { tours } from "../../../../lib/data/tours";
 import Image from "next/image";
 import Link from "next/link";
@@ -55,6 +56,42 @@ export default function TourPage({ params }: PageProps) {
   const { locale, slug } = params;
   const tour = tours.find((tour) => tour.slug === slug);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+
+  // Form state for tour booking
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    passengers: "",
+  });
+
+  // Handle input changes
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
+  // Handle passenger selection
+  const handlePassengerChange = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      passengers: value,
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Form submitted:", {
+      ...formData,
+      date: selectedDate,
+    });
+    // Implement actual form submission logic here
+  };
 
   if (!tour) {
     notFound();
@@ -152,15 +189,27 @@ export default function TourPage({ params }: PageProps) {
                 {t("book.description")}
               </p>
 
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={handleSubmit}>
                 <div>
                   <Label htmlFor="name">{t("book.fullName")}</Label>
-                  <Input type="text" id="name" required />
+                  <Input
+                    type="text"
+                    id="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
 
                 <div>
                   <Label htmlFor="email">{t("book.email")}</Label>
-                  <Input type="email" id="email" required />
+                  <Input
+                    type="email"
+                    id="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
 
                 <div>
@@ -185,6 +234,8 @@ export default function TourPage({ params }: PageProps) {
                       { value: "6", label: `6 ${t("book.passengers")}` },
                       { value: "7+", label: `7+ ${t("book.passengers")}` },
                     ]}
+                    value={formData.passengers}
+                    onValueChange={handlePassengerChange}
                     required
                   />
                 </div>
