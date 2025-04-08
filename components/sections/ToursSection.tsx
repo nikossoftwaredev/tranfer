@@ -19,9 +19,12 @@ const TourCard = ({
   price,
 }: TourCardProps) => {
   return (
-    <div className="bg-background rounded-lg overflow-hidden border border-border hover:shadow-lg transition-all group">
+    <Link
+      href="/#booking"
+      className="bg-background rounded-lg overflow-hidden border border-border hover:bg-background/60 hover:border-primary/50 transition-colors flex flex-col h-full"
+    >
       {/* Tour Image */}
-      <div className="h-48 bg-cover bg-center relative group-hover:h-52 transition-all duration-300 overflow-hidden">
+      <div className="h-48 bg-cover bg-center relative overflow-hidden">
         <Image
           src={image}
           alt={title}
@@ -39,24 +42,21 @@ const TourCard = ({
       </div>
 
       {/* Content */}
-      <div className="p-4">
+      <div className="p-4 flex-grow">
         <h3 className="text-xl font-bold mb-2">{title}</h3>
-        <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-          {subtitle}
-        </p>
+        <p className="text-muted-foreground text-sm line-clamp-2">{subtitle}</p>
+      </div>
 
+      {/* Footer with Price and Button */}
+      <div className="p-4 pt-0 mt-auto">
         <div className="flex justify-between items-center">
           <span className="font-medium text-primary text-lg">€{price}</span>
-
-          <Link
-            href="/#booking"
-            className="px-4 py-2 bg-primary/10 text-primary hover:bg-primary/20 transition-colors rounded-md text-sm font-medium"
-          >
+          <span className="px-4 py-2 bg-primary/10 text-primary hover:bg-primary/20 transition-colors rounded-md text-sm font-medium">
             Book This Tour
-          </Link>
+          </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

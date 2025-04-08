@@ -11,6 +11,31 @@ export const metadata: Metadata = {
   title: "Poseidon Transfer | Premium Transportation Services in Greece",
   description:
     "Experience luxury transportation across Greece with Poseidon Transfer. Professional chauffeurs, premium fleet, and personalized service.",
+  metadataBase: new URL("https://poseidontranfer.vercel.app"),
+  openGraph: {
+    title: "Poseidon Transfer | Premium Transportation Services in Greece",
+    description:
+      "Experience luxury transportation across Greece with Poseidon Transfer. Professional chauffeurs, premium fleet, and personalized service.",
+    url: "https://poseidontranfer.vercel.app",
+    siteName: "Poseidon Transfer",
+    images: [
+      {
+        url: "/images/hero-greece.jpg",
+        width: 1920,
+        height: 1080,
+        alt: "Luxury Transfer Services in Greece",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Poseidon Transfer | Premium Transportation Services in Greece",
+    description:
+      "Experience luxury transportation across Greece with Poseidon Transfer. Professional chauffeurs, premium fleet, and personalized service.",
+    images: ["/images/hero-greece.jpg"],
+  },
 };
 
 export default function RootLayout({
