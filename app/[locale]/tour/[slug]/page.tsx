@@ -7,14 +7,17 @@ import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
 
 type Props = {
-  params: {
-    locale: string;
-    slug: string;
-  };
+  params: Promise<{ locale: string; slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+type PageProps = {
+  params: { locale: string; slug: string };
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const tour = tours.find((tour) => tour.slug === params.slug);
+  const { slug } = await params;
+  const tour = tours.find((tour) => tour.slug === slug);
 
   if (!tour) {
     return {
@@ -38,9 +41,10 @@ export async function generateStaticParams() {
   ]);
 }
 
-export default function TourPage({ params }: Props) {
+export default function TourPage({ params }: PageProps) {
   const t = useTranslations("Tours.tourDetails");
-  const tour = tours.find((tour) => tour.slug === params.slug);
+  const { locale, slug } = params;
+  const tour = tours.find((tour) => tour.slug === slug);
 
   if (!tour) {
     notFound();
@@ -71,7 +75,7 @@ export default function TourPage({ params }: Props) {
       {/* Content */}
       <div className="container mx-auto px-4 py-12">
         <Link
-          href={`/${params.locale}/#tours`}
+          href={`/${locale}/#tours`}
           className="flex items-center text-primary mb-8 hover:underline"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
@@ -235,7 +239,7 @@ export default function TourPage({ params }: Props) {
                 <p>
                   {t("book.customize")}{" "}
                   <Link
-                    href={`/${params.locale}/#contact`}
+                    href={`/${locale}/#contact`}
                     className="text-primary hover:underline"
                   >
                     {t("book.contactUs")}

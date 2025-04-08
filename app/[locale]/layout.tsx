@@ -1,4 +1,3 @@
-import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "../../components/layout/Header";
 import Footer from "../../components/layout/Footer";
@@ -6,21 +5,25 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "../../i18n/routing";
-
-const inter = Inter({ subsets: ["latin"] });
+import type { Metadata } from "next";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { locale: string };
-}) {
+type Props = {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
   // Ensure locale is one of the supported locales
-  const locale = params.locale as (typeof routing.locales)[number];
-  const t = await getTranslations({ locale, namespace: "Metadata" });
+  const typedLocale = locale as (typeof routing.locales)[number];
+  const t = await getTranslations({
+    locale: typedLocale,
+    namespace: "Metadata",
+  });
 
   return {
     title: t("title"),
@@ -68,7 +71,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} className="dark">
-      <body className={inter.className}>
+      <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Header />
           <main>{children}</main>

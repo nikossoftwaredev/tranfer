@@ -8,12 +8,15 @@ import TestimonialsSection from "../../components/sections/TestimonialsSection";
 import ContactSection from "../../components/sections/ContactSection";
 import BookingSection from "../../components/sections/BookingSection";
 import { routing } from "../../i18n/routing";
+import type { Metadata } from "next";
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+type Props = {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
   // Ensure locale is one of the supported locales
   const typedLocale = locale as (typeof routing.locales)[number];
   const t = await getTranslations({
