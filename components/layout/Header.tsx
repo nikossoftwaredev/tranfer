@@ -56,7 +56,7 @@ const Header = () => {
   };
 
   return (
-    <header className="w-full bg-card/80 backdrop-blur-sm sticky top-0 z-50 border-b border-border">
+    <header className="w-full bg-[#121212] md:bg-card/80 md:backdrop-blur-sm sticky top-0 z-50 border-b border-border">
       <div className="container mx-auto px-4 flex items-center justify-between py-4">
         {/* Logo */}
         <Logo onClick={(e) => handleNavClick(e, "/")} />
@@ -103,6 +103,15 @@ const Header = () => {
           isMenuOpen ? "block" : "hidden"
         )}
       >
+        {/* Close button for mobile menu */}
+        <button
+          className="absolute top-6 right-4 text-foreground"
+          onClick={toggleMenu}
+          aria-label="Close menu"
+        >
+          <X className="h-6 w-6" />
+        </button>
+
         <div className="flex flex-col space-y-4">
           {navItems.map((item) => (
             <Link
