@@ -22,7 +22,7 @@ const TourCard = ({
   price,
   slug,
 }: TourCardProps) => {
-  const t = useTranslations("Tours.card");
+  const t = useTranslations("Tours");
   const locale = useLocale();
 
   return (
@@ -59,7 +59,7 @@ const TourCard = ({
         <div className="flex justify-between items-center">
           <span className="font-medium text-primary text-lg">€{price}</span>
           <span className="px-4 py-2 bg-primary/10 text-primary hover:bg-primary/20 transition-colors rounded-md text-sm font-medium">
-            {t("bookButton")}
+            {t("bookTour")}
           </span>
         </div>
       </div>
@@ -95,12 +95,14 @@ const ToursSection = () => {
         </div>
 
         <div className="text-center mt-10">
-          <p className="text-muted-foreground mb-4">{t("customTourText")}</p>
+          <p className="text-muted-foreground mb-4">
+            {t("customTour.description")}
+          </p>
           <Link
             href={`/${locale}/#contact`}
             className="cta-button inline-block"
           >
-            {t("requestCustom")}
+            {t("customTour.requestButton")}
           </Link>
         </div>
       </div>

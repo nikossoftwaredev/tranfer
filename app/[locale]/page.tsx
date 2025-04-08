@@ -7,13 +7,19 @@ import AboutSection from "../../components/sections/AboutSection";
 import TestimonialsSection from "../../components/sections/TestimonialsSection";
 import ContactSection from "../../components/sections/ContactSection";
 import BookingSection from "../../components/sections/BookingSection";
+import { routing } from "../../i18n/routing";
 
 export async function generateMetadata({
   params: { locale },
 }: {
   params: { locale: string };
 }) {
-  const t = await getTranslations({ locale, namespace: "Metadata" });
+  // Ensure locale is one of the supported locales
+  const typedLocale = locale as (typeof routing.locales)[number];
+  const t = await getTranslations({
+    locale: typedLocale,
+    namespace: "Metadata",
+  });
 
   return {
     title: t("title"),

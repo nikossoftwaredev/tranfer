@@ -24,7 +24,7 @@ const VehicleCard = ({
   features,
   tags = [],
 }: VehicleProps) => {
-  const t = useTranslations("Fleet.card");
+  const t = useTranslations("Fleet");
 
   return (
     <div className="bg-background border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
@@ -91,7 +91,7 @@ const VehicleCard = ({
             "bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
           )}
         >
-          {t("bookButton")}
+          {t("bookVehicle")}
         </Link>
       </div>
     </div>

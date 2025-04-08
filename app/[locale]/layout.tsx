@@ -3,7 +3,7 @@ import "./globals.css";
 import Header from "../../components/layout/Header";
 import Footer from "../../components/layout/Footer";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "../../i18n/routing";
 
@@ -16,26 +16,27 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: string }>;
+  params: { locale: string };
 }) {
-  const { locale } = await params;
-  const messages = await getMessages({ locale });
+  // Ensure locale is one of the supported locales
+  const locale = params.locale as (typeof routing.locales)[number];
+  const t = await getTranslations({ locale, namespace: "Metadata" });
 
   return {
-    title: messages.title,
-    description: messages.description,
+    title: t("title"),
+    description: t("description"),
     metadataBase: new URL("https://poseidontranfer.vercel.app"),
     openGraph: {
-      title: messages.title,
-      description: messages.description,
+      title: t("title"),
+      description: t("description"),
       url: "https://poseidontranfer.vercel.app",
-      siteName: messages.siteName,
+      siteName: t("siteName"),
       images: [
         {
           url: "/images/hero-greece.jpg",
           width: 1920,
           height: 1080,
-          alt: messages.imageAlt,
+          alt: t("imageAlt"),
         },
       ],
       locale,
@@ -43,8 +44,8 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: messages.title,
-      description: messages.description,
+      title: t("title"),
+      description: t("description"),
       images: ["/images/hero-greece.jpg"],
     },
   };

@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-i18n-types": "ts-node scripts/generate-i18n-types.ts"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.7",
