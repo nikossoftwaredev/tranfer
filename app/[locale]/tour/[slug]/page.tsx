@@ -1,3 +1,5 @@
+"use client";
+
 import { tours } from "../../../../lib/data/tours";
 import Image from "next/image";
 import Link from "next/link";
@@ -5,6 +7,13 @@ import { ArrowLeft, Clock, CheckCircle2 } from "lucide-react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { DatePicker } from "../../../../components/ui/date-picker";
+import { Label } from "../../../../components/ui/label";
+import { Input } from "../../../../components/ui/input";
+import { Textarea } from "../../../../components/ui/textarea";
+import { Button } from "../../../../components/ui/button";
+import { Select } from "../../../../components/ui/select";
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
@@ -45,6 +54,7 @@ export default function TourPage({ params }: PageProps) {
   const t = useTranslations("Tours.tourDetails");
   const { locale, slug } = params;
   const tour = tours.find((tour) => tour.slug === slug);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
 
   if (!tour) {
     notFound();
@@ -144,95 +154,49 @@ export default function TourPage({ params }: PageProps) {
 
               <form className="space-y-4">
                 <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium mb-1"
-                  >
-                    {t("book.fullName")}
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 bg-background"
+                  <Label htmlFor="name">{t("book.fullName")}</Label>
+                  <Input type="text" id="name" required />
+                </div>
+
+                <div>
+                  <Label htmlFor="email">{t("book.email")}</Label>
+                  <Input type="email" id="email" required />
+                </div>
+
+                <div>
+                  <Label htmlFor="date">{t("book.date")}</Label>
+                  <DatePicker
+                    date={selectedDate}
+                    setDate={setSelectedDate}
+                    placeholder={t("book.date")}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="passengers">{t("book.passengers")}</Label>
+                  <Select
+                    options={[
+                      { value: "", label: t("book.selectPassengers") },
+                      { value: "1", label: `1 ${t("book.passenger")}` },
+                      { value: "2", label: `2 ${t("book.passengers")}` },
+                      { value: "3", label: `3 ${t("book.passengers")}` },
+                      { value: "4", label: `4 ${t("book.passengers")}` },
+                      { value: "5", label: `5 ${t("book.passengers")}` },
+                      { value: "6", label: `6 ${t("book.passengers")}` },
+                      { value: "7+", label: `7+ ${t("book.passengers")}` },
+                    ]}
                     required
                   />
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium mb-1"
-                  >
-                    {t("book.email")}
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 bg-background"
-                    required
-                  />
+                  <Label htmlFor="notes">{t("book.specialRequests")}</Label>
+                  <Textarea id="notes" rows={3} />
                 </div>
 
-                <div>
-                  <label
-                    htmlFor="date"
-                    className="block text-sm font-medium mb-1"
-                  >
-                    {t("book.date")}
-                  </label>
-                  <input
-                    type="date"
-                    id="date"
-                    className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 bg-background"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="passengers"
-                    className="block text-sm font-medium mb-1"
-                  >
-                    {t("book.passengers")}
-                  </label>
-                  <select
-                    id="passengers"
-                    className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 bg-background text-foreground"
-                    required
-                  >
-                    <option value="" disabled selected>
-                      {t("book.selectPassengers")}
-                    </option>
-                    <option value="1">1 {t("book.passenger")}</option>
-                    <option value="2">2 {t("book.passengers")}</option>
-                    <option value="3">3 {t("book.passengers")}</option>
-                    <option value="4">4 {t("book.passengers")}</option>
-                    <option value="5">5 {t("book.passengers")}</option>
-                    <option value="6">6 {t("book.passengers")}</option>
-                    <option value="7+">7+ {t("book.passengers")}</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="notes"
-                    className="block text-sm font-medium mb-1"
-                  >
-                    {t("book.specialRequests")}
-                  </label>
-                  <textarea
-                    id="notes"
-                    rows={3}
-                    className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 bg-background"
-                  ></textarea>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-medium rounded-md"
-                >
+                <Button type="submit" className="w-full">
                   {t("book.bookButton")}
-                </button>
+                </Button>
               </form>
 
               <div className="mt-6 text-sm text-muted-foreground text-center">

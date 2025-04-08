@@ -64,7 +64,6 @@
   --muted-foreground: #a1a1a1;
   --accent: #D4AF37;
   /* Gold */
-  --accent-foreground: #000000;
   --destructive: #ef4444;
   --border: #333333;
   --input: #333333;
@@ -138,6 +137,10 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  button, [role="button"] {
+    cursor: pointer;
+  }
 }
 
 /* Additional luxury styling */
@@ -209,4 +212,47 @@ input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
   opacity: 0.6;
+}
+
+/* React Day Picker styles */
+.rdp {
+  --rdp-cell-size: 40px;
+  --rdp-accent-color: var(--primary);
+  --rdp-background-color: var(--primary);
+  --rdp-accent-color-dark: var(--primary);
+  --rdp-background-color-dark: var(--primary);
+  --rdp-outline: 2px solid var(--ring);
+  --rdp-outline-selected: 3px solid var(--ring);
+  margin: 0;
+}
+
+.rdp-months {
+  display: flex;
+}
+
+.rdp-month {
+  background-color: var(--background);
+  border-radius: var(--radius);
+  margin: 0;
+}
+
+.rdp-month_spacer {
+  flex: 1 1 auto;
+}
+
+.rdp-table {
+  margin: 0;
+}
+
+.rdp-with_weeknumber .rdp-table {
+  max-width: calc(var(--rdp-cell-size) * 8);
+  border-collapse: collapse;
+}
+
+.rdp-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  text-align: left;
 }

@@ -1,64 +1,74 @@
 "use client";
 
-import { useState } from "react";
 import { Phone, Mail, MapPin, Instagram, Facebook } from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 import { Textarea } from "../../components/ui/textarea";
 import { Button } from "../../components/ui/button";
 import { Loader2 } from "lucide-react";
-
-type ContactFormState = {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-};
+import { useToast } from "../../hooks/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../components/ui/form";
 
 const ContactSection = () => {
   const t = useTranslations("Contact");
-  const [formState, setFormState] = useState<ContactFormState>({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
+  const { toast } = useToast();
+
+  // Define form schema with Zod
+  const formSchema = z.object({
+    name: z.string().min(2, {
+      message: "Name must be at least 2 characters.",
+    }),
+    email: z.string().email({
+      message: "Please enter a valid email address.",
+    }),
+    subject: z.string().min(3, {
+      message: "Subject must be at least 3 characters.",
+    }),
+    message: z.string().min(10, {
+      message: "Message must be at least 10 characters.",
+    }),
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
+  // Initialize react-hook-form
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    },
+  });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormState((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const isSubmitting = form.formState.isSubmitting;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  // Form submission handler
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    // Simulate form submission with the form data
+    console.log("Form submitted with:", data);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitSuccess(true);
-      setFormState({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-      });
+    // Show success toast
+    toast({
+      variant: "success",
+      title: t("form.title"),
+      description:
+        "Your message has been sent successfully. We will get back to you soon.",
+    });
 
-      // Reset success message after 5 seconds
-      setTimeout(() => {
-        setSubmitSuccess(false);
-      }, 5000);
-    }, 1500);
+    // Reset form
+    form.reset();
   };
 
   return (
@@ -177,58 +187,76 @@ const ContactSection = () => {
 
           {/* Contact Form */}
           <div className="bg-background rounded-lg p-8 border border-border">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <Label htmlFor="name">{t("form.fullName")}</Label>
-                <Input
-                  id="name"
+            <h3 className="text-xl font-semibold mb-6">{t("form.title")}</h3>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
+                <FormField
+                  control={form.control}
                   name="name"
-                  className="mt-1 w-full"
-                  required
-                  value={formState.name}
-                  onChange={handleChange}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("form.fullName")}</FormLabel>
+                      <FormControl>
+                        <Input placeholder="John Doe" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              <div>
-                <Label htmlFor="email">{t("form.email")}</Label>
-                <Input
-                  id="email"
+                <FormField
+                  control={form.control}
                   name="email"
-                  type="email"
-                  className="mt-1 w-full"
-                  required
-                  value={formState.email}
-                  onChange={handleChange}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("form.email")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="john@example.com"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              <div>
-                <Label htmlFor="subject">{t("form.subject")}</Label>
-                <Input
-                  id="subject"
+                <FormField
+                  control={form.control}
                   name="subject"
-                  className="mt-1 w-full"
-                  required
-                  value={formState.subject}
-                  onChange={handleChange}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("form.subject")}</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Booking Inquiry" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              <div>
-                <Label htmlFor="message">{t("form.message")}</Label>
-                <Textarea
-                  id="message"
+                <FormField
+                  control={form.control}
                   name="message"
-                  className="mt-1 w-full"
-                  rows={5}
-                  required
-                  value={formState.message}
-                  onChange={handleChange}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("form.message")}</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Your message here..."
+                          className="min-h-[120px]"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              <div>
                 <Button
                   type="submit"
                   className="w-full"
@@ -243,14 +271,8 @@ const ContactSection = () => {
                     t("form.submit")
                   )}
                 </Button>
-              </div>
-
-              {submitSuccess && (
-                <div className="p-4 bg-green-50 border border-green-200 rounded-md text-green-800">
-                  {t("form.submit")}
-                </div>
-              )}
-            </form>
+              </form>
+            </Form>
           </div>
         </div>
       </div>
