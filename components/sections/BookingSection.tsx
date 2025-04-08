@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, Clock, Users } from "lucide-react";
+import { Users } from "lucide-react";
 
 type FormState = {
   fullName: string;
@@ -78,11 +78,11 @@ const BookingSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Book Your Transfer
+            Book Your Greek Transfer
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Complete the form below to request your private transfer. Our team
-            will get back to you promptly to confirm the details.
+            Complete the form below to request your private transfer in Greece.
+            Our team will get back to you promptly to confirm the details.
           </p>
         </div>
 
@@ -200,7 +200,7 @@ const BookingSection = () => {
                         value={formState.pickupLocation}
                         onChange={handleChange}
                         className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                        placeholder="Address, Airport, Hotel..."
+                        placeholder="Athens Airport, Hotel, Port..."
                         required
                       />
                     </div>
@@ -218,7 +218,7 @@ const BookingSection = () => {
                         value={formState.dropoffLocation}
                         onChange={handleChange}
                         className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                        placeholder="Address, Airport, Hotel..."
+                        placeholder="Hotel, Tourist Site, Port..."
                         required
                       />
                     </div>
@@ -230,18 +230,15 @@ const BookingSection = () => {
                         >
                           Date*
                         </label>
-                        <div className="relative">
-                          <input
-                            type="date"
-                            id="date"
-                            name="date"
-                            value={formState.date}
-                            onChange={handleChange}
-                            className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                            required
-                          />
-                          <Calendar className="h-4 w-4 absolute right-3 top-3 text-muted-foreground pointer-events-none" />
-                        </div>
+                        <input
+                          type="date"
+                          id="date"
+                          name="date"
+                          value={formState.date}
+                          onChange={handleChange}
+                          className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          required
+                        />
                       </div>
                       <div>
                         <label
@@ -250,18 +247,15 @@ const BookingSection = () => {
                         >
                           Time*
                         </label>
-                        <div className="relative">
-                          <input
-                            type="time"
-                            id="time"
-                            name="time"
-                            value={formState.time}
-                            onChange={handleChange}
-                            className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                            required
-                          />
-                          <Clock className="h-4 w-4 absolute right-3 top-3 text-muted-foreground pointer-events-none" />
-                        </div>
+                        <input
+                          type="time"
+                          id="time"
+                          name="time"
+                          value={formState.time}
+                          onChange={handleChange}
+                          className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          required
+                        />
                       </div>
                     </div>
                   </div>
@@ -351,7 +345,7 @@ const BookingSection = () => {
                       onChange={handleChange}
                       rows={5}
                       className="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                      placeholder="Any special requirements or flight details..."
+                      placeholder="Any special requirements, flight details, or Greek island ferry information..."
                     ></textarea>
                   </div>
                 </div>

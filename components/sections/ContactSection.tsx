@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Phone, Mail, MapPin, Instagram, Facebook } from "lucide-react";
+import Image from "next/image";
 
 type ContactFormState = {
   name: string;
@@ -57,10 +58,12 @@ const ContactSection = () => {
     <section id="contact" className="section-padding">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Contact Us</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Contact Our Greek Team
+          </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Have questions or need more information? Get in touch with our team,
-            and we'll be happy to assist you.
+            Have questions about our Greek transportation services? Get in touch
+            with our team, and we&apos;ll be happy to assist you.
           </p>
         </div>
 
@@ -69,7 +72,7 @@ const ContactSection = () => {
           <div>
             <div className="bg-primary/5 rounded-lg p-8 border border-primary/10 mb-8">
               <h3 className="text-xl font-semibold mb-6">
-                Contact Information
+                Athens Contact Information
               </h3>
 
               <div className="space-y-6">
@@ -77,9 +80,9 @@ const ContactSection = () => {
                   <Phone className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
                   <div className="ml-4">
                     <h4 className="font-medium mb-1">Phone</h4>
-                    <p className="text-muted-foreground">+1 (555) 123-4567</p>
+                    <p className="text-muted-foreground">+30 210 123-4567</p>
                     <p className="text-muted-foreground">
-                      +1 (555) 987-6543 (WhatsApp)
+                      +30 694 567-8901 (WhatsApp)
                     </p>
                   </div>
                 </div>
@@ -89,10 +92,10 @@ const ContactSection = () => {
                   <div className="ml-4">
                     <h4 className="font-medium mb-1">Email</h4>
                     <p className="text-muted-foreground">
-                      info@luxtransfer.com
+                      info@luxtransfer-greece.com
                     </p>
                     <p className="text-muted-foreground">
-                      bookings@luxtransfer.com
+                      bookings@luxtransfer-greece.com
                     </p>
                   </div>
                 </div>
@@ -102,11 +105,11 @@ const ContactSection = () => {
                   <div className="ml-4">
                     <h4 className="font-medium mb-1">Address</h4>
                     <p className="text-muted-foreground">
-                      123 Luxury Drive, Suite 400
+                      123 Kifisias Avenue
                       <br />
-                      New York, NY 10001
+                      Marousi, Athens 15123
                       <br />
-                      United States
+                      Greece
                     </p>
                   </div>
                 </div>
@@ -120,6 +123,7 @@ const ContactSection = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="h-10 w-10 rounded-full bg-background border border-border flex items-center justify-center text-foreground hover:text-primary hover:border-primary transition-colors"
+                    aria-label="Instagram"
                   >
                     <Instagram className="h-5 w-5" />
                   </a>
@@ -128,6 +132,7 @@ const ContactSection = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="h-10 w-10 rounded-full bg-background border border-border flex items-center justify-center text-foreground hover:text-primary hover:border-primary transition-colors"
+                    aria-label="Facebook"
                   >
                     <Facebook className="h-5 w-5" />
                   </a>
@@ -137,18 +142,20 @@ const ContactSection = () => {
 
             {/* Map */}
             <div className="rounded-lg overflow-hidden border border-border h-72 w-full">
-              <div className="relative h-full w-full bg-muted flex items-center justify-center">
-                <img
-                  src="https://source.unsplash.com/800x600/?map"
-                  alt="Location Map"
+              <div className="relative h-full w-full">
+                <Image
+                  src="/images/athens-map.jpg"
+                  alt="Athens Office Location"
+                  width={800}
+                  height={600}
                   className="h-full w-full object-cover opacity-70"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="bg-background/80 backdrop-blur-sm p-4 rounded-lg text-center max-w-xs">
-                    <p className="font-medium mb-1">Interactive Map</p>
+                    <p className="font-medium mb-1">Athens Office</p>
                     <p className="text-sm text-muted-foreground">
-                      Map placeholder - would integrate Google Maps in
-                      production
+                      Central location near Athens International Airport with
+                      easy access to all major destinations
                     </p>
                   </div>
                 </div>
@@ -180,8 +187,8 @@ const ContactSection = () => {
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Message Sent!</h3>
                 <p className="text-muted-foreground mb-4">
-                  Thank you for your message. We'll get back to you as soon as
-                  possible.
+                  Thank you for your message. Our Greek team will get back to
+                  you as soon as possible.
                 </p>
                 <button
                   onClick={() => setSubmitSuccess(false)}

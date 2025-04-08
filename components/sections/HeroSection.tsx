@@ -1,16 +1,21 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const HeroSection = () => {
   return (
-    <section
-      className="relative min-h-[90vh] flex items-center"
-      style={{
-        backgroundImage:
-          "url('https://source.unsplash.com/1600x900/?luxury-car')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
+    <section className="relative min-h-[90vh] flex items-center">
+      {/* Background Image */}
+      <div className="absolute inset-0 overflow-hidden">
+        <Image
+          src="/images/hero-greece.jpg"
+          alt="Luxury Transfer in Greece"
+          width={1920}
+          height={1080}
+          priority
+          className="w-full h-full object-cover"
+        />
+      </div>
+
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/50" />
 
@@ -18,11 +23,11 @@ const HeroSection = () => {
         <div className="max-w-2xl text-white">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
             Luxury Private Transfers in{" "}
-            <span className="gold-text">Your Region</span>
+            <span className="gold-text">Greece</span>
           </h1>
           <p className="text-lg md:text-xl text-white/90 mb-8">
-            Reliable, safe and premium transport services tailored to your
-            needs.
+            Reliable, safe and premium transport services throughout Athens and
+            the Greek Islands.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Link href="/#booking" className="cta-button text-center">

@@ -6,16 +6,17 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
-const robotoFont = Roboto({
+const roboto = Roboto({
   weight: ["300", "400", "500", "700"],
-  variable: "--font-roboto",
   subsets: ["latin"],
+  display: "swap",
+  variable: "--font-roboto",
 });
 
 export const metadata: Metadata = {
-  title: "Luxury Private Transfers | Professional Car Service",
+  title: "LuxTransfer Greece | Premium Transfer Services",
   description:
-    "Luxury private transfer services with professional drivers. Airport transfers, business travel, private tours, and premium chauffeur services.",
+    "Luxury private transfer services in Greece with professional drivers. Airport transfers, business travel, private tours, and premium chauffeur services.",
 };
 
 export default function RootLayout({
@@ -24,10 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${robotoFont.variable} antialiased min-h-screen flex flex-col`}
-      >
+    <html lang="en" className={roboto.variable}>
+      <body className="font-sans antialiased min-h-screen flex flex-col">
         <Header />
         <main className="flex-grow">{children}</main>
         <Footer />

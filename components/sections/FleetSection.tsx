@@ -1,5 +1,6 @@
 import { Users, Briefcase } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 type VehicleProps = {
@@ -24,10 +25,15 @@ const VehicleCard = ({
   return (
     <div className="bg-background border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
       {/* Vehicle Image */}
-      <div
-        className="h-52 w-full bg-cover bg-center"
-        style={{ backgroundImage: `url(${image})` }}
-      />
+      <div className="h-52 w-full relative overflow-hidden">
+        <Image
+          src={image}
+          alt={model}
+          width={400}
+          height={300}
+          className="w-full h-full object-cover"
+        />
+      </div>
 
       {/* Tags */}
       {tags.length > 0 && (
@@ -91,13 +97,13 @@ const VehicleCard = ({
 const FleetSection = () => {
   const vehicles = [
     {
-      image: "https://source.unsplash.com/800x600/?mercedes-benz",
+      image: "/images/fleet/mercedes-s-class.jpg",
       model: "Mercedes S-Class",
       category: "Luxury Sedan",
       capacity: "Up to 3 passengers",
       luggage: "2 large suitcases",
       features: [
-        "Professional Driver",
+        "Professional Greek Driver",
         "Free WiFi",
         "Leather Seats",
         "Climate Control",
@@ -107,13 +113,13 @@ const FleetSection = () => {
       tags: ["Business Class", "VIP"],
     },
     {
-      image: "https://source.unsplash.com/800x600/?bmw-7",
+      image: "/images/fleet/bmw-7-series.jpg",
       model: "BMW 7 Series",
       category: "Executive Sedan",
       capacity: "Up to 3 passengers",
       luggage: "2 large suitcases",
       features: [
-        "Professional Driver",
+        "Professional Greek Driver",
         "Free WiFi",
         "Leather Seats",
         "Climate Control",
@@ -123,13 +129,13 @@ const FleetSection = () => {
       tags: ["Business Class"],
     },
     {
-      image: "https://source.unsplash.com/800x600/?mercedes-vclass",
+      image: "/images/fleet/mercedes-vclass.jpg",
       model: "Mercedes V-Class",
       category: "Luxury Van",
       capacity: "Up to 7 passengers",
       luggage: "6 large suitcases",
       features: [
-        "Professional Driver",
+        "Professional Greek Driver",
         "Free WiFi",
         "Leather Seats",
         "Climate Control",
@@ -139,13 +145,13 @@ const FleetSection = () => {
       tags: ["Family Friendly", "Group Travel"],
     },
     {
-      image: "https://source.unsplash.com/800x600/?tesla-model-s",
+      image: "/images/fleet/tesla-model-s.jpg",
       model: "Tesla Model S",
       category: "Electric Luxury Sedan",
       capacity: "Up to 3 passengers",
       luggage: "2 large suitcases",
       features: [
-        "Professional Driver",
+        "Professional Greek Driver",
         "Free WiFi",
         "Premium Interior",
         "Climate Control",
@@ -161,11 +167,11 @@ const FleetSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Our Luxury Fleet
+            Our Greek Luxury Fleet
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Experience premium transportation with our exceptional collection of
-            meticulously maintained vehicles.
+            Experience premium transportation throughout Greece with our
+            exceptional collection of meticulously maintained vehicles.
           </p>
         </div>
 
