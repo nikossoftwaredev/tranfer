@@ -14,10 +14,10 @@ const Logo = ({ className, onClick }: LogoProps) => {
       onClick={onClick}
     >
       <Image
-        src="/images/logo.png"
+        src="/images/logo-small.png"
         alt="Poseidon Transfers"
-        width={100}
-        height={100}
+        width={60}
+        height={60}
         className="h-auto"
         priority
       />

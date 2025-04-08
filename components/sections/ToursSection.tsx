@@ -9,6 +9,7 @@ type TourCardProps = {
   duration: number;
   image: string;
   price: string;
+  slug: string;
 };
 
 const TourCard = ({
@@ -17,10 +18,11 @@ const TourCard = ({
   subtitle,
   duration,
   price,
+  slug,
 }: TourCardProps) => {
   return (
     <Link
-      href="/#booking"
+      href={`/tour/${slug}`}
       className="bg-background rounded-lg overflow-hidden border border-border hover:bg-background/60 hover:border-primary/50 transition-colors flex flex-col h-full"
     >
       {/* Tour Image */}
@@ -84,6 +86,7 @@ const ToursSection = () => {
               subtitle={tour.subtitle}
               duration={tour.hours}
               price={tour.cost}
+              slug={tour.slug}
             />
           ))}
         </div>
