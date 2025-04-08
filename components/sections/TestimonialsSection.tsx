@@ -1,4 +1,5 @@
 import { Star } from "lucide-react";
+import Image from "next/image";
 
 type TestimonialProps = {
   quote: string;
@@ -29,16 +30,20 @@ const TestimonialCard = ({
       </div>
 
       {/* Quote */}
-      <blockquote className="text-foreground mb-6 italic">"{quote}"</blockquote>
+      <blockquote className="text-foreground mb-6 italic">
+        &ldquo;{quote}&rdquo;
+      </blockquote>
 
       {/* Author */}
       <div className="flex items-center">
         {avatar ? (
           <div className="h-12 w-12 rounded-full overflow-hidden mr-4">
-            <img
+            <Image
               src={avatar}
               alt={author}
               className="h-full w-full object-cover"
+              width={48}
+              height={48}
             />
           </div>
         ) : (
@@ -66,14 +71,14 @@ const TestimonialsSection = () => {
     },
     {
       quote:
-        "We booked LuxTransfer for our wedding day transportation and couldn't have been happier. The attention to detail and the luxurious vehicles made our special day even more memorable.",
+        "We booked Poseidon Transfer for our wedding day transportation and couldn&apos;t have been happier. The attention to detail and the luxurious vehicles made our special day even more memorable.",
       author: "Sarah & Michael",
       role: "Newlyweds",
       rating: 5,
     },
     {
       quote:
-        "As someone who travels frequently for business, I appreciate the reliability and comfort that LuxTransfer provides. Their airport pickup service is always on time and their drivers are extremely professional.",
+        "As someone who travels frequently for business, I appreciate the reliability and comfort that Poseidon Transfer provides. Their airport pickup service is always on time and their drivers are extremely professional.",
       author: "David Chen",
       role: "International Consultant",
       rating: 5,
@@ -88,8 +93,8 @@ const TestimonialsSection = () => {
             What Our Clients Say
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Don't just take our word for it. Here's what our valued clients have
-            to say about their experience with LuxTransfer.
+            Don&apos;t just take our word for it. Here&apos;s what our valued
+            clients have to say about their experience with Poseidon Transfer.
           </p>
         </div>
 
