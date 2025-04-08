@@ -1,12 +1,16 @@
-import { tours } from "../../../types/tours";
+import { tours } from "../../../../types/tours";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Clock, CheckCircle2 } from "lucide-react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { useTranslations } from "next-intl";
 
 type Props = {
-  params: { slug: string };
+  params: {
+    locale: string;
+    slug: string;
+  };
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -28,12 +32,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  return tours.map((tour) => ({
-    slug: tour.slug,
-  }));
+  return tours.flatMap((tour) => [
+    { locale: "en-US", slug: tour.slug },
+    { locale: "el", slug: tour.slug },
+  ]);
 }
 
 export default function TourPage({ params }: Props) {
+  const t = useTranslations("Tours.tourDetails");
   const tour = tours.find((tour) => tour.slug === params.slug);
 
   if (!tour) {
@@ -65,11 +71,11 @@ export default function TourPage({ params }: Props) {
       {/* Content */}
       <div className="container mx-auto px-4 py-12">
         <Link
-          href="/#tours"
+          href={`/${params.locale}/#tours`}
           className="flex items-center text-primary mb-8 hover:underline"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to All Tours
+          {t("back")}
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -78,7 +84,9 @@ export default function TourPage({ params }: Props) {
             <div className="flex items-center mb-8">
               <div className="bg-primary/10 px-4 py-2 rounded-full flex items-center mr-4">
                 <Clock className="h-5 w-5 text-primary mr-2" />
-                <span className="font-medium">{tour.hours} hours</span>
+                <span className="font-medium">
+                  {tour.hours} {useTranslations("Tours")("hours")}
+                </span>
               </div>
               <div className="text-2xl font-bold text-primary">
                 €{tour.cost}
@@ -94,7 +102,7 @@ export default function TourPage({ params }: Props) {
             {/* Tour Highlights */}
             {tour.highlights && (
               <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-4">Tour Highlights</h2>
+                <h2 className="text-2xl font-bold mb-4">{t("highlights")}</h2>
                 <ul className="space-y-2">
                   {tour.highlights.map((highlight, index) => (
                     <li key={index} className="flex items-start">
@@ -109,9 +117,7 @@ export default function TourPage({ params }: Props) {
             {/* What's Included */}
             {tour.includes && (
               <div>
-                <h2 className="text-2xl font-bold mb-4">
-                  What&apos;s Included
-                </h2>
+                <h2 className="text-2xl font-bold mb-4">{t("includes")}</h2>
                 <ul className="space-y-2">
                   {tour.includes.map((item, index) => (
                     <li key={index} className="flex items-start">
@@ -127,10 +133,9 @@ export default function TourPage({ params }: Props) {
           {/* Booking Section */}
           <div className="lg:col-span-1">
             <div className="bg-card border border-border rounded-lg p-6 sticky top-24">
-              <h2 className="text-xl font-bold mb-4">Book This Tour</h2>
+              <h2 className="text-xl font-bold mb-4">{t("book.title")}</h2>
               <p className="text-muted-foreground mb-6">
-                Ready to experience this amazing Greek tour? Complete the form
-                below to request your booking.
+                {t("book.description")}
               </p>
 
               <form className="space-y-4">
@@ -139,7 +144,7 @@ export default function TourPage({ params }: Props) {
                     htmlFor="name"
                     className="block text-sm font-medium mb-1"
                   >
-                    Full Name*
+                    {t("book.fullName")}
                   </label>
                   <input
                     type="text"
@@ -154,7 +159,7 @@ export default function TourPage({ params }: Props) {
                     htmlFor="email"
                     className="block text-sm font-medium mb-1"
                   >
-                    Email Address*
+                    {t("book.email")}
                   </label>
                   <input
                     type="email"
@@ -169,7 +174,7 @@ export default function TourPage({ params }: Props) {
                     htmlFor="date"
                     className="block text-sm font-medium mb-1"
                   >
-                    Preferred Date*
+                    {t("book.date")}
                   </label>
                   <input
                     type="date"
@@ -184,7 +189,7 @@ export default function TourPage({ params }: Props) {
                     htmlFor="passengers"
                     className="block text-sm font-medium mb-1"
                   >
-                    Number of Passengers*
+                    {t("book.passengers")}
                   </label>
                   <select
                     id="passengers"
@@ -192,15 +197,15 @@ export default function TourPage({ params }: Props) {
                     required
                   >
                     <option value="" disabled selected>
-                      Select number of passengers
+                      {t("book.selectPassengers")}
                     </option>
-                    <option value="1">1 Passenger</option>
-                    <option value="2">2 Passengers</option>
-                    <option value="3">3 Passengers</option>
-                    <option value="4">4 Passengers</option>
-                    <option value="5">5 Passengers</option>
-                    <option value="6">6 Passengers</option>
-                    <option value="7+">7+ Passengers</option>
+                    <option value="1">1 {t("book.passenger")}</option>
+                    <option value="2">2 {t("book.passengers")}</option>
+                    <option value="3">3 {t("book.passengers")}</option>
+                    <option value="4">4 {t("book.passengers")}</option>
+                    <option value="5">5 {t("book.passengers")}</option>
+                    <option value="6">6 {t("book.passengers")}</option>
+                    <option value="7+">7+ {t("book.passengers")}</option>
                   </select>
                 </div>
 
@@ -209,7 +214,7 @@ export default function TourPage({ params }: Props) {
                     htmlFor="notes"
                     className="block text-sm font-medium mb-1"
                   >
-                    Special Requests
+                    {t("book.specialRequests")}
                   </label>
                   <textarea
                     id="notes"
@@ -222,20 +227,20 @@ export default function TourPage({ params }: Props) {
                   type="submit"
                   className="w-full py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-medium rounded-md"
                 >
-                  Request Booking
+                  {t("book.bookButton")}
                 </button>
               </form>
 
               <div className="mt-6 text-sm text-muted-foreground text-center">
                 <p>
-                  Need to customize this tour?{" "}
+                  {t("book.customize")}{" "}
                   <Link
-                    href="/#contact"
+                    href={`/${params.locale}/#contact`}
                     className="text-primary hover:underline"
                   >
-                    Contact us
+                    {t("book.contactUs")}
                   </Link>{" "}
-                  directly.
+                  {t("book.directly")}
                 </p>
               </div>
             </div>

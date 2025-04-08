@@ -1,6 +1,12 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { useParams } from "next/navigation";
 
 export default function TourNotFound() {
+  const t = useTranslations("Tours");
+  const params = useParams();
+  const locale = (params.locale as string) || "en-US";
+
   return (
     <div className="min-h-[70vh] flex items-center justify-center">
       <div className="text-center max-w-md p-6">
@@ -9,7 +15,7 @@ export default function TourNotFound() {
           The tour you are looking for does not exist or may have been removed.
         </p>
         <Link
-          href="/#tours"
+          href={`/${locale}/#tours`}
           className="px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-medium rounded-md inline-block"
         >
           Explore Our Tours

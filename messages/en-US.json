@@ -1,0 +1,217 @@
+{
+  "Metadata": {
+    "title": "Poseidon Transfers | Premium Transportation Services in Greece",
+    "description": "Experience luxury transportation across Greece with Poseidon Transfers. Professional chauffeurs, premium fleet, and personalized service.",
+    "siteName": "Poseidon Transfers",
+    "imageAlt": "Luxury Transfer Services in Greece"
+  },
+  "Navigation": {
+    "home": "Home",
+    "services": "Services",
+    "fleet": "Fleet",
+    "tours": "Greek Tours",
+    "about": "About",
+    "contact": "Contact",
+    "bookNow": "Book Now"
+  },
+  "Hero": {
+    "title": "Poseidon Transfers",
+    "subtitle": "Luxury Private Transfers in Greece",
+    "description": "Reliable, safe and premium transport services throughout Athens and the Greek Islands.",
+    "bookNow": "Book Now",
+    "exploreFleet": "Explore Our Fleet"
+  },
+  "Services": {
+    "title": "Our Premium Greek Services",
+    "description": "We offer a comprehensive range of luxury transportation services throughout Greece, from Athens to the islands and ancient sites.",
+    "airportTransfers": {
+      "title": "Athens Airport Transfers",
+      "description": "Comfortable and timely airport pickups and drop-offs at Athens International Airport with flight monitoring and complimentary waiting time."
+    },
+    "businessTravel": {
+      "title": "Business Travel",
+      "description": "Professional chauffeur services for executives and corporate clients throughout Athens and major Greek business centers."
+    },
+    "guidedTours": {
+      "title": "Greek Guided Tours",
+      "description": "Customized sightseeing experiences to the Acropolis, Delphi, Meteora, and other iconic Greek destinations with knowledgeable drivers."
+    },
+    "weddingTransfers": {
+      "title": "Greek Wedding & Event Transfers",
+      "description": "Special occasion transportation for Greek weddings and events with decorated vehicles and VIP service for your special day."
+    },
+    "portTransfers": {
+      "title": "Island & Port Transfers",
+      "description": "Seamless transfers to and from Greek ports like Piraeus and Rafina for connections to the beautiful Greek islands."
+    },
+    "customExperience": {
+      "title": "Custom Greek Experience",
+      "description": "Need a personalized Greek travel experience? We can create a tailored service package just for you.",
+      "contactUs": "Contact Us"
+    }
+  },
+  "Fleet": {
+    "title": "Our Greek Luxury Fleet",
+    "description": "Experience premium transportation throughout Greece with our exceptional collection of meticulously maintained vehicles.",
+    "features": "Features:",
+    "bookVehicle": "Book This Vehicle",
+    "tags": {
+      "businessClass": "Business Class",
+      "vip": "VIP",
+      "familyFriendly": "Family Friendly",
+      "groupTravel": "Group Travel",
+      "ecoOption": "Eco Option",
+      "premium": "Premium"
+    },
+    "vehicles": {
+      "mercedes": {
+        "capacity": "Up to 3 passengers",
+        "luggage": "2 large suitcases"
+      },
+      "vito": {
+        "capacity": "Up to 7 passengers",
+        "luggage": "6 large suitcases"
+      },
+      "tesla": {
+        "capacity": "Up to 3 passengers",
+        "luggage": "2 large suitcases"
+      }
+    },
+    "commonFeatures": {
+      "driver": "Professional Greek Driver",
+      "wifi": "Free WiFi",
+      "leather": "Leather Seats",
+      "climate": "Climate Control",
+      "water": "Bottled Water",
+      "charging": "Charging Outlets",
+      "legroom": "Extra Legroom",
+      "premium": "Premium Interior",
+      "zero": "Zero Emissions"
+    }
+  },
+  "Tours": {
+    "title": "Greek Tour Packages",
+    "description": "Explore the stunning beauty and rich history of Greece with our premium private tours, tailored to provide unforgettable experiences.",
+    "bookTour": "Book This Tour",
+    "customTour": {
+      "description": "Looking for a custom tour experience in Greece? We can create a personalized itinerary just for you.",
+      "requestButton": "Request Custom Tour"
+    },
+    "hours": "hours",
+    "tourDetails": {
+      "back": "Back to All Tours",
+      "highlights": "Tour Highlights",
+      "includes": "What's Included",
+      "book": {
+        "title": "Book This Tour",
+        "description": "Ready to experience this amazing Greek tour? Complete the form below to request your booking.",
+        "fullName": "Full Name*",
+        "email": "Email Address*",
+        "date": "Preferred Date*",
+        "passengers": "Number of Passengers*",
+        "selectPassengers": "Select number of passengers",
+        "passenger": "Passenger",
+        "passengers": "Passengers",
+        "specialRequests": "Special Requests",
+        "bookButton": "Request Booking",
+        "customize": "Need to customize this tour?",
+        "contactUs": "Contact us",
+        "directly": "directly."
+      }
+    }
+  },
+  "About": {
+    "title": "About Poseidon Transfers",
+    "description": "At Poseidon Transfers, we have been providing exceptional private transfer services throughout Greece for over 10 years. Our dedication to quality, safety, and Greek hospitality has earned us a reputation as one of the leading luxury transportation providers in the region.",
+    "teamDescription": "Our team of professional Greek chauffeurs is meticulously trained to provide the highest level of service, combining local knowledge with international standards to ensure that every journey with us is memorable for all the right reasons.",
+    "values": {
+      "safety": {
+        "title": "Safety First",
+        "description": "Your security is our top priority in Greece. All our vehicles undergo rigorous safety inspections and our drivers are extensively trained on Greek roads."
+      },
+      "punctuality": {
+        "title": "Punctuality",
+        "description": "We value your time and guarantee prompt service throughout Greece, with real-time tracking and flight monitoring for Athens airport transfers."
+      },
+      "quality": {
+        "title": "Premium Quality",
+        "description": "From our luxury vehicles to our personalized Greek service, we maintain the highest standards in every aspect of your journey."
+      },
+      "hospitality": {
+        "title": "Greek Hospitality",
+        "description": "We combine traditional Greek philoxenia (hospitality) with professional service. Our local drivers know Greece inside out."
+      }
+    },
+    "banner": {
+      "title": "Your Greek journey deserves the best",
+      "subtitle": "Experience luxury with every mile in Greece"
+    }
+  },
+  "Testimonials": {
+    "title": "What Our Clients Say",
+    "description": "Don't just take our word for it. Here's what our valued clients have to say about their experience with Poseidon Transfers."
+  },
+  "Booking": {
+    "title": "Book Your Greek Transfer",
+    "description": "Complete the form below to request your private transfer in Greece. Our team will get back to you promptly to confirm the details.",
+    "success": {
+      "title": "Booking Request Received!",
+      "message": "Thank you for your booking request. Our team will contact you shortly to confirm your reservation.",
+      "button": "Make another booking"
+    },
+    "form": {
+      "personal": "Personal Information",
+      "fullName": "Full Name*",
+      "email": "Email Address*",
+      "phone": "Phone Number*",
+      "trip": "Trip Details",
+      "pickup": "Pickup Location*",
+      "pickupPlaceholder": "Athens Airport, Hotel, Port...",
+      "dropoff": "Dropoff Location*",
+      "dropoffPlaceholder": "Hotel, Tourist Site, Port...",
+      "date": "Date*",
+      "time": "Time*",
+      "additional": "Additional Details",
+      "passengers": "Number of Passengers*",
+      "selectPassengers": "Select number of passengers",
+      "vehicle": "Preferred Vehicle",
+      "selectVehicle": "Select a vehicle (optional)",
+      "special": "Special Requests",
+      "notes": "Additional Notes",
+      "notesPlaceholder": "Any special requirements, flight details, or Greek island ferry information...",
+      "submit": "Send Booking Request"
+    }
+  },
+  "Contact": {
+    "title": "Contact Our Greek Team",
+    "description": "Have questions about our Greek transportation services? Get in touch with our team, and we'll be happy to assist you.",
+    "athens": {
+      "title": "Athens Contact Information",
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Address",
+      "follow": "Follow Us"
+    },
+    "office": {
+      "title": "Athens Office",
+      "description": "Central location near Athens International Airport with easy access to all major destinations"
+    },
+    "form": {
+      "title": "Send a Message",
+      "fullName": "Full Name*",
+      "email": "Email Address*",
+      "subject": "Subject*",
+      "message": "Message*",
+      "submit": "Send Message"
+    }
+  },
+  "Footer": {
+    "description": "Luxury private transfer services throughout Greece with professional drivers. Experience premium transportation tailored to your Greek adventure.",
+    "quickLinks": "Quick Links",
+    "services": "Our Services",
+    "contact": "Contact Us",
+    "rights": "All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms & Conditions"
+  }
+} 

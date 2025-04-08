@@ -12,3 +12,4 @@ alwaysApply: true
 - If you are going to use the same interface twice move it to a folder called types. so you can import it from there.
 - Always use shadcn ui components.
 - When creating a function that takes in more than 2 parameters always make this one param but an object containing all the params.
+know that next params are now a promise you have to await them
