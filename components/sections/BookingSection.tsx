@@ -5,6 +5,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
 import { DatePicker } from "../ui/date-picker";
+import { TimePicker } from "../ui/time-picker";
 import { Button } from "../ui/button";
 import { Select } from "../ui/select";
 import { useTranslations } from "next-intl";
@@ -56,6 +57,13 @@ const BookingSection = () => {
     setFormState((prev) => ({
       ...prev,
       date,
+    }));
+  };
+
+  const handleTimeChange = (time: string) => {
+    setFormState((prev) => ({
+      ...prev,
+      time,
     }));
   };
 
@@ -221,20 +229,18 @@ const BookingSection = () => {
                       <div className="space-y-2">
                         <Label htmlFor="date">{t("form.date")}</Label>
                         <DatePicker
-                          date={formState.date}
+                          date={formState.date || new Date()}
                           setDate={handleDateChange}
                           placeholder={t("form.date")}
                         />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="time">{t("form.time")}</Label>
-                        <Input
-                          type="time"
-                          id="time"
-                          name="time"
-                          value={formState.time}
-                          onChange={handleChange}
-                          required
+                        <TimePicker
+                          time={formState.time}
+                          setTime={handleTimeChange}
+                          placeholder={t("form.time")}
+                          className="h-10"
                         />
                       </div>
                     </div>

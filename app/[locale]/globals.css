@@ -207,11 +207,18 @@ option {
   @apply bg-background text-foreground;
 }
 
-/* Fix calendar and clock icons in date/time inputs */
+/* Hide default calendar and time icons in inputs */
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
-  opacity: 0.6;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  cursor: pointer;
 }
 
 /* React Day Picker styles */

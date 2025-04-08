@@ -9,26 +9,24 @@ import { Button } from "./button";
 import { Calendar } from "./calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
-interface DatePickerProps {
-  date?: Date;
-  setDate: (date?: Date) => void;
-  className?: string;
-  placeholder?: string;
-}
-
 export const DatePicker = ({
   date,
   setDate,
+  placeholder,
   className,
-  placeholder = "Pick a date",
-}: DatePickerProps) => {
+}: {
+  date: Date;
+  setDate: (date: Date) => void;
+  placeholder?: string;
+  className?: string;
+}) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
           className={cn(
-            "w-full justify-start text-left font-normal",
+            "w-full justify-start text-left font-normal h-10",
             !date && "text-muted-foreground",
             className
           )}
@@ -37,11 +35,11 @@ export const DatePicker = ({
           {date ? format(date, "PPP") : <span>{placeholder}</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
+      <PopoverContent className="w-auto p-0">
         <Calendar
           mode="single"
           selected={date}
-          onSelect={setDate}
+          onSelect={(day) => setDate(day as Date)}
           initialFocus
         />
       </PopoverContent>

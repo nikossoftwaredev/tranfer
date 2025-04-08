@@ -108,7 +108,6 @@
         "fullName": "Full Name*",
         "email": "Email Address*",
         "date": "Preferred Date*",
-        "passengers": "Number of Passengers*",
         "selectPassengers": "Select number of passengers",
         "passenger": "Passenger",
         "passengers": "Passengers",

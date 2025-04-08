@@ -10,6 +10,7 @@ import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { DatePicker } from "../../../../components/ui/date-picker";
+import { TimePicker } from "../../../../components/ui/time-picker";
 import { Label } from "../../../../components/ui/label";
 import { Input } from "../../../../components/ui/input";
 import { Textarea } from "../../../../components/ui/textarea";
@@ -56,6 +57,7 @@ export default function TourPage({ params }: PageProps) {
   const { locale, slug } = params;
   const tour = tours.find((tour) => tour.slug === slug);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [selectedTime, setSelectedTime] = useState<string>("");
 
   // Form state for tour booking
   const [formData, setFormData] = useState({
@@ -134,7 +136,7 @@ export default function TourPage({ params }: PageProps) {
           <div className="lg:col-span-2">
             <div className="flex items-center mb-8">
               <div className="bg-primary/10 px-4 py-2 rounded-full flex items-center mr-4">
-                <Clock className="h-5 w-5 text-primary mr-2" />
+                <Clock className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
                 <span className="font-medium">
                   {tour.hours} {useTranslations("Tours")("hours")}
                 </span>
@@ -215,9 +217,19 @@ export default function TourPage({ params }: PageProps) {
                 <div>
                   <Label htmlFor="date">{t("book.date")}</Label>
                   <DatePicker
-                    date={selectedDate}
+                    date={selectedDate || new Date()}
                     setDate={setSelectedDate}
                     placeholder={t("book.date")}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="time">Pick a time</Label>
+                  <TimePicker
+                    time={selectedTime}
+                    setTime={setSelectedTime}
+                    placeholder="Pick a time"
+                    className="h-10"
                   />
                 </div>
 
