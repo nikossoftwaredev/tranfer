@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold gold-text">Poseidon Transfer</h3>
+            <h3 className="text-2xl font-bold gold-text">Poseidon Transfers</h3>
             <p className="text-secondary-foreground/80 max-w-xs">
               Luxury private transfer services throughout Greece with
               professional drivers. Experience premium transportation tailored
@@ -163,7 +163,7 @@ const Footer = () => {
         {/* Bottom Footer */}
         <div className="border-t border-secondary-foreground/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-secondary-foreground/70 text-sm">
-            © {currentYear} Poseidon Transfer. All rights reserved.
+            © {currentYear} Poseidon Transfers. All rights reserved.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link

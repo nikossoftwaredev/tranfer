@@ -71,14 +71,14 @@ const TestimonialsSection = () => {
     },
     {
       quote:
-        "We booked Poseidon Transfer for our wedding day transportation and couldn&apos;t have been happier. The attention to detail and the luxurious vehicles made our special day even more memorable.",
+        "We booked Poseidon Transfers for our wedding day transportation and couldn&apos;t have been happier. The attention to detail and the luxurious vehicles made our special day even more memorable.",
       author: "Sarah & Michael",
       role: "Newlyweds",
       rating: 5,
     },
     {
       quote:
-        "As someone who travels frequently for business, I appreciate the reliability and comfort that Poseidon Transfer provides. Their airport pickup service is always on time and their drivers are extremely professional.",
+        "As someone who travels frequently for business, I appreciate the reliability and comfort that Poseidon Transfers provides. Their airport pickup service is always on time and their drivers are extremely professional.",
       author: "David Chen",
       role: "International Consultant",
       rating: 5,
@@ -94,7 +94,7 @@ const TestimonialsSection = () => {
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Don&apos;t just take our word for it. Here&apos;s what our valued
-            clients have to say about their experience with Poseidon Transfer.
+            clients have to say about their experience with Poseidon Transfers.
           </p>
         </div>
 

@@ -91,12 +91,21 @@ const ContactSection = () => {
                   <Mail className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
                   <div className="ml-4">
                     <h4 className="font-medium mb-1">Email</h4>
-                    <p className="text-muted-foreground">
-                      info@luxtransfer-greece.com
-                    </p>
-                    <p className="text-muted-foreground">
-                      bookings@luxtransfer-greece.com
-                    </p>
+                    <div className="space-y-2">
+                      <p className="font-medium">Email</p>
+                      <a
+                        href="mailto:info@poseidontransfers.gr"
+                        className="text-foreground/80 hover:text-primary transition-colors block"
+                      >
+                        info@poseidontransfers.gr
+                      </a>
+                      <a
+                        href="mailto:bookings@poseidontransfers.gr"
+                        className="text-foreground/80 hover:text-primary transition-colors block"
+                      >
+                        bookings@poseidontransfers.gr
+                      </a>
+                    </div>
                   </div>
                 </div>
 

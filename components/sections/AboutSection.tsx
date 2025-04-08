@@ -29,11 +29,11 @@ const AboutSection = () => {
           {/* Left Column: Text Content */}
           <div>
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              About LuxTransfer Greece
+              About Poseidon Transfers
             </h2>
 
             <p className="text-muted-foreground mb-6">
-              At LuxTransfer Greece, we have been providing exceptional private
+              At Poseidon Transfers, we have been providing exceptional private
               transfer services throughout Greece for over 10 years. Our
               dedication to quality, safety, and Greek hospitality has earned us
               a reputation as one of the leading luxury transportation providers

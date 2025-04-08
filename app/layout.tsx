@@ -8,16 +8,16 @@ import Footer from "../components/layout/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Poseidon Transfer | Premium Transportation Services in Greece",
+  title: "Poseidon Transfers | Premium Transportation Services in Greece",
   description:
-    "Experience luxury transportation across Greece with Poseidon Transfer. Professional chauffeurs, premium fleet, and personalized service.",
+    "Experience luxury transportation across Greece with Poseidon Transfers. Professional chauffeurs, premium fleet, and personalized service.",
   metadataBase: new URL("https://poseidontranfer.vercel.app"),
   openGraph: {
-    title: "Poseidon Transfer | Premium Transportation Services in Greece",
+    title: "Poseidon Transfers | Premium Transportation Services in Greece",
     description:
-      "Experience luxury transportation across Greece with Poseidon Transfer. Professional chauffeurs, premium fleet, and personalized service.",
+      "Experience luxury transportation across Greece with Poseidon Transfers. Professional chauffeurs, premium fleet, and personalized service.",
     url: "https://poseidontranfer.vercel.app",
-    siteName: "Poseidon Transfer",
+    siteName: "Poseidon Transfers",
     images: [
       {
         url: "/images/hero-greece.jpg",
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Poseidon Transfer | Premium Transportation Services in Greece",
+    title: "Poseidon Transfers | Premium Transportation Services in Greece",
     description:
-      "Experience luxury transportation across Greece with Poseidon Transfer. Professional chauffeurs, premium fleet, and personalized service.",
+      "Experience luxury transportation across Greece with Poseidon Transfers. Professional chauffeurs, premium fleet, and personalized service.",
     images: ["/images/hero-greece.jpg"],
   },
 };
