@@ -1,22 +1,16 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import { cn } from "../lib/utils";
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
 
-// We'll create these components next
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-
-const roboto = Roboto({
-  weight: ["300", "400", "500", "700"],
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-roboto",
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "LuxTransfer Greece | Premium Transfer Services",
+  title: "Poseidon Transfer | Premium Transportation Services in Greece",
   description:
-    "Luxury private transfer services in Greece with professional drivers. Airport transfers, business travel, private tours, and premium chauffeur services.",
+    "Experience luxury transportation across Greece with Poseidon Transfer. Professional chauffeurs, premium fleet, and personalized service.",
 };
 
 export default function RootLayout({
@@ -25,10 +19,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={roboto.variable}>
-      <body className="font-sans antialiased min-h-screen flex flex-col">
+    <html lang="en" className="dark">
+      <body className={cn(inter.className, "min-h-screen bg-background")}>
         <Header />
-        <main className="flex-grow">{children}</main>
+        <main>{children}</main>
         <Footer />
       </body>
     </html>

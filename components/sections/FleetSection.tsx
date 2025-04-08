@@ -1,7 +1,7 @@
 import { Users, Briefcase } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 type VehicleProps = {
   image: string;
@@ -97,7 +97,7 @@ const VehicleCard = ({
 const FleetSection = () => {
   const vehicles = [
     {
-      image: "/images/fleet/mercedes-s-class.jpg",
+      image: "/images/fleet/mercedes-s-class.png",
       model: "Mercedes S-Class",
       category: "Luxury Sedan",
       capacity: "Up to 3 passengers",
@@ -113,24 +113,8 @@ const FleetSection = () => {
       tags: ["Business Class", "VIP"],
     },
     {
-      image: "/images/fleet/bmw-7-series.jpg",
-      model: "BMW 7 Series",
-      category: "Executive Sedan",
-      capacity: "Up to 3 passengers",
-      luggage: "2 large suitcases",
-      features: [
-        "Professional Greek Driver",
-        "Free WiFi",
-        "Leather Seats",
-        "Climate Control",
-        "Bottled Water",
-        "Charging Outlets",
-      ],
-      tags: ["Business Class"],
-    },
-    {
-      image: "/images/fleet/mercedes-vclass.jpg",
-      model: "Mercedes V-Class",
+      image: "/images/fleet/mercedes-vito.png",
+      model: "Mercedes Vito",
       category: "Luxury Van",
       capacity: "Up to 7 passengers",
       luggage: "6 large suitcases",
@@ -145,7 +129,7 @@ const FleetSection = () => {
       tags: ["Family Friendly", "Group Travel"],
     },
     {
-      image: "/images/fleet/tesla-model-s.jpg",
+      image: "/images/fleet/tesla-s.png",
       model: "Tesla Model S",
       category: "Electric Luxury Sedan",
       capacity: "Up to 3 passengers",
@@ -175,7 +159,7 @@ const FleetSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {vehicles.map((vehicle, index) => (
             <VehicleCard
               key={index}

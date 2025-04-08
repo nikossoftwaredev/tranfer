@@ -22,8 +22,8 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-2xl text-white">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
-            Luxury Private Transfers in{" "}
-            <span className="gold-text">Greece</span>
+            <span className="gold-text">Poseidon Transfer</span> <br />
+            Luxury Private Transfers in Greece
           </h1>
           <p className="text-lg md:text-xl text-white/90 mb-8">
             Reliable, safe and premium transport services throughout Athens and

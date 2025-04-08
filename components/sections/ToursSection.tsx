@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Clock } from "lucide-react";
-import { tours } from "@/types/tours";
+import { tours } from "../../types/tours";
 
 type TourCardProps = {
   title: string;

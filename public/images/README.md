@@ -4,9 +4,11 @@ This directory contains placeholder images used throughout the website. Please r
 
 ## Required Images
 
-### Hero Image
+### Hero & About Images
 
 - File: `/images/hero-greece.jpg` - A high-quality image showing a luxury car in a beautiful Greek setting (1920x1080px recommended)
+- File: `/images/about-greece.jpg` - An image of a professional Greek chauffeur or luxury car in a Greek context (800x1000px)
+- File: `/images/athens-map.jpg` - A map or image of Athens showing office location (800x600px)
 
 ### Fleet Images
 
@@ -26,4 +28,4 @@ This directory contains placeholder images used throughout the website. Please r
 - `/images/tours/olympian_odyssey.jpg` - Olympia ancient site (800x600px)
 - `/images/tours/epic_encounters.jpg` - Epidaurus ancient theatre (800x600px)
 
-For best results, choose professional high-quality images with good lighting and composition to maintain the luxury feel of the website.
+For best results, choose professional high-quality images with good lighting and composition to maintain the luxury feel of the website. Use real photos of Greece to provide an authentic experience.
