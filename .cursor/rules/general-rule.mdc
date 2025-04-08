@@ -1,0 +1,14 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+
+- Always use pnpm.
+- Use tailwind
+- Always use arrow functions.
+- If you want to create a new interface, make sure that you cannot use Prisma Generated types.
+- If you are going to use the same interface twice move it to a folder called types. so you can import it from there.
+- Always use shadcn ui components.
+- When creating a function that takes in more than 2 parameters always make this one param but an object containing all the params.
