@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
@@ -9,6 +9,7 @@ import { TimePicker } from "../ui/time-picker";
 import { Button } from "../ui/button";
 import { Select } from "../ui/select";
 import { useTranslations } from "next-intl";
+import { useVehicle } from "../../contexts/VehicleContext";
 
 type FormState = {
   fullName: string;
@@ -25,6 +26,8 @@ type FormState = {
 
 const BookingSection = () => {
   const t = useTranslations("Booking");
+  const { selectedVehicle, setSelectedVehicle } = useVehicle();
+
   const [formState, setFormState] = useState<FormState>({
     fullName: "",
     email: "",
@@ -34,12 +37,19 @@ const BookingSection = () => {
     date: undefined,
     time: "",
     passengers: "",
-    vehicle: "",
+    vehicle: selectedVehicle,
     notes: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  useEffect(() => {
+    setFormState((prev) => ({
+      ...prev,
+      vehicle: selectedVehicle,
+    }));
+  }, [selectedVehicle]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -75,6 +85,10 @@ const BookingSection = () => {
       ...prev,
       [name]: value,
     }));
+
+    if (name === "vehicle") {
+      setSelectedVehicle(value);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -94,7 +108,7 @@ const BookingSection = () => {
         date: undefined,
         time: "",
         passengers: "",
-        vehicle: "",
+        vehicle: selectedVehicle,
         notes: "",
       });
 

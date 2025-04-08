@@ -1,10 +1,12 @@
+"use client";
+
 import { Users, Briefcase } from "lucide-react";
-import Link from "next/link";
 import Image from "next/image";
 import { cn } from "../../lib/utils";
 import { useTranslations } from "next-intl";
 import SectionHeading from "../ui/SectionHeading";
 import { VehicleConfig, vehicles } from "../../lib/data/vehicles";
+import { useVehicle } from "../../contexts/VehicleContext";
 import {
   Card,
   CardHeader,
@@ -26,6 +28,12 @@ const VehicleCard = ({
   tags = [],
 }: VehicleProps) => {
   const t = useTranslations("Fleet");
+  const { selectedVehicle, setSelectedVehicle } = useVehicle();
+  const isSelected = selectedVehicle === model;
+
+  const handleSelectVehicle = () => {
+    setSelectedVehicle(model);
+  };
 
   const getTagTranslation = (tag: string) => {
     switch (tag) {
@@ -72,7 +80,12 @@ const VehicleCard = ({
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+    <Card
+      className={cn(
+        "overflow-hidden hover:shadow-lg transition-shadow",
+        isSelected && "border-primary border-2"
+      )}
+    >
       {/* Vehicle Image */}
       <div className="h-52 w-full relative overflow-hidden">
         <Image
@@ -82,6 +95,11 @@ const VehicleCard = ({
           height={300}
           className="w-full h-full object-cover"
         />
+        {isSelected && (
+          <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-xs font-medium px-2 py-1 rounded-full">
+            Selected
+          </div>
+        )}
       </div>
 
       {/* Tags */}
@@ -131,15 +149,18 @@ const VehicleCard = ({
 
       {/* Book Button */}
       <CardFooter>
-        <Link
-          href="/#booking"
+        <button
+          onClick={handleSelectVehicle}
           className={cn(
-            "block w-full py-2 text-center text-sm font-medium rounded-md",
-            "bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+            "w-full py-2 text-center text-sm font-medium rounded-md",
+            isSelected
+              ? "bg-secondary text-secondary-foreground hover:bg-secondary/90"
+              : "bg-primary text-primary-foreground hover:bg-primary/90",
+            "transition-colors"
           )}
         >
-          {t("bookVehicle")}
-        </Link>
+          {isSelected ? "Selected" : t("bookVehicle")}
+        </button>
       </CardFooter>
     </Card>
   );

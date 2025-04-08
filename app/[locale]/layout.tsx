@@ -8,6 +8,7 @@ import { notFound } from "next/navigation";
 import { routing } from "../../i18n/routing";
 import type { Metadata } from "next";
 import { Toaster } from "../../components/ui/toaster";
+import { VehicleProvider } from "../../contexts/VehicleContext";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -75,10 +76,12 @@ export default async function RootLayout({
     <html lang={locale} className="dark">
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <Header />
-          <main>{children}</main>
-          <Footer />
-          <Toaster />
+          <VehicleProvider>
+            <Header />
+            <main>{children}</main>
+            <Footer />
+            <Toaster />
+          </VehicleProvider>
         </NextIntlClientProvider>
       </body>
     </html>
