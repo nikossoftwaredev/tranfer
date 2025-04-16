@@ -9,7 +9,7 @@ type Props = {
 };
 
 type PageProps = {
-  params: { locale: string; slug: string };
+  params: Promise<{ locale: string; slug: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -38,8 +38,8 @@ export async function generateStaticParams() {
   ]);
 }
 
-export default function TourPage({ params }: PageProps) {
-  const { locale, slug } = params;
+export default async function TourPage({ params }: PageProps) {
+  const { locale, slug } = await params;
   const tour = tours.find((tour) => tour.slug === slug);
 
   if (!tour) {

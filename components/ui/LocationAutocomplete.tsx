@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import React, { useState } from "react";
+import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,211 +17,111 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import debounce from "lodash.debounce";
+import { useDebounce } from "@/hooks/use-debounce";
 
 interface NominatimResult {
   place_id: number;
   display_name: string;
-  lat: string;
-  lon: string;
-  address?: {
+  name: string;
+  address: {
+    amenity?: string;
     road?: string;
-    house_number?: string;
-    postcode?: string;
     suburb?: string;
     city?: string;
     state?: string;
-    amenity?: string;
-    aeroway?: string;
+    country?: string;
+    postcode?: string;
   };
-  type?: string;
-  class?: string;
 }
 
 interface LocationOption {
   id: string;
   name: string;
   description?: string;
-  lat: string;
-  lon: string;
   uniqueKey: string;
-  isAirport?: boolean;
 }
 
-const formatAddress = (
-  result: NominatimResult
-): {
-  name: string;
-  description: string;
-  uniqueKey: string;
-  isAirport: boolean;
-} => {
-  const addr = result.address || {};
-  const isAirport =
-    result.class === "aeroway" ||
-    result.type === "aerodrome" ||
-    addr.aeroway === "aerodrome" ||
-    result.display_name.toLowerCase().includes("airport");
-
-  // Special handling for Athens International Airport
-  if (isAirport && result.display_name.toLowerCase().includes("athens")) {
-    return {
-      name: "Athens International Airport (ATH)",
-      description: "Eleftherios Venizelos International Airport",
-      uniqueKey: `ath-airport-${result.place_id}`,
-      isAirport: true,
-    };
-  }
-
-  const street = addr.road || "";
-  const number = addr.house_number || "";
-  const postcode = addr.postcode || "";
-  const suburb = addr.suburb || "";
-  const city = addr.city || "";
-  const amenity = addr.amenity || "";
-
-  let mainPart = "";
-  let secondaryPart = "";
-
-  if (isAirport) {
-    mainPart = result.display_name.split(",")[0];
-    secondaryPart = result.display_name.split(",").slice(1, 3).join(",").trim();
-  } else {
-    mainPart =
-      [street, number].filter(Boolean).join(" ") ||
-      amenity ||
-      result.display_name.split(",")[0];
-    secondaryPart = [suburb, city, postcode].filter(Boolean).join(", ");
-  }
-
-  // Make uniqueKey more specific by including coordinates
-  const uniqueKey = `${result.lat},${result.lon}`;
-
-  return {
-    name: mainPart,
-    description: secondaryPart,
-    uniqueKey,
-    isAirport,
-  };
+const ATH_AIRPORT: LocationOption = {
+  id: "ATH",
+  name: "Athens International Airport (ATH)",
+  description: "Attiki Odos, Spata Artemida 190 04",
+  uniqueKey: "ATH_AIRPORT_SPATA",
 };
 
-interface LocationAutocompleteProps {
-  value?: string;
-  onChange: (value: LocationOption) => void;
-  placeholder?: string;
+const formatAddress = (address: NominatimResult["address"]) => {
+  const parts = [];
+  if (address.road) parts.push(address.road);
+  if (address.suburb) parts.push(address.suburb);
+  if (address.city) parts.push(address.city);
+  if (address.state) parts.push(address.state);
+  if (address.country) parts.push(address.country);
+  if (address.postcode) parts.push(address.postcode);
+  return parts.join(", ");
+};
+
+interface Props {
+  value?: LocationOption;
+  onChange: (location: LocationOption) => void;
   isPickup?: boolean;
 }
 
-export const LocationAutocomplete = ({
-  value,
-  onChange,
-  placeholder = "Enter Location...",
-  isPickup = false,
-}: LocationAutocompleteProps) => {
-  const [open, setOpen] = React.useState(false);
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const [locations, setLocations] = React.useState<LocationOption[]>([]);
-  const [isLoading, setIsLoading] = React.useState(false);
+export const LocationAutocomplete = ({ value, onChange, isPickup }: Props) => {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const debouncedQuery = useDebounce(query, 300);
+  const [locations, setLocations] = useState<LocationOption[]>([]);
+  const selectedLocation = value;
 
-  const selectedLocation = React.useMemo(() => {
-    return locations.find((loc) => loc.id === value);
-  }, [locations, value]);
-
-  const searchLocations = async (query: string) => {
-    if (!query || query.length < 3) {
-      setLocations([]);
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?` +
-          new URLSearchParams({
-            q: `${query}, Greece`,
-            format: "json",
-            countrycodes: "gr",
-            addressdetails: "1",
-            limit: "15",
-          }),
-        {
-          headers: {
-            "Accept-Language": "en-US,en;q=0.9",
-            "User-Agent": "TransferBookingApp/1.0",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+  const searchLocations = React.useCallback(
+    async (searchQuery: string) => {
+      if (searchQuery.length < 3) {
+        setLocations([]);
+        return;
       }
 
-      const results: NominatimResult[] = await response.json();
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+            searchQuery
+          )}&format=json&addressdetails=1&limit=5`
+        );
+        const data: NominatimResult[] = await response.json();
 
-      // Convert results and remove duplicates
-      const formattedLocations = results.reduce<LocationOption[]>(
-        (acc, result) => {
-          const formatted = formatAddress(result);
+        const formattedLocations: LocationOption[] = data.map((result) => ({
+          id: result.place_id.toString(),
+          name: result.name || result.display_name.split(",")[0],
+          description: formatAddress(result.address),
+          uniqueKey: `${result.place_id}_${result.display_name}`,
+        }));
 
-          // Check if we already have this location
-          const isDuplicate = acc.some(
-            (loc) => loc.uniqueKey === formatted.uniqueKey
-          );
+        // Only add ATH to pickup locations and when query matches
+        if (isPickup && searchQuery.toLowerCase().includes("ath")) {
+          formattedLocations.unshift(ATH_AIRPORT);
+        }
 
-          if (!isDuplicate) {
-            acc.push({
-              id: `${result.lat},${result.lon}`,
-              name: formatted.name,
-              description: formatted.description,
-              lat: result.lat,
-              lon: result.lon,
-              uniqueKey: formatted.uniqueKey,
-              isAirport: formatted.isAirport,
-            });
-          }
-
-          return acc;
-        },
-        []
-      );
-
-      // Sort airports to the top if the search includes 'airport' or 'ath'
-      const sortedLocations = formattedLocations.sort((a, b) => {
-        if (a.isAirport && !b.isAirport) return -1;
-        if (!a.isAirport && b.isAirport) return 1;
-        return 0;
-      });
-
-      setLocations(sortedLocations);
-    } catch (error) {
-      console.error("Error fetching locations:", error);
-      setLocations([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const debouncedSearch = React.useMemo(
-    () => debounce(searchLocations, 500),
-    []
+        setLocations(formattedLocations);
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+        setLocations([]);
+      }
+    },
+    [isPickup]
   );
 
-  // Only search when query changes and is not empty
   React.useEffect(() => {
-    if (searchQuery) {
-      debouncedSearch(searchQuery);
+    if (debouncedQuery) {
+      searchLocations(debouncedQuery);
+    } else {
+      setLocations([]);
     }
-    return () => {
-      debouncedSearch.cancel();
-    };
-  }, [searchQuery, debouncedSearch]);
+  }, [debouncedQuery, searchLocations]);
 
-  // Initialize ATH search for pickup only on mount
+  // Only set ATH as initial value if it's a pickup location and no value is provided
   React.useEffect(() => {
-    if (isPickup && !value) {
-      searchLocations("ATH");
+    if (isPickup && !value && !query) {
+      setQuery("ATH");
     }
-  }, []); // Empty dependency array means this only runs once on mount
+  }, [isPickup, value, query]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -232,22 +132,30 @@ export const LocationAutocomplete = ({
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {selectedLocation ? selectedLocation.name : placeholder}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          {value ? (
+            <div className="text-left">
+              <div className="font-medium">{value.name}</div>
+              {value.description && (
+                <div className="text-sm text-muted-foreground">
+                  {value.description}
+                </div>
+              )}
+            </div>
+          ) : (
+            "Search location..."
+          )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0" align="start">
-        <Command shouldFilter={false}>
+      <PopoverContent className="w-[400px] p-0" align="start">
+        <Command>
           <CommandInput
-            placeholder={placeholder}
-            value={searchQuery}
-            onValueChange={setSearchQuery}
+            placeholder="Search location..."
+            value={query}
+            onValueChange={setQuery}
           />
           <CommandList>
             <CommandEmpty>
-              {isLoading ? (
-                <div className="py-6 text-center text-sm">Loading...</div>
-              ) : searchQuery.length < 3 ? (
+              {query.length < 3 ? (
                 <div className="py-6 text-center text-sm">
                   Type at least 3 characters to search...
                 </div>
@@ -258,37 +166,33 @@ export const LocationAutocomplete = ({
               )}
             </CommandEmpty>
             <CommandGroup>
-              {locations.map((location, index) => (
-                <React.Fragment key={location.uniqueKey}>
-                  {index > 0 && locations[index - 1].name === location.name && (
-                    <div className="mx-2 my-1 border-t border-border" />
-                  )}
-                  <CommandItem
-                    value={location.id}
-                    onSelect={() => {
-                      onChange(location);
-                      setOpen(false);
-                    }}
-                    className="cursor-pointer data-[selected=true]:bg-accent"
-                  >
-                    <Check
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        selectedLocation?.id === location.id
-                          ? "opacity-100"
-                          : "opacity-0"
-                      )}
-                    />
-                    <div className="w-full">
-                      <div className="font-medium">{location.name}</div>
-                      {location.description && (
-                        <div className="text-sm text-muted-foreground">
-                          {location.description}
-                        </div>
-                      )}
-                    </div>
-                  </CommandItem>
-                </React.Fragment>
+              {locations.map((location) => (
+                <CommandItem
+                  key={location.uniqueKey}
+                  value={location.id}
+                  onSelect={() => {
+                    onChange(location);
+                    setOpen(false);
+                  }}
+                  className="cursor-pointer data-[selected=true]:bg-accent"
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      selectedLocation?.id === location.id
+                        ? "opacity-100"
+                        : "opacity-0"
+                    )}
+                  />
+                  <div className="w-full">
+                    <div className="font-medium">{location.name}</div>
+                    {location.description && (
+                      <div className="text-sm text-muted-foreground">
+                        {location.description}
+                      </div>
+                    )}
+                  </div>
+                </CommandItem>
               ))}
             </CommandGroup>
           </CommandList>

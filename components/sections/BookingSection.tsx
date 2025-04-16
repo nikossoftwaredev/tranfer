@@ -11,7 +11,6 @@ import { Select } from "../ui/select";
 import { useTranslations } from "next-intl";
 import { useVehicle } from "../../contexts/VehicleContext";
 import { LocationAutocomplete } from "../ui/LocationAutocomplete";
-import { locations } from "../../lib/data/locations";
 
 type FormState = {
   fullName: string;
@@ -170,7 +169,7 @@ const BookingSection = () => {
                 {/* Personal Information */}
                 <div>
                   <h3 className="text-lg font-semibold mb-4">
-                    {t("form.personal")}
+                    {t("form.title")}
                   </h3>
                   <div className="space-y-4">
                     <div className="space-y-2">
@@ -220,7 +219,6 @@ const BookingSection = () => {
                         {t("form.pickupLabel")}
                       </Label>
                       <LocationAutocomplete
-                        locations={locations}
                         value={formState.pickupLocation}
                         onChange={(value) => {
                           setFormState((prev) => ({
@@ -237,7 +235,6 @@ const BookingSection = () => {
                         {t("form.dropoff")}
                       </Label>
                       <LocationAutocomplete
-                        locations={locations}
                         value={formState.dropoffLocation}
                         onChange={(value) => {
                           setFormState((prev) => ({
