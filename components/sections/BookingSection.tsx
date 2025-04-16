@@ -7,7 +7,6 @@ import { Label } from "../ui/label";
 import { DatePicker } from "../ui/date-picker";
 import { TimePicker } from "../ui/time-picker";
 import { Button } from "../ui/button";
-import { Select } from "../ui/select";
 import { useTranslations } from "next-intl";
 import { useVehicle } from "../../contexts/VehicleContext";
 import { LocationAutocomplete } from "../ui/LocationAutocomplete";
@@ -282,12 +281,19 @@ const BookingSection = () => {
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="passengers">{t("form.passengers")}</Label>
-                    <Select
+                    <select
+                      id="passengers"
+                      name="passengers"
+                      className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background"
                       value={formState.passengers}
-                      onValueChange={(value: string) =>
-                        handleSelectChange("passengers", value)
+                      onChange={(e) =>
+                        handleSelectChange("passengers", e.target.value)
                       }
+                      required
                     >
+                      <option value="" disabled selected>
+                        {t("form.selectPassengers")}
+                      </option>
                       <option value="1">
                         1 {t("form.selectPassengers").split(" ")[0]}
                       </option>
@@ -309,15 +315,18 @@ const BookingSection = () => {
                       <option value="7+">
                         7+ {t("form.selectPassengers").split(" ")[1]}
                       </option>
-                    </Select>
+                    </select>
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="vehicle">{t("form.vehicle")}</Label>
-                    <Select
+                    <select
+                      id="vehicle"
+                      name="vehicle"
+                      className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background"
                       value={formState.vehicle}
-                      onValueChange={(value: string) =>
-                        handleSelectChange("vehicle", value)
+                      onChange={(e) =>
+                        handleSelectChange("vehicle", e.target.value)
                       }
                     >
                       <option value="">{t("form.selectVehicle")}</option>
@@ -326,7 +335,7 @@ const BookingSection = () => {
                         Mercedes Vito (up to 7 passengers)
                       </option>
                       <option value="Tesla Model S">Tesla Model S</option>
-                    </Select>
+                    </select>
                   </div>
                 </div>
               </div>
