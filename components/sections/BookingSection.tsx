@@ -216,17 +216,20 @@ const BookingSection = () => {
                   </h3>
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="pickupLocation">{t("form.pickup")}</Label>
+                      <Label htmlFor="pickupLocation">
+                        {t("form.pickupLabel")}
+                      </Label>
                       <LocationAutocomplete
                         locations={locations}
                         value={formState.pickupLocation}
                         onChange={(value) => {
                           setFormState((prev) => ({
                             ...prev,
-                            pickupLocation: value,
+                            pickupLocation: value.id,
                           }));
                         }}
                         placeholder={t("form.pickupPlaceholder")}
+                        isPickup={true}
                       />
                     </div>
                     <div className="space-y-2">
@@ -239,10 +242,11 @@ const BookingSection = () => {
                         onChange={(value) => {
                           setFormState((prev) => ({
                             ...prev,
-                            dropoffLocation: value,
+                            dropoffLocation: value.id,
                           }));
                         }}
                         placeholder={t("form.dropoffPlaceholder")}
+                        isPickup={false}
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
