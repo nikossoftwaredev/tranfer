@@ -203,19 +203,18 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
                 <div>
                   <Label htmlFor="passengers">{t("book.passengers")}</Label>
                   <Select
-                    options={[
-                      { value: "", label: t("book.selectPassengers") },
-                      { value: "1", label: `1 ${t("book.passenger")}` },
-                      { value: "2", label: `2 ${t("book.passengers")}` },
-                      { value: "3", label: `3 ${t("book.passengers")}` },
-                      { value: "4", label: `4 ${t("book.passengers")}` },
-                      { value: "5", label: `5 ${t("book.passengers")}` },
-                      { value: "6", label: `6 ${t("book.passengers")}` },
-                      { value: "7+", label: `7+ ${t("book.passengers")}` },
-                    ]}
                     value={formData.passengers}
                     onValueChange={handlePassengerChange}
-                  />
+                  >
+                    <option value="">{t("book.selectPassengers")}</option>
+                    <option value="1">1 {t("book.passenger")}</option>
+                    <option value="2">2 {t("book.passengers")}</option>
+                    <option value="3">3 {t("book.passengers")}</option>
+                    <option value="4">4 {t("book.passengers")}</option>
+                    <option value="5">5 {t("book.passengers")}</option>
+                    <option value="6">6 {t("book.passengers")}</option>
+                    <option value="7+">7+ {t("book.passengers")}</option>
+                  </Select>
                 </div>
 
                 <Button type="submit" className="w-full mt-4">
