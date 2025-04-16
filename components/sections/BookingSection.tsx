@@ -117,7 +117,7 @@ const BookingSection = () => {
         if (result.success) {
           // Show success toast if the email was sent successfully
           toast({
-            variant: "success",
+            variant: "default",
             title: t("success.title"),
             description: t("success.message"),
           });
