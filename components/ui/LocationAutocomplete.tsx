@@ -51,11 +51,8 @@ const ATH_AIRPORT: LocationOption = {
 const formatAddress = (address: NominatimResult["address"]) => {
   const parts = [];
   if (address.road) parts.push(address.road);
-  if (address.suburb) parts.push(address.suburb);
   if (address.city) parts.push(address.city);
-  if (address.state) parts.push(address.state);
   if (address.country) parts.push(address.country);
-  if (address.postcode) parts.push(address.postcode);
   return parts.join(", ");
 };
 
@@ -75,7 +72,12 @@ export const LocationAutocomplete = ({ value, onChange, isPickup }: Props) => {
   const searchLocations = React.useCallback(
     async (searchQuery: string) => {
       if (searchQuery.length < 3) {
-        setLocations([]);
+        // Always show the airport as an option for pickup locations
+        if (isPickup) {
+          setLocations([ATH_AIRPORT]);
+        } else {
+          setLocations([]);
+        }
         return;
       }
 
@@ -94,15 +96,27 @@ export const LocationAutocomplete = ({ value, onChange, isPickup }: Props) => {
           uniqueKey: `${result.place_id}_${result.display_name}`,
         }));
 
-        // Only add ATH to pickup locations and when query matches
-        if (isPickup && searchQuery.toLowerCase().includes("ath")) {
-          formattedLocations.unshift(ATH_AIRPORT);
+        // Add ATH to pickup locations if it's not already in the results
+        if (isPickup) {
+          const hasAirport = formattedLocations.some(
+            (loc) =>
+              loc.name.toLowerCase().includes("airport") ||
+              loc.description?.toLowerCase().includes("airport")
+          );
+
+          if (!hasAirport) {
+            formattedLocations.unshift(ATH_AIRPORT);
+          }
         }
 
         setLocations(formattedLocations);
       } catch (error) {
         console.error("Error fetching locations:", error);
-        setLocations([]);
+        if (isPickup) {
+          setLocations([ATH_AIRPORT]);
+        } else {
+          setLocations([]);
+        }
       }
     },
     [isPickup]
@@ -111,17 +125,20 @@ export const LocationAutocomplete = ({ value, onChange, isPickup }: Props) => {
   React.useEffect(() => {
     if (debouncedQuery) {
       searchLocations(debouncedQuery);
+    } else if (isPickup) {
+      // Always show the airport for pickup
+      setLocations([ATH_AIRPORT]);
     } else {
       setLocations([]);
     }
-  }, [debouncedQuery, searchLocations]);
+  }, [debouncedQuery, searchLocations, isPickup]);
 
-  // Only set ATH as initial value if it's a pickup location and no value is provided
+  // Only show ATH as initial option if it's a pickup location
   React.useEffect(() => {
-    if (isPickup && !value && !query) {
-      setQuery("ATH");
+    if (isPickup && !value && locations.length === 0) {
+      setLocations([ATH_AIRPORT]);
     }
-  }, [isPickup, value, query]);
+  }, [isPickup, value, locations.length]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -133,13 +150,8 @@ export const LocationAutocomplete = ({ value, onChange, isPickup }: Props) => {
           className="w-full justify-between"
         >
           {value ? (
-            <div className="text-left">
+            <div className="text-left truncate">
               <div className="font-medium">{value.name}</div>
-              {value.description && (
-                <div className="text-sm text-muted-foreground">
-                  {value.description}
-                </div>
-              )}
             </div>
           ) : (
             "Search location..."
