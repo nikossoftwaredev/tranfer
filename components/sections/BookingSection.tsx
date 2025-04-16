@@ -10,6 +10,8 @@ import { Button } from "../ui/button";
 import { Select } from "../ui/select";
 import { useTranslations } from "next-intl";
 import { useVehicle } from "../../contexts/VehicleContext";
+import { LocationAutocomplete } from "../ui/LocationAutocomplete";
+import { locations } from "../../lib/data/locations";
 
 type FormState = {
   fullName: string;
@@ -215,28 +217,32 @@ const BookingSection = () => {
                   <div className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="pickupLocation">{t("form.pickup")}</Label>
-                      <Input
-                        type="text"
-                        id="pickupLocation"
-                        name="pickupLocation"
+                      <LocationAutocomplete
+                        locations={locations}
                         value={formState.pickupLocation}
-                        onChange={handleChange}
+                        onChange={(value) => {
+                          setFormState((prev) => ({
+                            ...prev,
+                            pickupLocation: value,
+                          }));
+                        }}
                         placeholder={t("form.pickupPlaceholder")}
-                        required
                       />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="dropoffLocation">
                         {t("form.dropoff")}
                       </Label>
-                      <Input
-                        type="text"
-                        id="dropoffLocation"
-                        name="dropoffLocation"
+                      <LocationAutocomplete
+                        locations={locations}
                         value={formState.dropoffLocation}
-                        onChange={handleChange}
+                        onChange={(value) => {
+                          setFormState((prev) => ({
+                            ...prev,
+                            dropoffLocation: value,
+                          }));
+                        }}
                         placeholder={t("form.dropoffPlaceholder")}
-                        required
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-4">

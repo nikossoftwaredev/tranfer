@@ -59,11 +59,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function RootLayout({
   children,
-  params: { locale },
+  params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
   // Validate that the incoming `locale` parameter is valid
   if (!hasLocale(routing.locales, locale)) {
     notFound();
