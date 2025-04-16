@@ -9,6 +9,7 @@ import { routing } from "../../i18n/routing";
 import type { Metadata } from "next";
 import { Toaster } from "../../components/ui/toaster";
 import { VehicleProvider } from "../../contexts/VehicleContext";
+import WhatsAppButton from "../../components/ui/WhatsAppButton";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -81,6 +82,7 @@ export default async function RootLayout({
             <Header />
             <main>{children}</main>
             <Footer />
+            <WhatsAppButton phoneNumber="+306912345678" />
             <Toaster />
           </VehicleProvider>
         </NextIntlClientProvider>
