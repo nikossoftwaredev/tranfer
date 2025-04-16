@@ -35,6 +35,7 @@ const ContactSection = () => {
     subject: z.string().min(3, {
       message: "Subject must be at least 3 characters.",
     }),
+    flightNumber: z.string().optional(),
     message: z.string().min(10, {
       message: "Message must be at least 10 characters.",
     }),
@@ -47,6 +48,7 @@ const ContactSection = () => {
       name: "",
       email: "",
       subject: "",
+      flightNumber: "",
       message: "",
     },
   });
@@ -233,6 +235,20 @@ const ContactSection = () => {
                       <FormLabel>{t("form.subject")}</FormLabel>
                       <FormControl>
                         <Input placeholder="Booking Inquiry" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="flightNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Flight Number (Optional)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g. BA1234" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
