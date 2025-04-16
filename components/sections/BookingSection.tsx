@@ -13,6 +13,13 @@ import { LocationAutocomplete } from "../ui/LocationAutocomplete";
 import { LocationOption } from "../ui/LocationAutocomplete";
 import { useToast } from "../../hooks/use-toast";
 import { sendMessage } from "../../lib/utils/sendMessage";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 type FormState = {
   fullName: string;
@@ -281,61 +288,65 @@ const BookingSection = () => {
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="passengers">{t("form.passengers")}</Label>
-                    <select
-                      id="passengers"
-                      name="passengers"
-                      className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background"
+                    <Select
                       value={formState.passengers}
-                      onChange={(e) =>
-                        handleSelectChange("passengers", e.target.value)
+                      onValueChange={(value) =>
+                        handleSelectChange("passengers", value)
                       }
                       required
                     >
-                      <option value="" disabled selected>
-                        {t("form.selectPassengers")}
-                      </option>
-                      <option value="1">
-                        1 {t("form.selectPassengers").split(" ")[0]}
-                      </option>
-                      <option value="2">
-                        2 {t("form.selectPassengers").split(" ")[1]}
-                      </option>
-                      <option value="3">
-                        3 {t("form.selectPassengers").split(" ")[1]}
-                      </option>
-                      <option value="4">
-                        4 {t("form.selectPassengers").split(" ")[1]}
-                      </option>
-                      <option value="5">
-                        5 {t("form.selectPassengers").split(" ")[1]}
-                      </option>
-                      <option value="6">
-                        6 {t("form.selectPassengers").split(" ")[1]}
-                      </option>
-                      <option value="7+">
-                        7+ {t("form.selectPassengers").split(" ")[1]}
-                      </option>
-                    </select>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder={t("form.selectPassengers")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">
+                          1 {t("form.selectPassengers").split(" ")[0]}
+                        </SelectItem>
+                        <SelectItem value="2">
+                          2 {t("form.selectPassengers").split(" ")[1]}
+                        </SelectItem>
+                        <SelectItem value="3">
+                          3 {t("form.selectPassengers").split(" ")[1]}
+                        </SelectItem>
+                        <SelectItem value="4">
+                          4 {t("form.selectPassengers").split(" ")[1]}
+                        </SelectItem>
+                        <SelectItem value="5">
+                          5 {t("form.selectPassengers").split(" ")[1]}
+                        </SelectItem>
+                        <SelectItem value="6">
+                          6 {t("form.selectPassengers").split(" ")[1]}
+                        </SelectItem>
+                        <SelectItem value="7+">
+                          7+ {t("form.selectPassengers").split(" ")[1]}
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="vehicle">{t("form.vehicle")}</Label>
-                    <select
-                      id="vehicle"
-                      name="vehicle"
-                      className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background"
+                    <Select
                       value={formState.vehicle}
-                      onChange={(e) =>
-                        handleSelectChange("vehicle", e.target.value)
+                      onValueChange={(value) =>
+                        handleSelectChange("vehicle", value)
                       }
                     >
-                      <option value="">{t("form.selectVehicle")}</option>
-                      <option value="Mercedes S-Class">Mercedes S-Class</option>
-                      <option value="Mercedes Vito">
-                        Mercedes Vito (up to 7 passengers)
-                      </option>
-                      <option value="Tesla Model S">Tesla Model S</option>
-                    </select>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder={t("form.selectVehicle")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Mercedes S-Class">
+                          Mercedes S-Class
+                        </SelectItem>
+                        <SelectItem value="Mercedes Vito">
+                          Mercedes Vito (up to 7 passengers)
+                        </SelectItem>
+                        <SelectItem value="Tesla Model S">
+                          Tesla Model S
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -21,17 +21,23 @@ import { useDebounce } from "@/hooks/use-debounce";
 
 interface NominatimResult {
   place_id: number;
+  osm_type?: string;
+  osm_id?: number;
   display_name: string;
-  name: string;
+  name?: string;
   address: {
-    amenity?: string;
+    house_number?: string;
     road?: string;
     suburb?: string;
     city?: string;
+    town?: string;
+    municipality?: string;
     state?: string;
     country?: string;
     postcode?: string;
+    [key: string]: string | undefined;
   };
+  boundingbox?: string[];
 }
 
 export interface LocationOption {
@@ -43,8 +49,12 @@ export interface LocationOption {
 
 const formatAddress = (address: NominatimResult["address"]) => {
   const parts = [];
+  if (address.house_number) parts.push(address.house_number);
   if (address.road) parts.push(address.road);
+  if (address.suburb) parts.push(address.suburb);
   if (address.city) parts.push(address.city);
+  if (address.town) parts.push(address.town);
+  if (address.state) parts.push(address.state);
   if (address.country) parts.push(address.country);
   return parts.join(", ");
 };
@@ -52,86 +62,69 @@ const formatAddress = (address: NominatimResult["address"]) => {
 interface Props {
   value?: LocationOption;
   onChange: (location: LocationOption) => void;
-  isPickup?: boolean;
 }
 
-export const LocationAutocomplete = ({ value, onChange, isPickup }: Props) => {
+export const LocationAutocomplete = ({ value, onChange }: Props) => {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const debouncedQuery = useDebounce(query, 300);
   const [locations, setLocations] = useState<LocationOption[]>([]);
-  const selectedLocation = value;
+  const [isLoading, setIsLoading] = useState(false);
 
-  const searchLocations = React.useCallback(
-    async (searchQuery: string) => {
-      if (searchQuery.length < 3) {
-        // Always show the airport as an option for pickup locations
-        if (isPickup) {
-          setLocations([]);
-        } else {
-          setLocations([]);
-        }
-        return;
-      }
+  const searchLocations = useCallback(async (searchQuery: string) => {
+    if (searchQuery.length < 3) {
+      setLocations([]);
+      return;
+    }
 
-      try {
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-            searchQuery
-          )}&format=json&addressdetails=1&limit=5`
-        );
-        const data: NominatimResult[] = await response.json();
+    setIsLoading(true);
 
-        const formattedLocations: LocationOption[] = data.map((result) => ({
-          id: result.place_id.toString(),
-          name: result.name || result.display_name.split(",")[0],
-          description: formatAddress(result.address),
-          uniqueKey: `${result.place_id}_${result.display_name}`,
-        }));
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+          searchQuery
+        )}&format=json&addressdetails=1&limit=10&accept-language=en`
+      );
 
-        // Add ATH to pickup locations if it's not already in the results
-        if (isPickup) {
-          const hasAirport = formattedLocations.some(
-            (loc) =>
-              loc.name.toLowerCase().includes("airport") ||
-              loc.description?.toLowerCase().includes("airport")
-          );
+      const data: NominatimResult[] = await response.json();
+      console.log("Search results:", data);
 
-          if (!hasAirport) {
-            formattedLocations.unshift();
-          }
-        }
+      if (data && Array.isArray(data)) {
+        const formattedLocations: LocationOption[] = data.map((result) => {
+          // Extract display name parts for a more user-friendly name
+          const displayNameParts = result.display_name.split(", ");
+          const simpleName =
+            displayNameParts.length > 0
+              ? displayNameParts[0]
+              : result.display_name;
+
+          return {
+            id: result.place_id.toString(),
+            name: result.name || simpleName,
+            description: formatAddress(result.address),
+            uniqueKey: `${result.place_id}_${result.display_name}`,
+          };
+        });
 
         setLocations(formattedLocations);
-      } catch (error) {
-        console.error("Error fetching locations:", error);
-        if (isPickup) {
-          setLocations([]);
-        } else {
-          setLocations([]);
-        }
+      } else {
+        setLocations([]);
       }
-    },
-    [isPickup]
-  );
+    } catch (error) {
+      console.error("Error fetching locations:", error);
+      setLocations([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (debouncedQuery) {
       searchLocations(debouncedQuery);
-    } else if (isPickup) {
-      // Always show the airport for pickup
-      setLocations([]);
     } else {
       setLocations([]);
     }
-  }, [debouncedQuery, searchLocations, isPickup]);
-
-  // Only show ATH as initial option if it's a pickup location
-  React.useEffect(() => {
-    if (isPickup && !value && locations.length === 0) {
-      setLocations([]);
-    }
-  }, [isPickup, value, locations.length]);
+  }, [debouncedQuery, searchLocations]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -145,6 +138,11 @@ export const LocationAutocomplete = ({ value, onChange, isPickup }: Props) => {
           {value ? (
             <div className="text-left truncate">
               <div className="font-medium">{value.name}</div>
+              {value.description && (
+                <div className="text-xs text-muted-foreground">
+                  {value.description}
+                </div>
+              )}
             </div>
           ) : (
             "Search location..."
@@ -154,52 +152,54 @@ export const LocationAutocomplete = ({ value, onChange, isPickup }: Props) => {
       <PopoverContent className="w-[400px] p-0" align="start">
         <Command>
           <CommandInput
-            placeholder="Search location..."
+            placeholder="Search any location..."
             value={query}
             onValueChange={setQuery}
           />
           <CommandList>
             <CommandEmpty>
-              {query.length < 3 ? (
+              {isLoading ? (
+                <div className="py-6 text-center text-sm">Searching...</div>
+              ) : query.length < 3 ? (
                 <div className="py-6 text-center text-sm">
                   Type at least 3 characters to search...
                 </div>
               ) : (
                 <div className="py-6 text-center text-sm">
-                  No location found.
+                  No locations found. Try a different search term.
                 </div>
               )}
             </CommandEmpty>
-            <CommandGroup>
-              {locations.map((location) => (
-                <CommandItem
-                  key={location.uniqueKey}
-                  value={location.id}
-                  onSelect={() => {
-                    onChange(location);
-                    setOpen(false);
-                  }}
-                  className="cursor-pointer data-[selected=true]:bg-accent"
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      selectedLocation?.id === location.id
-                        ? "opacity-100"
-                        : "opacity-0"
-                    )}
-                  />
-                  <div className="w-full">
-                    <div className="font-medium">{location.name}</div>
-                    {location.description && (
-                      <div className="text-sm text-muted-foreground">
-                        {location.description}
-                      </div>
-                    )}
-                  </div>
-                </CommandItem>
-              ))}
-            </CommandGroup>
+            {locations.length > 0 && (
+              <CommandGroup heading="Search Results">
+                {locations.map((location) => (
+                  <CommandItem
+                    key={location.uniqueKey}
+                    value={location.uniqueKey}
+                    onSelect={() => {
+                      onChange(location);
+                      setOpen(false);
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value?.id === location.id ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    <div className="w-full">
+                      <div className="font-medium">{location.name}</div>
+                      {location.description && (
+                        <div className="text-sm text-muted-foreground">
+                          {location.description}
+                        </div>
+                      )}
+                    </div>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
           </CommandList>
         </Command>
       </PopoverContent>
