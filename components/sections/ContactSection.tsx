@@ -98,7 +98,8 @@ const ContactSection = () => {
                     <h4 className="font-medium mb-1">{t("athens.phone")}</h4>
                     <p className="text-muted-foreground">+30 210 123-4567</p>
                     <p className="text-muted-foreground">
-                      +30 694 567-8901 (WhatsApp)
+                      +30 694 567-8901{" "}
+                      <span className="hidden sm:inline">(WhatsApp)</span>
                     </p>
                   </div>
                 </div>

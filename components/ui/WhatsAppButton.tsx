@@ -40,7 +40,7 @@ const WhatsAppButton = ({ phoneNumber }: WhatsAppButtonProps) => {
       aria-label="Chat on WhatsApp"
     >
       <FaWhatsapp className="text-xl" />
-      <span className="font-medium">{t("whatsapp.chat")}</span>
+      <span className="font-medium hidden md:inline">{t("whatsapp.chat")}</span>
     </a>
   );
 };
