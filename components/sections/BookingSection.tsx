@@ -13,6 +13,7 @@ import { useVehicle } from "../../contexts/VehicleContext";
 import { LocationAutocomplete } from "../ui/LocationAutocomplete";
 import { LocationOption } from "../ui/LocationAutocomplete";
 import { useToast } from "../../hooks/use-toast";
+import { sendMessage } from "../../lib/utils/sendMessage";
 
 type FormState = {
   fullName: string;
@@ -108,37 +109,60 @@ const BookingSection = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
+    // Send email with form data
+    sendMessage(formState)
+      .then((result) => {
+        setIsSubmitting(false);
 
-      // Show success toast instead of setting submitSuccess state
-      toast({
-        variant: "success",
-        title: t("success.title"),
-        description: t("success.message"),
+        if (result.success) {
+          // Show success toast if the email was sent successfully
+          toast({
+            variant: "success",
+            title: t("success.title"),
+            description: t("success.message"),
+          });
+
+          // Reset form fields after successful submission
+          setFormState((prev) => ({
+            ...prev,
+            fullName: "",
+            email: "",
+            phone: "",
+            pickupLocation: {
+              id: "",
+              name: "",
+              description: "",
+              uniqueKey: "",
+            },
+            dropoffLocation: {
+              id: "",
+              name: "",
+              description: "",
+              uniqueKey: "",
+            },
+            notes: "",
+          }));
+        } else {
+          // Show error toast if there was an issue sending the email
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description:
+              "There was a problem submitting your request. Please try again later or contact us directly.",
+          });
+        }
+      })
+      .catch((error) => {
+        setIsSubmitting(false);
+        // Show error toast if there was an exception
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description:
+            "There was a problem submitting your request. Please try again later or contact us directly.",
+        });
+        console.error("Form submission error:", error);
       });
-
-      // Reset form fields
-      setFormState((prev) => ({
-        ...prev,
-        fullName: "",
-        email: "",
-        phone: "",
-        pickupLocation: {
-          id: "",
-          name: "",
-          description: "",
-          uniqueKey: "",
-        },
-        dropoffLocation: {
-          id: "",
-          name: "",
-          description: "",
-          uniqueKey: "",
-        },
-      }));
-    }, 1500);
   };
 
   return (
