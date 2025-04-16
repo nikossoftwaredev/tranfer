@@ -11,13 +11,15 @@ import { Select } from "../ui/select";
 import { useTranslations } from "next-intl";
 import { useVehicle } from "../../contexts/VehicleContext";
 import { LocationAutocomplete } from "../ui/LocationAutocomplete";
+import { LocationOption } from "../ui/LocationAutocomplete";
+import { useToast } from "../../hooks/use-toast";
 
 type FormState = {
   fullName: string;
   email: string;
   phone: string;
-  pickupLocation: string;
-  dropoffLocation: string;
+  pickupLocation: LocationOption;
+  dropoffLocation: LocationOption;
   date: Date | undefined;
   time: string;
   passengers: string;
@@ -28,22 +30,32 @@ type FormState = {
 const BookingSection = () => {
   const t = useTranslations("Booking");
   const { selectedVehicle, setSelectedVehicle } = useVehicle();
+  const { toast } = useToast();
 
   const [formState, setFormState] = useState<FormState>({
     fullName: "",
     email: "",
     phone: "",
-    pickupLocation: "",
-    dropoffLocation: "",
+    pickupLocation: {
+      id: "",
+      name: "",
+      description: "",
+      uniqueKey: "",
+    },
+    dropoffLocation: {
+      id: "",
+      name: "",
+      description: "",
+      uniqueKey: "",
+    },
     date: undefined,
     time: "",
     passengers: "",
-    vehicle: selectedVehicle,
+    vehicle: "",
     notes: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   useEffect(() => {
     setFormState((prev) => ({
@@ -99,24 +111,33 @@ const BookingSection = () => {
     // Simulate form submission
     setTimeout(() => {
       setIsSubmitting(false);
-      setSubmitSuccess(true);
-      setFormState({
+
+      // Show success toast instead of setting submitSuccess state
+      toast({
+        variant: "success",
+        title: t("success.title"),
+        description: t("success.message"),
+      });
+
+      // Reset form fields
+      setFormState((prev) => ({
+        ...prev,
         fullName: "",
         email: "",
         phone: "",
-        pickupLocation: "",
-        dropoffLocation: "",
-        date: undefined,
-        time: "",
-        passengers: "",
-        vehicle: selectedVehicle,
-        notes: "",
-      });
-
-      // Reset success message after 5 seconds
-      setTimeout(() => {
-        setSubmitSuccess(false);
-      }, 5000);
+        pickupLocation: {
+          id: "",
+          name: "",
+          description: "",
+          uniqueKey: "",
+        },
+        dropoffLocation: {
+          id: "",
+          name: "",
+          description: "",
+          uniqueKey: "",
+        },
+      }));
     }, 1500);
   };
 
@@ -131,280 +152,219 @@ const BookingSection = () => {
         </div>
 
         <div className="max-w-4xl mx-auto bg-background rounded-lg shadow-md border border-border p-6 md:p-8">
-          {submitSuccess ? (
-            <div className="text-center py-8">
-              <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold mb-2">
-                {t("success.title")}
-              </h3>
-              <p className="text-muted-foreground mb-4">
-                {t("success.message")}
-              </p>
-              <Button
-                onClick={() => setSubmitSuccess(false)}
-                variant="link"
-                className="text-primary font-medium"
-              >
-                {t("success.button")}
-              </Button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Personal Information */}
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">
-                    {t("form.title")}
-                  </h3>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="fullName">{t("form.fullName")}</Label>
-                      <Input
-                        type="text"
-                        id="fullName"
-                        name="fullName"
-                        value={formState.fullName}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">{t("form.email")}</Label>
-                      <Input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formState.email}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">{t("form.phone")}</Label>
-                      <Input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formState.phone}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Trip Details */}
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">
-                    {t("form.trip")}
-                  </h3>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="pickupLocation">
-                        {t("form.pickupLabel")}
-                      </Label>
-                      <LocationAutocomplete
-                        value={formState.pickupLocation}
-                        onChange={(value) => {
-                          setFormState((prev) => ({
-                            ...prev,
-                            pickupLocation: value.id,
-                          }));
-                        }}
-                        placeholder={t("form.pickupPlaceholder")}
-                        isPickup={true}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="dropoffLocation">
-                        {t("form.dropoff")}
-                      </Label>
-                      <LocationAutocomplete
-                        value={formState.dropoffLocation}
-                        onChange={(value) => {
-                          setFormState((prev) => ({
-                            ...prev,
-                            dropoffLocation: value.id,
-                          }));
-                        }}
-                        placeholder={t("form.dropoffPlaceholder")}
-                        isPickup={false}
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="date">{t("form.date")}</Label>
-                        <DatePicker
-                          date={formState.date || new Date()}
-                          setDate={handleDateChange}
-                          placeholder={t("form.date")}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="time">{t("form.time")}</Label>
-                        <TimePicker
-                          time={formState.time}
-                          setTime={handleTimeChange}
-                          placeholder={t("form.time")}
-                          className="h-10"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Additional Details */}
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">
-                    {t("form.additional")}
-                  </h3>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="passengers">{t("form.passengers")}</Label>
-                      <Select
-                        value={formState.passengers}
-                        onValueChange={(value: string) =>
-                          handleSelectChange("passengers", value)
-                        }
-                        options={[
-                          {
-                            value: "1",
-                            label:
-                              "1 " + t("form.selectPassengers").split(" ")[0],
-                          },
-                          {
-                            value: "2",
-                            label:
-                              "2 " + t("form.selectPassengers").split(" ")[1],
-                          },
-                          {
-                            value: "3",
-                            label:
-                              "3 " + t("form.selectPassengers").split(" ")[1],
-                          },
-                          {
-                            value: "4",
-                            label:
-                              "4 " + t("form.selectPassengers").split(" ")[1],
-                          },
-                          {
-                            value: "5",
-                            label:
-                              "5 " + t("form.selectPassengers").split(" ")[1],
-                          },
-                          {
-                            value: "6",
-                            label:
-                              "6 " + t("form.selectPassengers").split(" ")[1],
-                          },
-                          {
-                            value: "7+",
-                            label:
-                              "7+ " + t("form.selectPassengers").split(" ")[1],
-                          },
-                        ]}
-                        required
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="vehicle">{t("form.vehicle")}</Label>
-                      <Select
-                        value={formState.vehicle}
-                        onValueChange={(value: string) =>
-                          handleSelectChange("vehicle", value)
-                        }
-                        options={[
-                          { value: "", label: t("form.selectVehicle") },
-                          {
-                            value: "Mercedes S-Class",
-                            label: "Mercedes S-Class",
-                          },
-                          {
-                            value: "Mercedes Vito",
-                            label: "Mercedes Vito (up to 7 passengers)",
-                          },
-                          { value: "Tesla Model S", label: "Tesla Model S" },
-                        ]}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Special Requests */}
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">
-                    {t("form.special")}
-                  </h3>
+          <form onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Personal Information */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4">
+                  {t("form.title")}
+                </h3>
+                <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="notes">{t("form.notes")}</Label>
-                    <Textarea
-                      id="notes"
-                      name="notes"
-                      value={formState.notes}
+                    <Label htmlFor="fullName">{t("form.fullName")}</Label>
+                    <Input
+                      type="text"
+                      id="fullName"
+                      name="fullName"
+                      value={formState.fullName}
                       onChange={handleChange}
-                      placeholder={t("form.notesPlaceholder")}
-                      className="min-h-[120px]"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">{t("form.email")}</Label>
+                    <Input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formState.email}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">{t("form.phone")}</Label>
+                    <Input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formState.phone}
+                      onChange={handleChange}
+                      required
                     />
                   </div>
                 </div>
               </div>
 
-              {/* Submit Button */}
-              <div className="mt-8 text-center">
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="px-8 py-3 min-w-[200px] relative"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <span className="opacity-0">{t("form.submit")}</span>
-                      <span className="absolute inset-0 flex items-center justify-center">
-                        <svg
-                          className="animate-spin h-5 w-5 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          ></circle>
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                          ></path>
-                        </svg>
-                      </span>
-                    </>
-                  ) : (
-                    t("form.submit")
-                  )}
-                </Button>
+              {/* Trip Details */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4">{t("form.trip")}</h3>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="pickupLocation">
+                      {t("form.pickupLabel")}
+                    </Label>
+                    <LocationAutocomplete
+                      value={formState.pickupLocation}
+                      onChange={(value) => {
+                        setFormState((prev) => ({
+                          ...prev,
+                          pickupLocation: value,
+                        }));
+                      }}
+                      isPickup={true}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="dropoffLocation">{t("form.dropoff")}</Label>
+                    <LocationAutocomplete
+                      value={formState.dropoffLocation}
+                      onChange={(value) => {
+                        setFormState((prev) => ({
+                          ...prev,
+                          dropoffLocation: value,
+                        }));
+                      }}
+                      isPickup={false}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="date">{t("form.date")}</Label>
+                      <DatePicker
+                        date={formState.date || new Date()}
+                        setDate={handleDateChange}
+                        placeholder={t("form.date")}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="time">{t("form.time")}</Label>
+                      <TimePicker
+                        time={formState.time}
+                        setTime={handleTimeChange}
+                        placeholder={t("form.time")}
+                        className="h-10"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
-            </form>
-          )}
+
+              {/* Additional Details */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4">
+                  {t("form.additional")}
+                </h3>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="passengers">{t("form.passengers")}</Label>
+                    <Select
+                      value={formState.passengers}
+                      onValueChange={(value: string) =>
+                        handleSelectChange("passengers", value)
+                      }
+                    >
+                      <option value="1">
+                        1 {t("form.selectPassengers").split(" ")[0]}
+                      </option>
+                      <option value="2">
+                        2 {t("form.selectPassengers").split(" ")[1]}
+                      </option>
+                      <option value="3">
+                        3 {t("form.selectPassengers").split(" ")[1]}
+                      </option>
+                      <option value="4">
+                        4 {t("form.selectPassengers").split(" ")[1]}
+                      </option>
+                      <option value="5">
+                        5 {t("form.selectPassengers").split(" ")[1]}
+                      </option>
+                      <option value="6">
+                        6 {t("form.selectPassengers").split(" ")[1]}
+                      </option>
+                      <option value="7+">
+                        7+ {t("form.selectPassengers").split(" ")[1]}
+                      </option>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="vehicle">{t("form.vehicle")}</Label>
+                    <Select
+                      value={formState.vehicle}
+                      onValueChange={(value: string) =>
+                        handleSelectChange("vehicle", value)
+                      }
+                    >
+                      <option value="">{t("form.selectVehicle")}</option>
+                      <option value="Mercedes S-Class">Mercedes S-Class</option>
+                      <option value="Mercedes Vito">
+                        Mercedes Vito (up to 7 passengers)
+                      </option>
+                      <option value="Tesla Model S">Tesla Model S</option>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Special Requests */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4">
+                  {t("form.special")}
+                </h3>
+                <div className="space-y-2">
+                  <Label htmlFor="notes">{t("form.notes")}</Label>
+                  <Textarea
+                    id="notes"
+                    name="notes"
+                    value={formState.notes}
+                    onChange={handleChange}
+                    placeholder={t("form.notesPlaceholder")}
+                    className="min-h-[120px]"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <div className="mt-8 text-center">
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="px-8 py-3 min-w-[200px] relative"
+              >
+                {isSubmitting ? (
+                  <>
+                    <span className="opacity-0">{t("form.submit")}</span>
+                    <span className="absolute inset-0 flex items-center justify-center">
+                      <svg
+                        className="animate-spin h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                    </span>
+                  </>
+                ) : (
+                  t("form.submit")
+                )}
+              </Button>
+            </div>
+          </form>
         </div>
       </div>
     </section>

@@ -34,7 +34,7 @@ interface NominatimResult {
   };
 }
 
-interface LocationOption {
+export interface LocationOption {
   id: string;
   name: string;
   description?: string;
