@@ -198,6 +198,7 @@ const BookingSection = () => {
                       name="fullName"
                       value={formState.fullName}
                       onChange={handleChange}
+                      autoComplete="name"
                       required
                     />
                   </div>
@@ -209,6 +210,7 @@ const BookingSection = () => {
                       name="email"
                       value={formState.email}
                       onChange={handleChange}
+                      autoComplete="email"
                       required
                     />
                   </div>
@@ -220,6 +222,7 @@ const BookingSection = () => {
                       name="phone"
                       value={formState.phone}
                       onChange={handleChange}
+                      autoComplete="tel"
                       required
                     />
                   </div>
@@ -242,7 +245,6 @@ const BookingSection = () => {
                           pickupLocation: value,
                         }));
                       }}
-                      isPickup={true}
                     />
                   </div>
                   <div className="space-y-2">
@@ -255,7 +257,6 @@ const BookingSection = () => {
                           dropoffLocation: value,
                         }));
                       }}
-                      isPickup={false}
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
@@ -299,27 +300,13 @@ const BookingSection = () => {
                         <SelectValue placeholder={t("form.selectPassengers")} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="1">
-                          1 {t("form.selectPassengers").split(" ")[0]}
-                        </SelectItem>
-                        <SelectItem value="2">
-                          2 {t("form.selectPassengers").split(" ")[1]}
-                        </SelectItem>
-                        <SelectItem value="3">
-                          3 {t("form.selectPassengers").split(" ")[1]}
-                        </SelectItem>
-                        <SelectItem value="4">
-                          4 {t("form.selectPassengers").split(" ")[1]}
-                        </SelectItem>
-                        <SelectItem value="5">
-                          5 {t("form.selectPassengers").split(" ")[1]}
-                        </SelectItem>
-                        <SelectItem value="6">
-                          6 {t("form.selectPassengers").split(" ")[1]}
-                        </SelectItem>
-                        <SelectItem value="7+">
-                          7+ {t("form.selectPassengers").split(" ")[1]}
-                        </SelectItem>
+                        <SelectItem value="1">1 passenger</SelectItem>
+                        <SelectItem value="2">2 passengers</SelectItem>
+                        <SelectItem value="3">3 passengers</SelectItem>
+                        <SelectItem value="4">4 passengers</SelectItem>
+                        <SelectItem value="5">5 passengers</SelectItem>
+                        <SelectItem value="6">6 passengers</SelectItem>
+                        <SelectItem value="7+">7+ passengers</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
