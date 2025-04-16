@@ -61,7 +61,7 @@ const ContactSection = () => {
 
     // Show success toast
     toast({
-      variant: "success",
+      variant: "default",
       title: t("form.title"),
       description:
         "Your message has been sent successfully. We will get back to you soon.",

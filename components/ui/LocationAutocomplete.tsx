@@ -41,13 +41,6 @@ export interface LocationOption {
   uniqueKey: string;
 }
 
-const ATH_AIRPORT: LocationOption = {
-  id: "ATH",
-  name: "Athens International Airport (ATH)",
-  description: "Attiki Odos, Spata Artemida 190 04",
-  uniqueKey: "ATH_AIRPORT_SPATA",
-};
-
 const formatAddress = (address: NominatimResult["address"]) => {
   const parts = [];
   if (address.road) parts.push(address.road);
@@ -74,7 +67,7 @@ export const LocationAutocomplete = ({ value, onChange, isPickup }: Props) => {
       if (searchQuery.length < 3) {
         // Always show the airport as an option for pickup locations
         if (isPickup) {
-          setLocations([ATH_AIRPORT]);
+          setLocations([]);
         } else {
           setLocations([]);
         }
@@ -105,7 +98,7 @@ export const LocationAutocomplete = ({ value, onChange, isPickup }: Props) => {
           );
 
           if (!hasAirport) {
-            formattedLocations.unshift(ATH_AIRPORT);
+            formattedLocations.unshift();
           }
         }
 
@@ -113,7 +106,7 @@ export const LocationAutocomplete = ({ value, onChange, isPickup }: Props) => {
       } catch (error) {
         console.error("Error fetching locations:", error);
         if (isPickup) {
-          setLocations([ATH_AIRPORT]);
+          setLocations([]);
         } else {
           setLocations([]);
         }
@@ -127,7 +120,7 @@ export const LocationAutocomplete = ({ value, onChange, isPickup }: Props) => {
       searchLocations(debouncedQuery);
     } else if (isPickup) {
       // Always show the airport for pickup
-      setLocations([ATH_AIRPORT]);
+      setLocations([]);
     } else {
       setLocations([]);
     }
@@ -136,7 +129,7 @@ export const LocationAutocomplete = ({ value, onChange, isPickup }: Props) => {
   // Only show ATH as initial option if it's a pickup location
   React.useEffect(() => {
     if (isPickup && !value && locations.length === 0) {
-      setLocations([ATH_AIRPORT]);
+      setLocations([]);
     }
   }, [isPickup, value, locations.length]);
 
