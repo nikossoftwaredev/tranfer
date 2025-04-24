@@ -10,7 +10,6 @@ type TourCardProps = {
   subtitle: string;
   duration: number;
   image: string;
-  price: string;
   slug: string;
 };
 
@@ -19,7 +18,6 @@ const TourCard = ({
   title,
   subtitle,
   duration,
-  price,
   slug,
 }: TourCardProps) => {
   const t = useTranslations("Tours");
@@ -54,10 +52,9 @@ const TourCard = ({
         <p className="text-muted-foreground text-sm line-clamp-2">{subtitle}</p>
       </div>
 
-      {/* Footer with Price and Button */}
+      {/* Footer with Button */}
       <div className="p-4 pt-0 mt-auto">
-        <div className="flex justify-between items-center">
-          <span className="font-medium text-primary text-lg">€{price}</span>
+        <div className="flex justify-end items-center">
           <span className="px-4 py-2 bg-primary/10 text-primary hover:bg-primary/20 transition-colors rounded-md text-sm font-medium">
             {t("bookTour")}
           </span>
@@ -88,7 +85,6 @@ const ToursSection = () => {
               title={tour.title}
               subtitle={tour.subtitle}
               duration={tour.hours}
-              price={tour.cost}
               slug={tour.slug}
             />
           ))}

@@ -102,14 +102,11 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
           {/* Tour Details */}
           <div className="lg:col-span-2">
             <div className="flex items-center mb-8">
-              <div className="bg-primary/10 px-4 py-2 rounded-full flex items-center mr-4">
+              <div className="bg-primary/10 px-4 py-2 rounded-full flex items-center">
                 <Clock className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
                 <span className="font-medium">
                   {tour.hours} {toursT("hours")}
                 </span>
-              </div>
-              <div className="text-2xl font-bold text-primary">
-                €{tour.cost}
               </div>
             </div>
 
