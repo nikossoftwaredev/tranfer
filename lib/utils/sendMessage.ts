@@ -11,19 +11,20 @@ type BookingFormData = {
     name: string;
     description?: string;
     uniqueKey: string;
-  };
+  } | undefined;
   dropoffLocation: {
     id: string;
     name: string;
     description?: string;
     uniqueKey: string;
-  };
+  } | undefined;
   date?: Date;
   time?: string;
   passengers: string;
   vehicle: string;
   luggage: string;
   childSeats: string;
+  flightNumber?: string;
   notes?: string;
 };
 
@@ -54,13 +55,13 @@ export const sendMessage = async (formData: BookingFormData) => {
       <p><strong>Phone:</strong> ${formData.phone}</p>
       
       <h2>Trip Details</h2>
-      <p><strong>Pickup Location:</strong> ${formData.pickupLocation.name}</p>
+      <p><strong>Pickup Location:</strong> ${formData.pickupLocation?.name || "Not specified"}</p>
       <p><strong>Pickup Details:</strong> ${
-        formData.pickupLocation.description || "N/A"
+        formData.pickupLocation?.description || "N/A"
       }</p>
-      <p><strong>Dropoff Location:</strong> ${formData.dropoffLocation.name}</p>
+      <p><strong>Dropoff Location:</strong> ${formData.dropoffLocation?.name || "Not specified"}</p>
       <p><strong>Dropoff Details:</strong> ${
-        formData.dropoffLocation.description || "N/A"
+        formData.dropoffLocation?.description || "N/A"
       }</p>
       <p><strong>Date:</strong> ${formattedDate}</p>
       <p><strong>Time:</strong> ${formattedTime}</p>
@@ -70,6 +71,7 @@ export const sendMessage = async (formData: BookingFormData) => {
       <p><strong>Luggage:</strong> ${formData.luggage || "Not specified"}</p>
       <p><strong>Child Seats:</strong> ${formData.childSeats || "Not specified"}</p>
       <p><strong>Vehicle:</strong> ${formData.vehicle || "Not specified"}</p>
+      <p><strong>Flight Number:</strong> ${formData.flightNumber || "Not specified"}</p>
       <p><strong>Special Requests:</strong> ${formData.notes || "None"}</p>
     `;
 
