@@ -13,6 +13,7 @@ import { LocationAutocomplete } from "../ui/LocationAutocomplete";
 import { LocationOption } from "../ui/LocationAutocomplete";
 import { useToast } from "../../hooks/use-toast";
 import { sendMessage } from "../../lib/utils/sendMessage";
+import { Luggage, BabyIcon } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -31,6 +32,8 @@ type FormState = {
   time: string;
   passengers: string;
   vehicle: string;
+  luggage: string;
+  childSeats: string;
   notes: string;
 };
 
@@ -59,6 +62,8 @@ const BookingSection = () => {
     time: "",
     passengers: "",
     vehicle: "",
+    luggage: "",
+    childSeats: "",
     notes: "",
   });
 
@@ -98,7 +103,7 @@ const BookingSection = () => {
   };
 
   const handleSelectChange = (
-    name: keyof Pick<FormState, "passengers" | "vehicle">,
+    name: keyof Pick<FormState, "passengers" | "vehicle" | "luggage" | "childSeats">,
     value: string
   ) => {
     setFormState((prev) => ({
@@ -281,33 +286,80 @@ const BookingSection = () => {
               </div>
 
               {/* Additional Details */}
-              <div>
+              <div className="col-span-2">
                 <h3 className="text-lg font-semibold mb-4">
                   {t("form.additional")}
                 </h3>
                 <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="passengers">{t("form.passengers")}</Label>
-                    <Select
-                      value={formState.passengers}
-                      onValueChange={(value) =>
-                        handleSelectChange("passengers", value)
-                      }
-                      required
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder={t("form.selectPassengers")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="1">1 passenger</SelectItem>
-                        <SelectItem value="2">2 passengers</SelectItem>
-                        <SelectItem value="3">3 passengers</SelectItem>
-                        <SelectItem value="4">4 passengers</SelectItem>
-                        <SelectItem value="5">5 passengers</SelectItem>
-                        <SelectItem value="6">6 passengers</SelectItem>
-                        <SelectItem value="7+">7+ passengers</SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="passengers">{t("form.passengers")}</Label>
+                      <Select
+                        value={formState.passengers}
+                        onValueChange={(value) =>
+                          handleSelectChange("passengers", value)
+                        }
+                        required
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder={t("form.selectPassengers")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="1">1 passenger</SelectItem>
+                          <SelectItem value="2">2 passengers</SelectItem>
+                          <SelectItem value="3">3 passengers</SelectItem>
+                          <SelectItem value="4">4 passengers</SelectItem>
+                          <SelectItem value="5">5 passengers</SelectItem>
+                          <SelectItem value="6">6 passengers</SelectItem>
+                          <SelectItem value="7+">7+ passengers</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="luggage">{t("form.luggage")}</Label>
+                      <Select
+                        value={formState.luggage}
+                        onValueChange={(value) =>
+                          handleSelectChange("luggage", value)
+                        }
+                        required
+                      >
+                        <SelectTrigger className="w-full pl-10">
+                          <Luggage className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                          <SelectValue placeholder={t("form.luggagePlaceholder")} />
+                        </SelectTrigger>
+                        <SelectContent className="max-h-[200px] overflow-y-auto">
+                          {[...Array(20)].map((_, i) => (
+                            <SelectItem key={i + 1} value={(i + 1).toString()}>
+                              {i + 1} {t("form.luggagePlural")}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="childSeats">{t("form.childSeat")}</Label>
+                      <Select
+                        value={formState.childSeats}
+                        onValueChange={(value) =>
+                          handleSelectChange("childSeats", value)
+                        }
+                      >
+                        <SelectTrigger className="w-full pl-10">
+                          <BabyIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                          <SelectValue placeholder={t("form.childSeatPlaceholder")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {[...Array(3)].map((_, i) => (
+                            <SelectItem key={i + 1} value={(i + 1).toString()}>
+                              {i + 1} {t("form.childSeatPlural")}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
 
                   <div className="space-y-2">

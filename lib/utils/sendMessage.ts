@@ -22,6 +22,8 @@ type BookingFormData = {
   time?: string;
   passengers: string;
   vehicle: string;
+  luggage: string;
+  childSeats: string;
   notes?: string;
 };
 
@@ -65,6 +67,8 @@ export const sendMessage = async (formData: BookingFormData) => {
       
       <h2>Additional Details</h2>
       <p><strong>Passengers:</strong> ${formData.passengers}</p>
+      <p><strong>Luggage:</strong> ${formData.luggage || "Not specified"}</p>
+      <p><strong>Child Seats:</strong> ${formData.childSeats || "Not specified"}</p>
       <p><strong>Vehicle:</strong> ${formData.vehicle || "Not specified"}</p>
       <p><strong>Special Requests:</strong> ${formData.notes || "None"}</p>
     `;
