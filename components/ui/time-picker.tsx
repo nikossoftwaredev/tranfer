@@ -5,7 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { ScrollArea, ScrollBar } from "./scroll-area";
 import { FaClock } from "react-icons/fa";
 import * as React from "react";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 interface TimePickerProps {
@@ -21,9 +21,17 @@ const MINUTES = Array.from({ length: 12 }, (_, i) => i * 5);
 const TimePickerComponent = ({ value, onChange }: TimePickerProps) => {
   const [open, setOpen] = React.useState(false);
 
-  // Parse hours and minutes from value
+  // Ensure there's always a valid time value
+  useEffect(() => {
+    // If empty string or invalid format, initialize with a default time
+    if (!value || !value.includes(":")) {
+      onChange("12:00");
+    }
+  }, [value, onChange]);
+
+  // Parse hours and minutes from value, defaulting to 12:00 if format is invalid
   const [hoursStr, minutesStr] =
-    value.split(":").length === 2 ? value.split(":") : ["00", "00"];
+    value && value.split(":").length === 2 ? value.split(":") : ["12", "00"];
 
   // Convert to integers for selection
   const hoursValue = parseInt(hoursStr);
@@ -55,6 +63,9 @@ const TimePickerComponent = ({ value, onChange }: TimePickerProps) => {
     [open]
   );
 
+  // Display value with proper formatting
+  const displayValue = value && value.includes(":") ? value : "12:00";
+
   return (
     <div className="space-y-2">
       <Popover open={open} onOpenChange={setOpen} modal>
@@ -67,7 +78,7 @@ const TimePickerComponent = ({ value, onChange }: TimePickerProps) => {
           >
             <div className="flex items-center">
               <FaClock className="mr-2 h-4 w-4 opacity-70" />
-              <span>{value}</span>
+              <span>{displayValue}</span>
             </div>
             <span className="sr-only">Open time picker</span>
           </Button>

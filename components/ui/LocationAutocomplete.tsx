@@ -87,7 +87,7 @@ export const LocationAutocomplete = ({
   isPickupLocation = false,
 }: Props) => {
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState(isPickupLocation ? "Athens Airport" : "");
+  const [query, setQuery] = useState("");
   const debouncedQuery = useDebounce(query, 300);
   const [locations, setLocations] = useState<LocationOption[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -165,13 +165,6 @@ export const LocationAutocomplete = ({
     }
   }, [debouncedQuery, searchLocations]);
 
-  // Initial search for pickup location
-  useEffect(() => {
-    if (isPickupLocation && !value) {
-      searchLocations("Athens Airport");
-    }
-  }, [isPickupLocation, searchLocations, value]);
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -191,8 +184,6 @@ export const LocationAutocomplete = ({
                   </div>
                 )}
               </div>
-            ) : isPickupLocation ? (
-              "Athens Airport..."
             ) : (
               "Search location..."
             )}

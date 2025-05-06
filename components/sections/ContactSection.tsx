@@ -1,7 +1,8 @@
 "use client";
 
-import { Phone, Mail, MapPin, Instagram, Facebook } from "lucide-react";
+import { Phone, Mail, Instagram, Facebook } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { PHONE_NUMBER, EMAIL } from "../../lib/data/config";
 
 const ContactSection = () => {
   const t = useTranslations("Contact");
@@ -31,11 +32,7 @@ const ContactSection = () => {
                   <Phone className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
                   <div className="ml-4">
                     <h4 className="font-medium mb-1">{t("athens.phone")}</h4>
-                    <p className="text-muted-foreground">+30 210 123-4567</p>
-                    <p className="text-muted-foreground">
-                      +30 694 567-8901{" "}
-                      <span className="hidden sm:inline">(WhatsApp)</span>
-                    </p>
+                    <p className="text-muted-foreground">{PHONE_NUMBER}</p>
                   </div>
                 </div>
 
@@ -45,32 +42,12 @@ const ContactSection = () => {
                     <h4 className="font-medium mb-1">{t("athens.email")}</h4>
                     <div className="space-y-2">
                       <a
-                        href="mailto:info@poseidontransfers.gr"
+                        href={`mailto:${EMAIL}`}
                         className="text-foreground/80 hover:text-primary transition-colors block"
                       >
-                        info@poseidontransfers.gr
-                      </a>
-                      <a
-                        href="mailto:bookings@poseidontransfers.gr"
-                        className="text-foreground/80 hover:text-primary transition-colors block"
-                      >
-                        bookings@poseidontransfers.gr
+                        {EMAIL}
                       </a>
                     </div>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <MapPin className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                  <div className="ml-4">
-                    <h4 className="font-medium mb-1">{t("athens.address")}</h4>
-                    <p className="text-muted-foreground">
-                      123 Kifisias Avenue
-                      <br />
-                      Marousi, Athens 15123
-                      <br />
-                      Greece
-                    </p>
                   </div>
                 </div>
               </div>

@@ -42,50 +42,126 @@ export async function sendTelegramMessage(formData: FormData) {
     throw new Error("Telegram credentials not configured");
   }
 
-  // Format the date
-  const formattedDate = formData.date
-    ? new Date(formData.date).toLocaleDateString()
-    : "Not specified";
+  // Format the date and time in a clear, readable format
+  let formattedDate = "Not specified";
+  let formattedTime = formData.time || "Not specified";
+  // First check if isoDateTime was passed directly from the form
+  let isoDateTime = formData.isoDateTime || "Not specified";
 
-  // Construct the message
+  if (formData.date) {
+    const date = new Date(formData.date);
+
+    // Format date in a clear format
+    formattedDate = date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+
+    // Handle time if provided
+    if (formData.time && formData.time.includes(":")) {
+      const [hours, minutes] = formData.time.split(":");
+
+      if (hours && minutes) {
+        try {
+          const hoursInt = parseInt(hours, 10);
+          const minutesInt = parseInt(minutes, 10);
+
+          // Validate the parsed values
+          if (
+            !isNaN(hoursInt) &&
+            !isNaN(minutesInt) &&
+            hoursInt >= 0 &&
+            hoursInt < 24 &&
+            minutesInt >= 0 &&
+            minutesInt < 60
+          ) {
+            date.setHours(hoursInt, minutesInt, 0, 0);
+
+            // Format time in 24-hour format
+            formattedTime = date.toLocaleTimeString("en-GB", {
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: false,
+            });
+
+            // Only create ISO format if not already provided
+            if (isoDateTime === "Not specified") {
+              isoDateTime = date.toISOString();
+            }
+          }
+        } catch {
+          // In case of error, fallback to default time
+          date.setHours(12, 0, 0, 0);
+          formattedTime = "12:00";
+
+          if (isoDateTime === "Not specified") {
+            isoDateTime = date.toISOString();
+          }
+        }
+      } else {
+        // If time format is invalid, set to noon by default
+        date.setHours(12, 0, 0, 0);
+        formattedTime = "12:00";
+
+        // Only create ISO format if not already provided
+        if (isoDateTime === "Not specified") {
+          isoDateTime = date.toISOString();
+        }
+      }
+    }
+  }
+
+  // Helper function to create copiable text blocks
+  const makeCopiable = (value: string): string => {
+    // Use inline code formatting for simple values
+    return `\`${value}\``;
+  };
+
+  // Make sure pickup location is properly accessed
+  const pickupLabel = formData.pickupLocation?.label || "Not specified";
+  const pickupCoordinates =
+    formData.pickupLocation?.coordinates || "Not available";
+  const dropoffLabel = formData.dropoffLocation?.label || "Not specified";
+  const dropoffCoordinates =
+    formData.dropoffLocation?.coordinates || "Not available";
+
+  // Construct the message with copiable text fields
   const message = `
 🚗 *New Booking Request*
 
 *Personal Information:*
-👤 Name: ${formData.fullName}
-📧 Email: ${formData.email}
-📞 Phone: ${formData.countryCode}${formData.phone}
+👤 Name: ${makeCopiable(formData.fullName)}
+📧 Email: ${makeCopiable(formData.email)}
+📞 Phone: ${makeCopiable(formData.countryCode + formData.phone)}
 
 *Trip Details:*
-📍 Pickup Location: ${formData.pickupLocation?.label || "Not specified"}
-📍 Pickup Coordinates: ${
-    formData.pickupLocation?.coordinates || "Not available"
-  }
-🏁 Dropoff Location: ${formData.dropoffLocation?.label || "Not specified"}
-🏁 Dropoff Coordinates: ${
-    formData.dropoffLocation?.coordinates || "Not available"
-  }
-📅 Date: ${formattedDate}
-⏰ Time: ${formData.time || "Not specified"}
-🌐 ISO DateTime: ${formData.isoDateTime || "Not specified"}
+📍 Pickup Location: ${makeCopiable(pickupLabel)}
+📍 Pickup Coordinates: ${makeCopiable(pickupCoordinates)}
+🏁 Dropoff Location: ${makeCopiable(dropoffLabel)}
+🏁 Dropoff Coordinates: ${makeCopiable(dropoffCoordinates)}
+📅 Date: ${makeCopiable(formattedDate)}
+⏰ Time: ${makeCopiable(formattedTime)}
 
 *Additional Information:*
-👥 Passengers: ${formData.passengers}
-🧳 Luggage: ${formData.luggage}
-👶 Child Seats: ${formData.childSeats}
-✈️ Flight Number: ${formData.flightNumber || "Not specified"}
-🚗 Vehicle: ${formData.vehicle}
-📋 Booking Type: ${formData.bookingType || "Regular Transfer"}
+👥 Passengers: ${makeCopiable(formData.passengers)}
+🧳 Luggage: ${makeCopiable(formData.luggage)}
+👶 Child Seats: ${makeCopiable(formData.childSeats)}
+✈️ Flight Number: ${makeCopiable(formData.flightNumber || "Not specified")}
+🚗 Vehicle: ${makeCopiable(formData.vehicle)}
+📋 Booking Type: ${makeCopiable(formData.bookingType || "Regular Transfer")}
 
 *Tour Selection:*
 ${
   formData.selectedTour
-    ? `🏛️ Selected Tour: ${formData.selectedTour}`
+    ? `🏛️ Selected Tour: ${makeCopiable(formData.selectedTour)}`
     : "No specific tour selected"
 }
 
 *Notes:*
+\`\`\`
 ${formData.notes || "No additional notes"}
+\`\`\`
 `;
 
   try {
@@ -104,14 +180,18 @@ ${formData.notes || "No additional notes"}
           }),
         }
       );
+
       if (!response.ok) {
-        throw new Error("Failed to send message to Telegram");
+        const errorData = await response.json();
+        throw new Error(
+          `Failed to send message to Telegram: ${JSON.stringify(errorData)}`
+        );
       }
     }
 
     return { success: true };
   } catch (error) {
-    console.error("Error sending message to Telegram:", error);
+    // No need to log, just re-throw
     throw error;
   }
 }

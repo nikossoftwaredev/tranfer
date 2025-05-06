@@ -1,23 +1,28 @@
 "use server";
 
 import nodemailer from "nodemailer";
+import { EMAIL } from "../data/config";
 
 type BookingFormData = {
   fullName: string;
   email: string;
   phone: string;
-  pickupLocation: {
-    id: string;
-    name: string;
-    description?: string;
-    uniqueKey: string;
-  } | undefined;
-  dropoffLocation?: {
-    id: string;
-    name: string;
-    description?: string;
-    uniqueKey: string;
-  } | undefined;
+  pickupLocation:
+    | {
+        id: string;
+        name: string;
+        description?: string;
+        uniqueKey: string;
+      }
+    | undefined;
+  dropoffLocation?:
+    | {
+        id: string;
+        name: string;
+        description?: string;
+        uniqueKey: string;
+      }
+    | undefined;
   date?: Date;
   time?: string;
   passengers: string;
@@ -55,11 +60,15 @@ export const sendMessage = async (formData: BookingFormData) => {
       <p><strong>Phone:</strong> ${formData.phone}</p>
       
       <h2>Trip Details</h2>
-      <p><strong>Pickup Location:</strong> ${formData.pickupLocation?.name || "Not specified"}</p>
+      <p><strong>Pickup Location:</strong> ${
+        formData.pickupLocation?.name || "Not specified"
+      }</p>
       <p><strong>Pickup Details:</strong> ${
         formData.pickupLocation?.description || "N/A"
       }</p>
-      <p><strong>Dropoff Location:</strong> ${formData.dropoffLocation?.name || "Not specified"}</p>
+      <p><strong>Dropoff Location:</strong> ${
+        formData.dropoffLocation?.name || "Not specified"
+      }</p>
       <p><strong>Dropoff Details:</strong> ${
         formData.dropoffLocation?.description || "N/A"
       }</p>
@@ -69,16 +78,20 @@ export const sendMessage = async (formData: BookingFormData) => {
       <h2>Additional Details</h2>
       <p><strong>Passengers:</strong> ${formData.passengers}</p>
       <p><strong>Luggage:</strong> ${formData.luggage || "Not specified"}</p>
-      <p><strong>Child Seats:</strong> ${formData.childSeats || "Not specified"}</p>
+      <p><strong>Child Seats:</strong> ${
+        formData.childSeats || "Not specified"
+      }</p>
       <p><strong>Vehicle:</strong> ${formData.vehicle || "Not specified"}</p>
-      <p><strong>Flight Number:</strong> ${formData.flightNumber || "Not specified"}</p>
+      <p><strong>Flight Number:</strong> ${
+        formData.flightNumber || "Not specified"
+      }</p>
       <p><strong>Special Requests:</strong> ${formData.notes || "None"}</p>
     `;
 
     // Send email
     const info = await transporter.sendMail({
       from: process.env.EMAIL_USER || "noreply@posidon-transfers.com",
-      to: "solonoodle1997@gmail.com", // Recipient email
+      to: EMAIL, // Use the email from config
       subject: `New Booking Request from ${formData.fullName}`,
       html: htmlContent,
     });

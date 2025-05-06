@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Phone, Mail, MapPin, Instagram, Facebook } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { PHONE_NUMBER, EMAIL } from "../../lib/data/config";
 
 const Footer = () => {
   const t = useTranslations("Footer");
@@ -141,14 +142,12 @@ const Footer = () => {
               <li className="flex items-start">
                 <Phone className="h-5 w-5 mr-2 text-primary" />
                 <span className="text-secondary-foreground/80">
-                  +30 210 123-4567
+                  {PHONE_NUMBER}
                 </span>
               </li>
               <li className="flex items-start">
                 <Mail className="h-5 w-5 mr-2 text-primary" />
-                <span className="text-secondary-foreground/80">
-                  info@poseidontransfer.gr
-                </span>
+                <span className="text-secondary-foreground/80">{EMAIL}</span>
               </li>
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 mr-2 text-primary flex-shrink-0" />

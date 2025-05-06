@@ -92,7 +92,9 @@ const VehicleCard = ({
           alt={model}
           width={400}
           height={300}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="w-full h-full object-cover"
+          priority={isSelected}
         />
         {isSelected && (
           <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-xs font-medium px-2 py-1 rounded-full">

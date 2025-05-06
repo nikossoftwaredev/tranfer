@@ -78,7 +78,7 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
     pickupLocation: undefined,
     dropoffLocation: undefined,
     date: undefined,
-    time: "",
+    time: "12:00",
     passengers: "1",
     luggage: "0",
     childSeats: "0",
