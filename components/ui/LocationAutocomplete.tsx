@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Plane, MapPin, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -78,11 +78,16 @@ const isAirport = (result: NominatimResult): boolean => {
 interface Props {
   value?: LocationOption;
   onChange: (location: LocationOption) => void;
+  isPickupLocation?: boolean;
 }
 
-export const LocationAutocomplete = ({ value, onChange }: Props) => {
+export const LocationAutocomplete = ({
+  value,
+  onChange,
+  isPickupLocation = false,
+}: Props) => {
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState("Athens Airport");
+  const [query, setQuery] = useState(isPickupLocation ? "Athens Airport" : "");
   const debouncedQuery = useDebounce(query, 300);
   const [locations, setLocations] = useState<LocationOption[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -96,24 +101,32 @@ export const LocationAutocomplete = ({ value, onChange }: Props) => {
     setIsLoading(true);
 
     try {
+      // Use our own API endpoint instead of directly calling Nominatim
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-          searchQuery
-        )}&format=json&addressdetails=1&limit=10&accept-language=en`
+        `/api/location?q=${encodeURIComponent(searchQuery)}`
       );
 
+      if (!response.ok) {
+        throw new Error(`API request failed with status ${response.status}`);
+      }
+
       const data: NominatimResult[] = await response.json();
-      // Remove debug logging that might cause performance issues
-      // console.log("Search results:", data);
 
       if (data && Array.isArray(data)) {
         const formattedLocations: LocationOption[] = data.map((result) => {
           // Extract display name parts for a more user-friendly name
           const displayNameParts = result.display_name.split(", ");
-          const simpleName =
-            displayNameParts.length > 0
+          let name =
+            result.name ||
+            (displayNameParts.length > 0
               ? displayNameParts[0]
-              : result.display_name;
+              : result.display_name);
+
+          // Clean up hotel names
+          if (name.toLowerCase().includes("hotel")) {
+            name = name.replace(/hotel/i, "Hotel").trim();
+          }
+
           const airportCheck = isAirport(result);
 
           // Extract coordinates if available
@@ -124,7 +137,7 @@ export const LocationAutocomplete = ({ value, onChange }: Props) => {
 
           return {
             id: result.place_id.toString(),
-            name: result.name || simpleName,
+            name,
             description: formatAddress(result.address),
             uniqueKey: `${result.place_id}_${result.display_name}`,
             isAirport: airportCheck,
@@ -152,38 +165,12 @@ export const LocationAutocomplete = ({ value, onChange }: Props) => {
     }
   }, [debouncedQuery, searchLocations]);
 
-  // Memoize CommandItems to avoid recreating components on each render
-  const locationItems = useMemo(() => {
-    return locations.map((location) => (
-      <CommandItem
-        key={location.uniqueKey}
-        value={location.uniqueKey}
-        onSelect={() => {
-          onChange(location);
-          setOpen(false);
-        }}
-        className="cursor-pointer py-3"
-      >
-        <div className="flex items-start w-full overflow-hidden">
-          <div className="mr-2 mt-1 flex-shrink-0">
-            {location.isAirport ? (
-              <Plane className="h-4 w-4 text-primary" />
-            ) : (
-              <MapPin className="h-4 w-4 text-primary" />
-            )}
-          </div>
-          <div className="flex-1 overflow-hidden">
-            <div className="font-medium text-sm truncate">{location.name}</div>
-            {location.description && (
-              <div className="text-xs text-muted-foreground truncate">
-                {location.description}
-              </div>
-            )}
-          </div>
-        </div>
-      </CommandItem>
-    ));
-  }, [locations, onChange]);
+  // Initial search for pickup location
+  useEffect(() => {
+    if (isPickupLocation && !value) {
+      searchLocations("Athens Airport");
+    }
+  }, [isPickupLocation, searchLocations, value]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -204,6 +191,8 @@ export const LocationAutocomplete = ({ value, onChange }: Props) => {
                   </div>
                 )}
               </div>
+            ) : isPickupLocation ? (
+              "Athens Airport..."
             ) : (
               "Search location..."
             )}
@@ -218,7 +207,11 @@ export const LocationAutocomplete = ({ value, onChange }: Props) => {
       >
         <Command>
           <CommandInput
-            placeholder="Search any location..."
+            placeholder={
+              isPickupLocation
+                ? "Enter airport, hotel, or place in Greece..."
+                : "Enter destination in Greece..."
+            }
             value={query}
             onValueChange={setQuery}
             className="h-10"
@@ -233,12 +226,45 @@ export const LocationAutocomplete = ({ value, onChange }: Props) => {
                 </div>
               ) : (
                 <div className="py-6 text-center text-sm text-wrap">
-                  No locations found. Try a different search term.
+                  No locations found. Try different spelling or more general
+                  terms.
                 </div>
               )}
             </CommandEmpty>
             {locations.length > 0 && (
-              <CommandGroup>{locationItems}</CommandGroup>
+              <CommandGroup>
+                {locations.map((location) => (
+                  <CommandItem
+                    key={location.uniqueKey}
+                    value={location.uniqueKey}
+                    onSelect={() => {
+                      onChange(location);
+                      setOpen(false);
+                    }}
+                    className="cursor-pointer py-3"
+                  >
+                    <div className="flex items-start w-full overflow-hidden">
+                      <div className="mr-2 mt-1 flex-shrink-0">
+                        {location.isAirport ? (
+                          <Plane className="h-4 w-4 text-primary" />
+                        ) : (
+                          <MapPin className="h-4 w-4 text-primary" />
+                        )}
+                      </div>
+                      <div className="flex-1 overflow-hidden">
+                        <div className="font-medium text-sm truncate">
+                          {location.name}
+                        </div>
+                        {location.description && (
+                          <div className="text-xs text-muted-foreground truncate">
+                            {location.description}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
             )}
           </CommandList>
         </Command>

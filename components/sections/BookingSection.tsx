@@ -368,6 +368,7 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                         <LocationAutocomplete
                           value={formState.pickupLocation}
                           onChange={handlePickupLocationChange}
+                          isPickupLocation={true}
                         />
                       </div>
                       <div className="space-y-2">
@@ -381,6 +382,7 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                         <LocationAutocomplete
                           value={formState.dropoffLocation}
                           onChange={handleDropoffLocationChange}
+                          isPickupLocation={false}
                         />
                       </div>
                     </div>

@@ -1,77 +1,12 @@
 "use client";
 
 import { Phone, Mail, MapPin, Instagram, Facebook } from "lucide-react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { Input } from "../../components/ui/input";
-import { Textarea } from "../../components/ui/textarea";
-import { Button } from "../../components/ui/button";
-import { Loader2 } from "lucide-react";
-import { useToast } from "../../hooks/use-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../components/ui/form";
 
 const ContactSection = () => {
   const t = useTranslations("Contact");
-  const { toast } = useToast();
-
-  // Define form schema with Zod
-  const formSchema = z.object({
-    name: z.string().min(2, {
-      message: "Name must be at least 2 characters.",
-    }),
-    email: z.string().email({
-      message: "Please enter a valid email address.",
-    }),
-    subject: z.string().min(3, {
-      message: "Subject must be at least 3 characters.",
-    }),
-    flightNumber: z.string().optional(),
-    message: z.string().min(10, {
-      message: "Message must be at least 10 characters.",
-    }),
-  });
 
   // Initialize react-hook-form
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      subject: "",
-      flightNumber: "",
-      message: "",
-    },
-  });
-
-  const isSubmitting = form.formState.isSubmitting;
-
-  // Form submission handler
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    // Simulate form submission with the form data
-    console.log("Form submitted with:", data);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    // Show success toast
-    toast({
-      variant: "default",
-      title: t("form.title"),
-      description:
-        "Your message has been sent successfully. We will get back to you soon.",
-    });
-
-    // Reset form
-    form.reset();
-  };
 
   return (
     <section id="contact" className="section-padding">
@@ -164,31 +99,7 @@ const ContactSection = () => {
                 </div>
               </div>
             </div>
-
-            {/* Map */}
-            <div className="rounded-lg overflow-hidden border border-border h-72 w-full">
-              <div className="relative h-full w-full">
-                <Image
-                  src="/images/athens-map.jpg"
-                  alt="Athens Office Location"
-                  width={800}
-                  height={600}
-                  className="h-full w-full object-cover opacity-70"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-background/80 backdrop-blur-sm p-4 rounded-lg text-center max-w-xs">
-                    <p className="font-medium mb-1">Athens Office</p>
-                    <p className="text-sm text-muted-foreground">
-                      Central location near Athens International Airport with
-                      easy access to all major destinations
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
-
-        
         </div>
       </div>
     </section>

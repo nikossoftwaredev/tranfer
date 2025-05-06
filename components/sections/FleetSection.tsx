@@ -46,7 +46,7 @@ const VehicleCard = ({
       case "groupTravel":
         return t("tags.groupTravel");
       case "ecoOption":
-        return t("tags.ecoOption");
+        return "Eco-Friendly";
       case "premium":
         return t("tags.premium");
       default:
@@ -58,8 +58,6 @@ const VehicleCard = ({
     switch (feature) {
       case "driver":
         return t("commonFeatures.driver");
-      case "wifi":
-        return t("commonFeatures.wifi");
       case "leather":
         return t("commonFeatures.leather");
       case "climate":
@@ -73,7 +71,8 @@ const VehicleCard = ({
       case "premium":
         return t("commonFeatures.premium");
       case "zero":
-        return t("commonFeatures.zero");
+        // Fallback for missing translation
+        return "Zero Emissions";
       default:
         return feature;
     }
