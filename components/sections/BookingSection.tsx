@@ -14,7 +14,7 @@ import { useVehicle } from "../../contexts/VehicleContext";
 import { LocationAutocomplete } from "../ui/LocationAutocomplete";
 import { LocationOption } from "../ui/LocationAutocomplete";
 import { useToast } from "../../hooks/use-toast";
-import { sendMessage } from "../../lib/utils/sendMessage";
+import { sendTelegramMessage } from "../../server_actions/telegram";
 import { tours } from "../../lib/data/tours";
 import { 
   Luggage, 
@@ -122,11 +122,17 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
     setIsSubmitting(true);
 
     try {
-      // Send email with form data
-      await sendMessage({
+      // Send form data to Telegram
+      await sendTelegramMessage({
         ...formState,
-        phone: `${formState.countryCode}${formState.phone}`,
+        phone: formState.phone,
         vehicle: selectedVehicle || "Not specified",
+        pickupLocation: {
+          ...formState.pickupLocation,
+          label: formState.pickupLocation?.name || "Not specified",
+          value: formState.pickupLocation?.uniqueKey || "Not specified",
+          description: formState.pickupLocation?.description || "Not specified",
+        },
       });
 
       toast({
@@ -397,40 +403,31 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                       <div className="space-y-2">
                         <Label htmlFor="flightNumber" className="flex items-center gap-2">
                           <Plane className="h-4 w-4" />
-                          {tf("notes")}
+                          {t("form.flightNumber" as any)}
                         </Label>
                         <Input
                           id="flightNumber"
                           name="flightNumber"
-                          placeholder={tf("notesPlaceholder")}
+                          placeholder={t("form.flightNumberPlaceholder" as any)}
                           value={formState.flightNumber}
                           onChange={handleChange}
                           className="w-full"
                         />
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Special Requests */}
-                <Card className="bg-card">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <FileText className="h-5 w-5" />
-                      {tf("title")}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <Label htmlFor="notes">{tf("notes")}</Label>
-                      <Textarea
-                        id="notes"
-                        name="notes"
-                        value={formState.notes}
-                        onChange={handleChange}
-                        placeholder={tf("notesPlaceholder")}
-                        className="min-h-[120px]"
-                      />
+                      <div className="space-y-2">
+                        <Label htmlFor="notes" className="flex items-center gap-2">
+                          <FileText className="h-4 w-4" />
+                          {tf("notes")}
+                        </Label>
+                        <Textarea
+                          id="notes"
+                          name="notes"
+                          value={formState.notes}
+                          onChange={handleChange}
+                          placeholder={tf("notesPlaceholder")}
+                          className="min-h-[120px]"
+                        />
+                      </div>
                     </div>
                   </CardContent>
                 </Card>

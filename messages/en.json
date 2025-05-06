@@ -1,0 +1,41 @@
+{
+  "Booking": {
+    "title": "Book Your Transfer",
+    "description": "Fill out the form below to request your private transfer in Greece. Our team will contact you promptly to confirm the details.",
+    "success": {
+      "title": "Booking Request Received!",
+      "message": "Thank you for your booking request. Our team will contact you shortly to confirm your booking.",
+      "button": "Make Another Booking"
+    },
+    "form": {
+      "title": "Book Your Transfer",
+      "pickupLabel": "Pickup Location",
+      "pickupPlaceholder": "Enter pickup location...",
+      "fullName": "Full Name*",
+      "email": "Email Address*",
+      "phone": "Phone*",
+      "trip": "Trip Details",
+      "dropoff": "Drop-off Location*",
+      "dropoffPlaceholder": "Enter drop-off location...",
+      "date": "Date*",
+      "time": "Time*",
+      "additional": "Additional Details",
+      "passengers": "Number of Passengers*",
+      "selectPassengers": "Select number of passengers",
+      "vehicle": "Preferred Vehicle",
+      "selectVehicle": "Select vehicle (optional)",
+      "luggage": "Number of Luggage*",
+      "luggagePlaceholder": "Select number of luggage",
+      "luggagePlural": "pieces",
+      "childSeat": "Child Seats",
+      "childSeatPlaceholder": "Select number of seats",
+      "childSeatPlural": "seats",
+      "special": "Special Requests",
+      "notes": "Additional Notes",
+      "notesPlaceholder": "Any special requirements, flight details or cruise information...",
+      "submit": "Submit Booking Request",
+      "flightNumber": "Flight Number",
+      "flightNumberPlaceholder": "Enter your flight number"
+    }
+  }
+} 
