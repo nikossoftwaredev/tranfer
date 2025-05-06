@@ -1,9 +1,9 @@
 {
   "Metadata": {
-    "title": "Poseidon Transfers | Premium Υπηρεσίες Μεταφοράς στην Ελλάδα",
-    "description": "Απολαύστε πολυτελείς μεταφορές σε όλη την Ελλάδα με την Poseidon Transfers. Επαγγελματίες οδηγοί, πολυτελής στόλος και εξατομικευμένες υπηρεσίες.",
-    "siteName": "Poseidon Transfers",
-    "imageAlt": "Πολυτελείς Υπηρεσίες Μεταφοράς στην Ελλάδα"
+    "title": "Poseidon Transfers and Tours | Premium Υπηρεσίες Μεταφοράς και Περιηγήσεις στην Ελλάδα",
+    "description": "Απολαύστε πολυτελείς μεταφορές και οδηγούμενες περιηγήσεις σε όλη την Ελλάδα με την Poseidon Transfers and Tours. Επαγγελματίες οδηγοί, πολυτελής στόλος και εξατομικευμένες υπηρεσίες.",
+    "siteName": "Poseidon Transfers and Tours",
+    "imageAlt": "Πολυτελείς Υπηρεσίες Μεταφοράς και Περιηγήσεις στην Ελλάδα"
   },
   "Navigation": {
     "home": "Αρχική",
@@ -15,9 +15,9 @@
     "bookNow": "Κράτηση Τώρα"
   },
   "Hero": {
-    "title": "Poseidon Transfers",
-    "subtitle": "Πολυτελείς Ιδιωτικές Μεταφορές στην Ελλάδα",
-    "description": "Αξιόπιστες, ασφαλείς και premium υπηρεσίες μεταφοράς σε όλη την Αθήνα και τα νησιά.",
+    "title": "Poseidon Transfers and Tours",
+    "subtitle": "Πολυτελείς Ιδιωτικές Μεταφορές και Οδηγούμενες Περιηγήσεις στην Ελλάδα",
+    "description": "Αξιόπιστες, ασφαλείς και premium υπηρεσίες μεταφοράς και περιηγήσεις σε όλη την Αθήνα και τα νησιά.",
     "bookNow": "Κράτηση Τώρα",
     "exploreFleet": "Δείτε τον Στόλο μας"
   },
@@ -60,7 +60,6 @@
       "vip": "VIP",
       "familyFriendly": "Κατάλληλο για Οικογένειες",
       "groupTravel": "Ομαδικά Ταξίδια",
-      "ecoOption": "Οικολογική Επιλογή",
       "premium": "Premium"
     },
     "vehicles": {
@@ -72,9 +71,9 @@
         "capacity": "Έως 7 επιβάτες",
         "luggage": "6 μεγάλες βαλίτσες"
       },
-      "tesla": {
-        "capacity": "Έως 3 επιβάτες",
-        "luggage": "2 μεγάλες βαλίτσες"
+      "vclass": {
+        "capacity": "Έως 7 επιβάτες",
+        "luggage": "6 μεγάλες βαλίτσες"
       }
     },
     "commonFeatures": {
@@ -85,8 +84,7 @@
       "water": "Εμφιαλωμένο Νερό",
       "charging": "Θύρες Φόρτισης",
       "legroom": "Επιπλέον Χώρος για τα Πόδια",
-      "premium": "Premium Εσωτερικό",
-      "zero": "Μηδενικές Εκπομπές"
+      "premium": "Premium Εσωτερικό"
     }
   },
   "Tours": {

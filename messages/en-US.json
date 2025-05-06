@@ -1,9 +1,9 @@
 {
   "Metadata": {
-    "title": "Poseidon Transfers | Premium Transportation Services in Greece",
-    "description": "Experience luxury transportation across Greece with Poseidon Transfers. Professional chauffeurs, premium fleet, and personalized service.",
-    "siteName": "Poseidon Transfers",
-    "imageAlt": "Luxury Transfer Services in Greece"
+    "title": "Poseidon Transfers and Tours | Premium Transportation Services in Greece",
+    "description": "Experience luxury transportation and guided tours across Greece with Poseidon Transfers and Tours. Professional chauffeurs, premium fleet, and personalized service.",
+    "siteName": "Poseidon Transfers and Tours",
+    "imageAlt": "Luxury Transfer and Tour Services in Greece"
   },
   "Navigation": {
     "home": "Home",
@@ -15,9 +15,9 @@
     "bookNow": "Book Now"
   },
   "Hero": {
-    "title": "Poseidon Transfers",
-    "subtitle": "Luxury Private Transfers in Greece",
-    "description": "Reliable, safe and premium transport services throughout Athens and the Islands.",
+    "title": "Poseidon Transfers and Tours",
+    "subtitle": "Luxury Private Transfers and Guided Tours in Greece",
+    "description": "Reliable, safe and premium transport services and guided tours throughout Athens and the Islands.",
     "bookNow": "Book Now",
     "exploreFleet": "Explore Our Fleet"
   },
@@ -60,7 +60,6 @@
       "vip": "VIP",
       "familyFriendly": "Family Friendly",
       "groupTravel": "Group Travel",
-      "ecoOption": "Eco Option",
       "premium": "Premium"
     },
     "vehicles": {
@@ -72,9 +71,9 @@
         "capacity": "Up to 7 passengers",
         "luggage": "6 large suitcases"
       },
-      "tesla": {
-        "capacity": "Up to 3 passengers",
-        "luggage": "2 large suitcases"
+      "vclass": {
+        "capacity": "Up to 7 passengers",
+        "luggage": "6 large suitcases"
       }
     },
     "commonFeatures": {
@@ -85,8 +84,7 @@
       "water": "Bottled Water",
       "charging": "Charging Outlets",
       "legroom": "Extra Legroom",
-      "premium": "Premium Interior",
-      "zero": "Zero Emissions"
+      "premium": "Premium Interior"
     }
   },
   "Tours": {

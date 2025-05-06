@@ -12,7 +12,7 @@ type BookingFormData = {
     description?: string;
     uniqueKey: string;
   } | undefined;
-  dropoffLocation: {
+  dropoffLocation?: {
     id: string;
     name: string;
     description?: string;

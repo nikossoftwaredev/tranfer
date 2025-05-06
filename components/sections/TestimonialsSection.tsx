@@ -1,6 +1,6 @@
 import { Star } from "lucide-react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 type TestimonialProps = {
   quote: string;
@@ -63,27 +63,52 @@ const TestimonialCard = ({
 
 const TestimonialsSection = () => {
   const t = useTranslations("Testimonials");
+  const locale = useLocale();
 
   const testimonials = [
     {
-      quote:
-        "The service was impeccable from start to finish. The driver was professional, the car was immaculate, and the entire experience exceeded my expectations.",
-      author: "James Wilson",
-      role: "Business Executive",
+      translations: {
+        "en-US": {
+          quote: "The service was impeccable from start to finish. The driver was professional, the car was immaculate, and the entire experience exceeded my expectations.",
+          author: "James Wilson",
+          role: "Business Executive",
+        },
+        "el": {
+          quote: "Η υπηρεσία ήταν άψογη από την αρχή μέχρι το τέλος. Ο οδηγός ήταν επαγγελματίας, το αυτοκίνητο ήταν άψογο και ολόκληρη η εμπειρία ξεπέρασε τις προσδοκίες μου.",
+          author: "James Wilson",
+          role: "Επιχειρηματίας",
+        }
+      },
       rating: 5,
     },
     {
-      quote:
-        "We booked Poseidon Transfers for our wedding day transportation and couldn&apos;t have been happier. The attention to detail and the luxurious vehicles made our special day even more memorable.",
-      author: "Sarah & Michael",
-      role: "Newlyweds",
+      translations: {
+        "en-US": {
+          quote: "We booked Poseidon Transfers for our wedding day transportation and couldn't have been happier. The attention to detail and the luxurious vehicles made our special day even more memorable.",
+          author: "Sarah & Michael",
+          role: "Newlyweds",
+        },
+        "el": {
+          quote: "Κλείσαμε την Poseidon Transfers για τη μεταφορά της ημέρας του γάμου μας και δεν θα μπορούσαμε να είμαστε πιο ευχαριστημένοι. Η προσοχή στη λεπτομέρεια και τα πολυτελή οχήματα έκαναν την ειδική μας μέρα ακόμα πιο αξέχαστη.",
+          author: "Sarah & Michael",
+          role: "Νεόνυμφοι",
+        }
+      },
       rating: 5,
     },
     {
-      quote:
-        "As someone who travels frequently for business, I appreciate the reliability and comfort that Poseidon Transfers provides. Their airport pickup service is always on time and their drivers are extremely professional.",
-      author: "David Chen",
-      role: "International Consultant",
+      translations: {
+        "en-US": {
+          quote: "As someone who travels frequently for business, I appreciate the reliability and comfort that Poseidon Transfers provides. Their airport pickup service is always on time and their drivers are extremely professional.",
+          author: "David Chen",
+          role: "International Consultant",
+        },
+        "el": {
+          quote: "Ως κάποιος που ταξιδεύει συχνά για επαγγελματικούς λόγους, εκτιμώ την αξιοπιστία και την άνεση που παρέχει η Poseidon Transfers. Η υπηρεσία παραλαβής από το αεροδρόμιο είναι πάντα στην ώρα της και οι οδηγοί τους είναι εξαιρετικά επαγγελματίες.",
+          author: "David Chen",
+          role: "Διεθνής Σύμβουλος",
+        }
+      },
       rating: 5,
     },
   ];
@@ -99,15 +124,20 @@ const TestimonialsSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {testimonials.map((testimonial, index) => (
-            <TestimonialCard
-              key={index}
-              quote={testimonial.quote}
-              author={testimonial.author}
-              role={testimonial.role}
-              rating={testimonial.rating}
-            />
-          ))}
+          {testimonials.map((testimonial, index) => {
+            const translatedContent = testimonial.translations[locale];
+            if (!translatedContent) return null;
+            
+            return (
+              <TestimonialCard
+                key={index}
+                quote={translatedContent.quote}
+                author={translatedContent.author}
+                role={translatedContent.role}
+                rating={testimonial.rating}
+              />
+            );
+          })}
         </div>
       </div>
     </section>

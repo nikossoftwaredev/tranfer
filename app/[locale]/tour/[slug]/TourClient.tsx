@@ -1,18 +1,22 @@
 "use client";
 
-import * as React from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowLeft, Clock, CheckCircle2 } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { DatePicker } from "../../../../components/ui/date-picker";
-import { TimePicker } from "../../../../components/ui/time-picker";
-import { Label } from "../../../../components/ui/label";
-import { Input } from "../../../../components/ui/input";
-import { Button } from "../../../../components/ui/button";
-import { Select } from "../../../../components/ui/select";
+import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 import { tours } from "../../../../lib/data/tours";
+import BookingSection from "../../../../components/sections/BookingSection";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/ui/card";
+import { Button } from "../../../../components/ui/button";
+import { ArrowLeft, MapPin, Clock, Users, Luggage } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../../components/ui/select";
 
 type TourClientProps = {
   locale: string;
@@ -21,69 +25,34 @@ type TourClientProps = {
 
 const TourClient = ({ locale, slug }: TourClientProps) => {
   const t = useTranslations("Tours.tourDetails");
-  const toursT = useTranslations("Tours");
   const tour = tours.find((tour) => tour.slug === slug);
-  const translatedContent = tour?.translations?.[locale];
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [selectedTime, setSelectedTime] = useState<string>("");
-
-  // Form state for tour booking
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    passengers: "",
-  });
-
-  // Handle input changes
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { id, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
-  };
-
-  // Handle passenger selection
-  const handlePassengerChange = (value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      passengers: value,
-    }));
-  };
-
-  // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form submitted:", {
-      ...formData,
-      date: selectedDate,
-    });
-    // Implement actual form submission logic here
-  };
+  const translatedContent = tour?.translations[locale];
 
   if (!tour || !translatedContent) {
     return (
-      <div className="container mx-auto px-4 py-12">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Tour not found</h1>
-          <Link
-            href={`/${locale}/#tours`}
-            className="flex items-center justify-center text-primary hover:underline"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            {t("back")}
-          </Link>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="max-w-md w-full">
+          <CardHeader>
+            <CardTitle className="text-center">Tour Not Found</CardTitle>
+          </CardHeader>
+          <CardContent className="text-center">
+            <p className="mb-4">The requested tour could not be found.</p>
+            <Button asChild>
+              <Link href="/tours">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                {t("back")}
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div className="bg-background min-h-screen">
+    <div className="min-h-screen">
       {/* Hero Section */}
-      <div className="relative h-[50vh] md:h-[60vh]">
+      <div className="relative h-[60vh] w-full">
         <Image
           src={tour.image}
           alt={translatedContent.title}
@@ -91,151 +60,66 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-black/60" />
-        <div className="absolute inset-0 flex items-center">
-          <div className="container mx-auto px-4">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-              {translatedContent.title}
-            </h1>
-            <p className="text-xl text-white/90 max-w-2xl">{translatedContent.subtitle}</p>
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+          <div className="text-center text-white">
+            <h1 className="text-4xl font-bold mb-4">{translatedContent.title}</h1>
+            <p className="text-xl">{translatedContent.subtitle}</p>
           </div>
         </div>
       </div>
 
-      {/* Content */}
+      {/* Tour Details */}
       <div className="container mx-auto px-4 py-12">
-        <Link
-          href={`/${locale}/#tours`}
-          className="flex items-center text-primary mb-8 hover:underline"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          {t("back")}
-        </Link>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Main Content */}
+          <div className="md:col-span-2 space-y-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("book.title")}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">{translatedContent.description}</p>
+              </CardContent>
+            </Card>
 
-        {/* Description */}
-        <div className="prose prose-lg max-w-none mb-12">
-          {translatedContent.description.map((paragraph, index) => (
-            <p key={index} className="mb-4">
-              {paragraph}
-            </p>
-          ))}
-        </div>
+            {translatedContent.highlights && translatedContent.highlights.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>{t("highlights")}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="list-disc list-inside space-y-2">
+                    {translatedContent.highlights.map((highlight, index) => (
+                      <li key={index} className="text-muted-foreground">
+                        {highlight}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            )}
 
-        {/* Highlights */}
-        {translatedContent.highlights && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold mb-4">{t("highlights")}</h2>
-            <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {translatedContent.highlights.map((highlight, index) => (
-                <li key={index} className="flex items-start">
-                  <CheckCircle2 className="h-5 w-5 text-primary mr-2 mt-1 flex-shrink-0" />
-                  <span>{highlight}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* What's Included */}
-        {translatedContent.includes && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold mb-4">{t("includes")}</h2>
-            <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {translatedContent.includes.map((item, index) => (
-                <li key={index} className="flex items-start">
-                  <CheckCircle2 className="h-5 w-5 text-primary mr-2 mt-1 flex-shrink-0" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          {/* Tour Details */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center mb-8">
-              <div className="bg-primary/10 px-4 py-2 rounded-full flex items-center">
-                <Clock className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
-                <span className="font-medium">
-                  {tour.hours} {toursT("hours")}
-                </span>
-              </div>
-            </div>
+            {translatedContent.includes && translatedContent.includes.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>{t("includes")}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="list-disc list-inside space-y-2">
+                    {translatedContent.includes.map((item, index) => (
+                      <li key={index} className="text-muted-foreground">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            )}
           </div>
 
           {/* Booking Section */}
-          <div className="lg:col-span-1">
-            <div className="bg-card border border-border rounded-lg p-6 sticky top-24">
-              <h2 className="text-xl font-bold mb-4">{t("book.title")}</h2>
-              <p className="text-muted-foreground mb-6">
-                {t("book.description")}
-              </p>
-
-              <form className="space-y-4" onSubmit={handleSubmit}>
-                <div>
-                  <Label htmlFor="name">{t("book.fullName")}</Label>
-                  <Input
-                    type="text"
-                    id="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="email">{t("book.email")}</Label>
-                  <Input
-                    type="email"
-                    id="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="date">{t("book.date")}</Label>
-                  <DatePicker
-                    date={selectedDate || new Date()}
-                    setDate={setSelectedDate}
-                    placeholder={t("book.date")}
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="time">Pick a time</Label>
-                  <TimePicker
-                    time={selectedTime}
-                    setTime={setSelectedTime}
-                    placeholder="Pick a time"
-                    className="h-10"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="passengers">{t("book.passengers")}</Label>
-                  <Select
-                    value={formData.passengers}
-                    onValueChange={handlePassengerChange}
-                  >
-                    <option value="">{t("book.selectPassengers")}</option>
-                    <option value="1">1 {t("book.passenger")}</option>
-                    <option value="2">2 {t("book.passengers")}</option>
-                    <option value="3">3 {t("book.passengers")}</option>
-                    <option value="4">4 {t("book.passengers")}</option>
-                    <option value="5">5 {t("book.passengers")}</option>
-                    <option value="6">6 {t("book.passengers")}</option>
-                    <option value="7+">7+ {t("book.passengers")}</option>
-                  </Select>
-                </div>
-
-                <Button type="submit" className="w-full mt-4">
-                  {t("book.bookButton")}
-                </Button>
-              </form>
-            </div>
+          <div className="md:col-span-1">
+            <BookingSection tourSlug={slug} />
           </div>
         </div>
       </div>
