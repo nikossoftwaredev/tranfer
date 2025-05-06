@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Plane, MapPin, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -37,6 +37,8 @@ interface NominatimResult {
     [key: string]: string | undefined;
   };
   boundingbox?: string[];
+  lat?: string;
+  lon?: string;
 }
 
 export interface LocationOption {
@@ -45,6 +47,10 @@ export interface LocationOption {
   description?: string;
   uniqueKey: string;
   isAirport?: boolean;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
 }
 
 const formatAddress = (address: NominatimResult["address"]) => {
@@ -97,7 +103,8 @@ export const LocationAutocomplete = ({ value, onChange }: Props) => {
       );
 
       const data: NominatimResult[] = await response.json();
-      console.log("Search results:", data);
+      // Remove debug logging that might cause performance issues
+      // console.log("Search results:", data);
 
       if (data && Array.isArray(data)) {
         const formattedLocations: LocationOption[] = data.map((result) => {
@@ -109,12 +116,19 @@ export const LocationAutocomplete = ({ value, onChange }: Props) => {
               : result.display_name;
           const airportCheck = isAirport(result);
 
+          // Extract coordinates if available
+          const coordinates =
+            result.lat && result.lon
+              ? { lat: parseFloat(result.lat), lng: parseFloat(result.lon) }
+              : undefined;
+
           return {
             id: result.place_id.toString(),
             name: result.name || simpleName,
             description: formatAddress(result.address),
             uniqueKey: `${result.place_id}_${result.display_name}`,
             isAirport: airportCheck,
+            coordinates: coordinates,
           };
         });
 
@@ -137,6 +151,39 @@ export const LocationAutocomplete = ({ value, onChange }: Props) => {
       setLocations([]);
     }
   }, [debouncedQuery, searchLocations]);
+
+  // Memoize CommandItems to avoid recreating components on each render
+  const locationItems = useMemo(() => {
+    return locations.map((location) => (
+      <CommandItem
+        key={location.uniqueKey}
+        value={location.uniqueKey}
+        onSelect={() => {
+          onChange(location);
+          setOpen(false);
+        }}
+        className="cursor-pointer py-3"
+      >
+        <div className="flex items-start w-full overflow-hidden">
+          <div className="mr-2 mt-1 flex-shrink-0">
+            {location.isAirport ? (
+              <Plane className="h-4 w-4 text-primary" />
+            ) : (
+              <MapPin className="h-4 w-4 text-primary" />
+            )}
+          </div>
+          <div className="flex-1 overflow-hidden">
+            <div className="font-medium text-sm truncate">{location.name}</div>
+            {location.description && (
+              <div className="text-xs text-muted-foreground truncate">
+                {location.description}
+              </div>
+            )}
+          </div>
+        </div>
+      </CommandItem>
+    ));
+  }, [locations, onChange]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -191,39 +238,7 @@ export const LocationAutocomplete = ({ value, onChange }: Props) => {
               )}
             </CommandEmpty>
             {locations.length > 0 && (
-              <CommandGroup>
-                {locations.map((location) => (
-                  <CommandItem
-                    key={location.uniqueKey}
-                    value={location.uniqueKey}
-                    onSelect={() => {
-                      onChange(location);
-                      setOpen(false);
-                    }}
-                    className="cursor-pointer py-3"
-                  >
-                    <div className="flex items-start w-full overflow-hidden">
-                      <div className="mr-2 mt-1 flex-shrink-0">
-                        {location.isAirport ? (
-                          <Plane className="h-4 w-4 text-primary" />
-                        ) : (
-                          <MapPin className="h-4 w-4 text-primary" />
-                        )}
-                      </div>
-                      <div className="flex-1 overflow-hidden">
-                        <div className="font-medium text-sm truncate">
-                          {location.name}
-                        </div>
-                        {location.description && (
-                          <div className="text-xs text-muted-foreground truncate">
-                            {location.description}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
+              <CommandGroup>{locationItems}</CommandGroup>
             )}
           </CommandList>
         </Command>

@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { InputWithIcon } from "../ui/input-with-icon";
 import { PhoneInput } from "../ui/phone-input";
 import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
 import { DatePicker } from "../ui/date-picker";
-import { TimePicker } from "../ui/time-picker";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useTranslations, useLocale } from "next-intl";
@@ -16,19 +15,20 @@ import { LocationOption } from "../ui/LocationAutocomplete";
 import { useToast } from "../../hooks/use-toast";
 import { sendTelegramMessage } from "../../server_actions/telegram";
 import { tours } from "../../lib/data/tours";
-import { 
-  Luggage, 
-  BabyIcon, 
-  User, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Calendar, 
-  Clock, 
-  Users, 
+import { vehicles } from "../../lib/data/vehicles";
+import {
+  Luggage,
+  BabyIcon,
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  Clock,
+  Users,
   FileText,
   Plane,
-  Info
+  Info,
 } from "lucide-react";
 import {
   Select,
@@ -38,6 +38,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { TimePicker } from "../ui/time-picker";
 
 type FormState = {
   fullName: string;
@@ -45,6 +46,7 @@ type FormState = {
   phone: string;
   countryCode: string;
   pickupLocation: LocationOption | undefined;
+  dropoffLocation: LocationOption | undefined;
   date: Date | undefined;
   time: string;
   passengers: string;
@@ -58,12 +60,15 @@ type FormState = {
 const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
   const t = useTranslations("Booking");
   const tf = useTranslations("Booking.form");
-  const { selectedVehicle } = useVehicle();
+  const { selectedVehicle, setSelectedVehicle } = useVehicle();
   const { toast } = useToast();
   const locale = useLocale();
 
-  // Find the tour if tourSlug is provided
-  const selectedTour = tourSlug ? tours.find(tour => tour.slug === tourSlug) : undefined;
+  // Find the tour if tourSlug is provided - memoize this calculation
+  const selectedTour = useMemo(
+    () => (tourSlug ? tours.find((tour) => tour.slug === tourSlug) : undefined),
+    [tourSlug]
+  );
 
   const [formState, setFormState] = useState<FormState>({
     fullName: "",
@@ -71,6 +76,7 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
     phone: "",
     countryCode: "+30",
     pickupLocation: undefined,
+    dropoffLocation: undefined,
     date: undefined,
     time: "",
     passengers: "1",
@@ -83,87 +89,195 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target;
-    setFormState((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const handleChange = useCallback(
+    (
+      e: React.ChangeEvent<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >
+    ) => {
+      const { name, value } = e.target;
+      setFormState((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    },
+    []
+  );
 
-  const handlePhoneChange = (value: { phone: string; countryCode: string }) => {
-    setFormState((prev) => ({
-      ...prev,
-      phone: value.phone,
-      countryCode: value.countryCode,
-    }));
-  };
+  const handlePhoneChange = useCallback(
+    (value: { phone: string; countryCode: string }) => {
+      setFormState((prev) => ({
+        ...prev,
+        phone: value.phone,
+        countryCode: value.countryCode,
+      }));
+    },
+    []
+  );
 
-  const handleDateChange = (date: Date | undefined) => {
+  const handleDateChange = useCallback((date: Date | undefined) => {
     setFormState((prev) => ({
       ...prev,
       date,
     }));
-  };
+  }, []);
 
-  const handleTimeChange = (time: string) => {
+  const handleTimeChange = useCallback((time: string) => {
     setFormState((prev) => ({
       ...prev,
       time,
     }));
-  };
+  }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  const handlePickupLocationChange = useCallback((value: LocationOption) => {
+    setFormState((prev) => ({
+      ...prev,
+      pickupLocation: value,
+    }));
+  }, []);
 
-    try {
-      // Send form data to Telegram
-      await sendTelegramMessage({
-        ...formState,
-        phone: formState.phone,
-        vehicle: selectedVehicle || "Not specified",
-        pickupLocation: {
-          ...formState.pickupLocation,
-          label: formState.pickupLocation?.name || "Not specified",
-          value: formState.pickupLocation?.uniqueKey || "Not specified",
-          description: formState.pickupLocation?.description || "Not specified",
-        },
-      });
+  const handleDropoffLocationChange = useCallback((value: LocationOption) => {
+    setFormState((prev) => ({
+      ...prev,
+      dropoffLocation: value,
+    }));
+  }, []);
 
-      toast({
-        variant: "default",
-        title: t("success.title"),
-        description: t("success.message"),
-      });
+  const handlePassengersChange = useCallback((value: string) => {
+    setFormState((prev) => ({
+      ...prev,
+      passengers: value,
+    }));
+  }, []);
 
-      // Reset form fields after successful submission
-      setFormState((prev) => ({
-        ...prev,
-        fullName: "",
-        email: "",
-        phone: "",
-        countryCode: "+30",
-        pickupLocation: undefined,
-        flightNumber: "",
-        notes: "",
-      }));
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description:
-          "There was a problem submitting your request. Please try again later or contact us directly.",
-      });
-      console.error("Form submission error:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const handleLuggageChange = useCallback((value: string) => {
+    setFormState((prev) => ({
+      ...prev,
+      luggage: value,
+    }));
+  }, []);
+
+  const handleChildSeatsChange = useCallback((value: string) => {
+    setFormState((prev) => ({
+      ...prev,
+      childSeats: value,
+    }));
+  }, []);
+
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      setIsSubmitting(true);
+
+      // Format ISO datetime string for clarity across timezones
+      let isoDateTime = "Not specified";
+
+      if (formState.date) {
+        const dateObj = new Date(formState.date);
+
+        // If time is also provided, parse and add it to the date
+        if (formState.time) {
+          const [hours, minutes] = formState.time.split(":").map(Number);
+          dateObj.setHours(hours, minutes);
+        }
+
+        isoDateTime = dateObj.toISOString();
+      }
+
+      // Extract coordinates from locations if available
+      const pickupCoordinates = formState.pickupLocation?.coordinates
+        ? `${formState.pickupLocation.coordinates.lat},${formState.pickupLocation.coordinates.lng}`
+        : "Not available";
+
+      const dropoffCoordinates = formState.dropoffLocation?.coordinates
+        ? `${formState.dropoffLocation.coordinates.lat},${formState.dropoffLocation.coordinates.lng}`
+        : "Not available";
+
+      try {
+        // Send form data to Telegram
+        await sendTelegramMessage({
+          ...formState,
+          phone: formState.phone,
+          vehicle: selectedVehicle || "Not specified",
+          pickupLocation: {
+            ...formState.pickupLocation,
+            label: formState.pickupLocation?.name || "Not specified",
+            value: formState.pickupLocation?.uniqueKey || "Not specified",
+            description:
+              formState.pickupLocation?.description || "Not specified",
+            coordinates: pickupCoordinates,
+          },
+          dropoffLocation: {
+            ...formState.dropoffLocation,
+            label: formState.dropoffLocation?.name || "Not specified",
+            value: formState.dropoffLocation?.uniqueKey || "Not specified",
+            description:
+              formState.dropoffLocation?.description || "Not specified",
+            coordinates: dropoffCoordinates,
+          },
+          isoDateTime: isoDateTime,
+          bookingType: selectedTour ? "Tour Booking" : "Transfer",
+        });
+
+        toast({
+          variant: "default",
+          title: t("success.title"),
+          description: t("success.message"),
+        });
+
+        // Reset form fields after successful submission
+        setFormState((prev) => ({
+          ...prev,
+          fullName: "",
+          email: "",
+          phone: "",
+          countryCode: "+30",
+          pickupLocation: undefined,
+          dropoffLocation: undefined,
+          flightNumber: "",
+          notes: "",
+        }));
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description:
+            "There was a problem submitting your request. Please try again later or contact us directly.",
+        });
+        console.error("Form submission error:", error);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [formState, selectedVehicle, selectedTour, t, toast]
+  );
+
+  // Memoize the tour section to prevent unnecessary re-renders
+  const tourSection = useMemo(() => {
+    if (!selectedTour) return null;
+
+    return (
+      <Card className="bg-card">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <MapPin className="h-5 w-5" />
+            Selected Tour
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <Input
+              id="selectedTour"
+              name="selectedTour"
+              value={formState.selectedTour}
+              disabled
+              className="bg-muted"
+            />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }, [selectedTour, formState.selectedTour]);
 
   return (
     <section id="booking" className="section-padding bg-primary/5">
@@ -177,40 +291,18 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
 
         <div className="max-w-4xl mx-auto">
           <Card className="bg-background/80 backdrop-blur-sm border-2">
-            <CardHeader className="text-center pb-2">
-              <CardTitle className="text-2xl">{tf("title")}</CardTitle>
-            </CardHeader>
+            <CardHeader className="text-center pb-2"></CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Tour Selection (if on tour page) */}
-                {selectedTour && (
-                  <Card className="bg-card">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <MapPin className="h-5 w-5" />
-                        {tf("title")}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-2">
-                        <Input
-                          id="selectedTour"
-                          name="selectedTour"
-                          value={formState.selectedTour}
-                          disabled
-                          className="bg-muted"
-                        />
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
+                {tourSection}
 
                 {/* Personal Information */}
                 <Card className="bg-card">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <User className="h-5 w-5" />
-                      {tf("title")}
+                      Personal Information
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -236,7 +328,10 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                       icon={<Mail className="h-4 w-4" />}
                     />
                     <div className="space-y-2">
-                      <Label htmlFor="phone" className="flex items-center gap-2">
+                      <Label
+                        htmlFor="phone"
+                        className="flex items-center gap-2"
+                      >
                         <Phone className="h-4 w-4" />
                         {tf("phone")}
                       </Label>
@@ -257,30 +352,44 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <MapPin className="h-5 w-5" />
-                      {tf("title")}
+                      Journey Details
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <Label htmlFor="pickupLocation" className="flex items-center gap-2">
+                        <Label
+                          htmlFor="pickupLocation"
+                          className="flex items-center gap-2"
+                        >
                           <MapPin className="h-4 w-4" />
                           {tf("pickupLabel")}
                         </Label>
                         <LocationAutocomplete
                           value={formState.pickupLocation}
-                          onChange={(value) => {
-                            setFormState((prev) => ({
-                              ...prev,
-                              pickupLocation: value,
-                            }));
-                          }}
+                          onChange={handlePickupLocationChange}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="dropoffLocation"
+                          className="flex items-center gap-2"
+                        >
+                          <MapPin className="h-4 w-4" />
+                          {tf("dropoff")}
+                        </Label>
+                        <LocationAutocomplete
+                          value={formState.dropoffLocation}
+                          onChange={handleDropoffLocationChange}
                         />
                       </div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <Label htmlFor="date" className="flex items-center gap-2">
+                        <Label
+                          htmlFor="date"
+                          className="flex items-center gap-2"
+                        >
                           <Calendar className="h-4 w-4" />
                           {tf("date")}
                         </Label>
@@ -291,14 +400,17 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="time" className="flex items-center gap-2">
+                        <Label
+                          htmlFor="time"
+                          className="flex items-center gap-2"
+                        >
                           <Clock className="h-4 w-4" />
                           {tf("time")}
                         </Label>
                         <TimePicker
-                          time={formState.time}
-                          setTime={handleTimeChange}
-                          placeholder={tf("time")}
+                          value={formState.time}
+                          onChange={handleTimeChange}
+                          label={tf("time")}
                         />
                       </div>
                     </div>
@@ -310,124 +422,169 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Info className="h-5 w-5" />
-                      {tf("title")}
+                      Travel Preferences
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div className="space-y-2">
-                        <Label htmlFor="passengers" className="flex items-center gap-2">
+                        <Label
+                          htmlFor="passengers"
+                          className="flex items-center gap-2"
+                        >
                           <Users className="h-4 w-4" />
                           {tf("passengers")}
                         </Label>
                         <Select
                           value={formState.passengers}
-                          onValueChange={(value) =>
-                            setFormState((prev) => ({
-                              ...prev,
-                              passengers: value,
-                            }))
-                          }
+                          onValueChange={handlePassengersChange}
                         >
                           <SelectTrigger>
                             <SelectValue placeholder={tf("selectPassengers")} />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent className="max-h-[300px]">
                             {[...Array(10)].map((_, i) => (
-                              <SelectItem key={i + 1} value={(i + 1).toString()}>
-                                {i + 1} {tf("passengers")}
+                              <SelectItem
+                                key={i + 1}
+                                value={(i + 1).toString()}
+                              >
+                                {i + 1}
                               </SelectItem>
                             ))}
-                            <SelectItem value="11+">11+ {tf("passengers")}</SelectItem>
+                            <SelectItem value="11+">11+</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="luggage" className="flex items-center gap-2">
+                        <Label
+                          htmlFor="luggage"
+                          className="flex items-center gap-2"
+                        >
                           <Luggage className="h-4 w-4" />
                           {tf("luggage")}
                         </Label>
                         <Select
                           value={formState.luggage}
-                          onValueChange={(value) =>
-                            setFormState((prev) => ({
-                              ...prev,
-                              luggage: value,
-                            }))
-                          }
+                          onValueChange={handleLuggageChange}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder={tf("luggagePlaceholder")} />
+                            <SelectValue
+                              placeholder={tf("luggagePlaceholder")}
+                            />
                           </SelectTrigger>
-                          <SelectContent>
-                            {[...Array(10)].map((_, i) => (
-                              <SelectItem key={i} value={i.toString()}>
-                                {i} {tf("luggagePlural")}
+                          <SelectContent className="max-h-[300px]">
+                            <SelectItem value="0">0</SelectItem>
+                            {[...Array(9)].map((_, i) => (
+                              <SelectItem
+                                key={i + 1}
+                                value={(i + 1).toString()}
+                              >
+                                {i + 1}
                               </SelectItem>
                             ))}
-                            <SelectItem value="10+">10+ {tf("luggagePlural")}</SelectItem>
+                            <SelectItem value="10+">10+</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="childSeats" className="flex items-center gap-2">
+                        <Label
+                          htmlFor="childSeats"
+                          className="flex items-center gap-2"
+                        >
                           <BabyIcon className="h-4 w-4" />
                           {tf("childSeat")}
                         </Label>
                         <Select
                           value={formState.childSeats}
-                          onValueChange={(value) =>
-                            setFormState((prev) => ({
-                              ...prev,
-                              childSeats: value,
-                            }))
-                          }
+                          onValueChange={handleChildSeatsChange}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder={tf("childSeatPlaceholder")} />
+                            <SelectValue
+                              placeholder={tf("childSeatPlaceholder")}
+                            />
                           </SelectTrigger>
-                          <SelectContent>
-                            {[...Array(3)].map((_, i) => (
-                              <SelectItem key={i} value={i.toString()}>
-                                {i} {tf("childSeatPlural")}
+                          <SelectContent className="max-h-[300px]">
+                            <SelectItem value="0">0</SelectItem>
+                            {[...Array(2)].map((_, i) => (
+                              <SelectItem
+                                key={i + 1}
+                                value={(i + 1).toString()}
+                              >
+                                {i + 1}
                               </SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
                       </div>
                     </div>
-                    
+
+                    {/* Display Selected Vehicle - Moving this to be with Flight Number */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <Label htmlFor="flightNumber" className="flex items-center gap-2">
+                        <Label
+                          htmlFor="flightNumber"
+                          className="flex items-center gap-2"
+                        >
                           <Plane className="h-4 w-4" />
-                          {t("form.flightNumber" as any)}
+                          Flight Number
                         </Label>
                         <Input
                           id="flightNumber"
                           name="flightNumber"
-                          placeholder={t("form.flightNumberPlaceholder" as any)}
+                          placeholder="e.g. FR1234"
                           value={formState.flightNumber}
                           onChange={handleChange}
                           className="w-full"
                         />
                       </div>
+
                       <div className="space-y-2">
-                        <Label htmlFor="notes" className="flex items-center gap-2">
-                          <FileText className="h-4 w-4" />
-                          {tf("notes")}
+                        <Label
+                          htmlFor="selectedVehicle"
+                          className="flex items-center gap-2"
+                        >
+                          <Info className="h-4 w-4" />
+                          Selected Vehicle
                         </Label>
-                        <Textarea
-                          id="notes"
-                          name="notes"
-                          value={formState.notes}
-                          onChange={handleChange}
-                          placeholder={tf("notesPlaceholder")}
-                          className="min-h-[120px]"
-                        />
+                        <Select
+                          value={selectedVehicle}
+                          onValueChange={setSelectedVehicle}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a vehicle" />
+                          </SelectTrigger>
+                          <SelectContent className="max-h-[300px]">
+                            {vehicles.map((vehicle) => (
+                              <SelectItem
+                                key={vehicle.model}
+                                value={vehicle.model}
+                              >
+                                {vehicle.model} ({vehicle.category})
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="notes"
+                        className="flex items-center gap-2"
+                      >
+                        <FileText className="h-4 w-4" />
+                        {tf("notes")}
+                      </Label>
+                      <Textarea
+                        id="notes"
+                        name="notes"
+                        value={formState.notes}
+                        onChange={handleChange}
+                        placeholder={tf("notesPlaceholder")}
+                        className="min-h-[120px]"
+                      />
                     </div>
                   </CardContent>
                 </Card>
