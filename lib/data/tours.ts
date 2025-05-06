@@ -1,102 +1,192 @@
 export interface TourConfig {
-  title: string;
-  subtitle: string;
+  id: string;
+  slug: string;
+  image: string;
   cost: string;
   hours: number;
-  image: string;
-  slug: string;
-  description: string[];
-  highlights?: string[];
-  includes?: string[];
+  translations: {
+    [locale: string]: {
+      title: string;
+      subtitle: string;
+      description: string[];
+      highlights?: string[];
+      includes?: string[];
+    };
+  };
 }
 
 export const tours: TourConfig[] = [
   {
-    title: "Sunset Serenity at Poseidon's Haven",
-    subtitle: "Experience the Majesty of the Poseidon Temple in Sounio",
+    id: "poseidon-temple",
+    slug: "poseidon-temple-sounio",
+    image: "/images/tours/poseidon_haven.jpg",
     cost: "399",
     hours: 4,
-    image: "/images/tours/poseidon_haven.jpg",
-    slug: "poseidon-temple-sounio",
-    description: [
-      "Embark on a magnificent afternoon journey along the scenic Athens Riviera to Cape Sounio, home to the iconic Temple of Poseidon. This exclusive private tour allows you to experience one of Greece's most spectacular sunsets in a setting steeped in mythology and natural beauty.",
-      "As you travel south from Athens, you'll enjoy breathtaking coastal views along the Saronic Gulf, with opportunities to stop at picturesque beaches and seaside towns. Your knowledgeable driver will share fascinating insights about the region's history and culture.",
-      "Upon arrival at Cape Sounio, you'll be mesmerized by the majestic Temple of Poseidon perched dramatically on the cliff edge. Built in 444 BC, this ancient monument honors the mighty god of the sea, offering panoramic views of the Aegean.",
-      "The highlight of your experience will be witnessing the magical sunset, as golden light bathes the temple columns and the sun dips into the sea - a truly unforgettable Greek moment.",
-    ],
-    highlights: [
-      "Private luxury transportation with professional driver-guide",
-      "Breathtaking Athens Riviera coastal drive",
-      "Visit to the iconic Temple of Poseidon",
-      "Spectacular sunset views over the Aegean Sea",
-      "Free time to explore Cape Sounio",
-    ],
-    includes: [
-      "Luxury private vehicle and professional driver",
-      "Hotel/accommodation pickup and drop-off",
-      "Bottled water and refreshments",
-      "Free Wi-Fi in vehicle",
-      "All taxes and fees",
-    ],
+    translations: {
+      "en-US": {
+        title: "Sunset Serenity at Poseidon's Haven",
+        subtitle: "Experience the Majesty of the Poseidon Temple in Sounio",
+        description: [
+          "Embark on a magnificent afternoon journey along the scenic Athens Riviera to Cape Sounio, home to the iconic Temple of Poseidon. This exclusive private tour allows you to experience one of Greece's most spectacular sunsets in a setting steeped in mythology and natural beauty.",
+          "As you travel south from Athens, you'll enjoy breathtaking coastal views along the Saronic Gulf, with opportunities to stop at picturesque beaches and seaside towns. Your knowledgeable driver will share fascinating insights about the region's history and culture.",
+          "Upon arrival at Cape Sounio, you'll be mesmerized by the majestic Temple of Poseidon perched dramatically on the cliff edge. Built in 444 BC, this ancient monument honors the mighty god of the sea, offering panoramic views of the Aegean.",
+          "The highlight of your experience will be witnessing the magical sunset, as golden light bathes the temple columns and the sun dips into the sea - a truly unforgettable Greek moment.",
+        ],
+        highlights: [
+          "Private luxury transportation with professional driver-guide",
+          "Breathtaking Athens Riviera coastal drive",
+          "Visit to the iconic Temple of Poseidon",
+          "Spectacular sunset views over the Aegean Sea",
+          "Free time to explore Cape Sounio",
+        ],
+        includes: [
+          "Luxury private vehicle and professional driver",
+          "Hotel/accommodation pickup and drop-off",
+          "Bottled water and refreshments",
+          "Free Wi-Fi in vehicle",
+          "All taxes and fees",
+        ],
+      },
+      "el": {
+        title: "Ηλιοβασίλεμα στο Καταφύγιο του Ποσειδώνα",
+        subtitle: "Βιώστε τη Μεγαλοπρέπεια του Ναού του Ποσειδώνα στον Σούνιο",
+        description: [
+          "Επιβιβαστείτε σε ένα μεγαλειώδες απογευματινό ταξίδι κατά μήκος της γραφικής Αθηναϊκής Ριβιέρας προς το Ακρωτήριο Σούνιο, όπου βρίσκεται ο εμβληματικός Ναός του Ποσειδώνα. Αυτή η αποκλειστική ιδιωτική περιήγηση σας επιτρέπει να βιώσετε ένα από τα πιο εντυπωσιακά ηλιοβασιλέματα της Ελλάδας σε ένα περιβάλλον γεμάτο μυθολογία και φυσική ομορφιά.",
+          "Καθώς ταξιδεύετε νότια από την Αθήνα, θα απολαύσετε εντυπωσιακές θάλασσες θέας κατά μήκος του Σαρωνικού Κόλπου, με ευκαιρίες για στάσεις σε γραφικές παραλίες και παραθαλάσσιες πόλεις. Ο γνώστης οδηγός σας θα μοιραστεί συναρπαστικές πληροφορίες για την ιστορία και τον πολιτισμό της περιοχής.",
+          "Με την άφιξή σας στο Ακρωτήριο Σούνιο, θα γοητευτείτε από τον μεγαλειώδη Ναό του Ποσειδώνα που στέκεται δραματικά στην άκρη του βράχου. Χτισμένος το 444 π.Χ., αυτό το αρχαίο μνημείο τιμά τον ισχυρό θεό της θάλασσας, προσφέροντας πανοραμική θέα στο Αιγαίο.",
+          "Το αποκορύφωμα της εμπειρίας σας θα είναι να παρακολουθήσετε το μαγικό ηλιοβασίλεμα, καθώς το χρυσό φως λούζει τις κολόνες του ναού και ο ήλιος βυθίζεται στη θάλασσα - μια πραγματικά αξέχαστη ελληνική στιγμή.",
+        ],
+        highlights: [
+          "Ιδιωτική πολυτελής μεταφορά με επαγγελματία οδηγό-ξενάγο",
+          "Εντυπωσιακή παράκτια διαδρομή στην Αθηναϊκή Ριβιέρα",
+          "Επίσκεψη στον εμβληματικό Ναό του Ποσειδώνα",
+          "Εντυπωσιακή θέα του ηλιοβασιλέματος πάνω από το Αιγαίο",
+          "Ελεύθερος χρόνος για εξερεύνηση του Ακρωτηρίου Σούνιο",
+        ],
+        includes: [
+          "Πολυτελές ιδιωτικό όχημα και επαγγελματίας οδηγός",
+          "Παραλαβή και επιστροφή από το ξενοδοχείο/κατάλυμα",
+          "Εμφιαλωμένο νερό και αναψυκτικά",
+          "Δωρεάν Wi-Fi στο όχημα",
+          "Όλοι οι φόροι και τα τέλη",
+        ],
+      },
+    },
   },
 
   {
-    title: "Nafplio Nouveau",
-    subtitle:
-      "A Day in the Charming Heart of Greece: Experience the Magic of Nafplio",
+    id: "nafplio-nouveau",
+    slug: "nafplio-nouveau",
+    image: "/images/tours/nafplio_nouveau.jpg",
     cost: "250",
     hours: 6,
-    image: "/images/tours/nafplio_nouveau.jpg",
-    slug: "nafplio-nouveau",
-    description: [
-      "Discover the enchanting city of Nafplio, Greece's first capital and one of its most romantic destinations. This private day tour takes you through picturesque countryside to a coastal gem filled with Venetian architecture, charming streets, and rich history.",
-      "Your journey begins with a comfortable drive through the scenic Peloponnese, passing by beautiful landscapes and historic sites. Upon arrival in Nafplio, you'll be captivated by its elegant ambiance, neoclassical mansions, and imposing fortifications.",
-      "Explore the narrow cobblestone streets of the old town, visit the impressive Palamidi Fortress, and stroll along the beautiful seafront promenade. Your knowledgeable driver will share fascinating stories about Nafplio's pivotal role in modern Greek history.",
-    ],
-    highlights: [
-      "Private luxury transportation with professional driver",
-      "Scenic journey through the Peloponnese countryside",
-      "Exploration of Nafplio's Old Town and fortress",
-      "Breathtaking coastal views",
-      "Free time for shopping and dining",
-    ],
-    includes: [
-      "Luxury private vehicle and professional driver",
-      "Hotel/accommodation pickup and drop-off",
-      "Bottled water and refreshments",
-      "Free Wi-Fi in vehicle",
-      "All taxes and fees",
-    ],
+    translations: {
+      "en-US": {
+        title: "Nafplio Nouveau",
+        subtitle: "A Day in the Charming Heart of Greece: Experience the Magic of Nafplio",
+        description: [
+          "Discover the enchanting city of Nafplio, Greece's first capital and one of its most romantic destinations. This private day tour takes you through picturesque countryside to a coastal gem filled with Venetian architecture, charming streets, and rich history.",
+          "Your journey begins with a comfortable drive through the scenic Peloponnese, passing by beautiful landscapes and historic sites. Upon arrival in Nafplio, you'll be captivated by its elegant ambiance, neoclassical mansions, and imposing fortifications.",
+          "Explore the narrow cobblestone streets of the old town, visit the impressive Palamidi Fortress, and stroll along the beautiful seafront promenade. Your knowledgeable driver will share fascinating stories about Nafplio's pivotal role in modern Greek history.",
+        ],
+        highlights: [
+          "Private luxury transportation with professional driver",
+          "Scenic journey through the Peloponnese countryside",
+          "Exploration of Nafplio's Old Town and fortress",
+          "Breathtaking coastal views",
+          "Free time for shopping and dining",
+        ],
+        includes: [
+          "Luxury private vehicle and professional driver",
+          "Hotel/accommodation pickup and drop-off",
+          "Bottled water and refreshments",
+          "Free Wi-Fi in vehicle",
+          "All taxes and fees",
+        ],
+      },
+      "el": {
+        title: "Ναύπλιο Νουβό",
+        subtitle: "Μια Μέρα στην Γοητευτική Καρδιά της Ελλάδας: Βιώστε τη Μαγεία του Ναυπλίου",
+        description: [
+          "Ανακαλύψτε τη γοητευτική πόλη του Ναυπλίου, την πρώτη πρωτεύουσα της Ελλάδας και ένα από τα πιο ρομαντικά της προορισμούς. Αυτή η ιδιωτική ημερήσια περιήγηση σας οδηγεί μέσα από γραφική ύπαιθρο σε ένα παράκτιο διαμάντι γεμάτο βενετσιάνικη αρχιτεκτονική, γοητευτικά δρομάκια και πλούσια ιστορία.",
+          "Το ταξίδι σας ξεκινά με μια άνετη διαδρομή μέσα από την γραφική Πελοπόννησο, περνώντας από όμορφα τοπία και ιστορικά σημεία. Με την άφιξή σας στο Ναύπλιο, θα γοητευτείτε από την κομψή ατμόσφαιρά του, τα νεοκλασικά αρχοντικά και τις εντυπωσιακές οχυρώσεις.",
+          "Εξερευνήστε τα στενά πλακόστρωτα δρομάκια της παλιάς πόλης, επισκεφθείτε την εντυπωσιακή Φρούριο Παλαμήδι, και κάντε βόλτα κατά μήκος της όμορφης παραλιακής λεωφόρου. Ο γνώστης οδηγός σας θα μοιραστεί συναρπαστικές ιστορίες για τον καθοριστικό ρόλο του Ναυπλίου στη σύγχρονη ελληνική ιστορία.",
+        ],
+        highlights: [
+          "Ιδιωτική πολυτελής μεταφορά με επαγγελματία οδηγό",
+          "Γραφική διαδρομή μέσα από την ύπαιθρο της Πελοποννήσου",
+          "Εξερεύνηση της Παλιάς Πόλης και του φρουρίου του Ναυπλίου",
+          "Εντυπωσιακές θάλασσες θέας",
+          "Ελεύθερος χρόνος για ψώνια και φαγητό",
+        ],
+        includes: [
+          "Πολυτελές ιδιωτικό όχημα και επαγγελματίας οδηγός",
+          "Παραλαβή και επιστροφή από το ξενοδοχείο/κατάλυμα",
+          "Εμφιαλωμένο νερό και αναψυκτικά",
+          "Δωρεάν Wi-Fi στο όχημα",
+          "Όλοι οι φόροι και τα τέλη",
+        ],
+      },
+    },
   },
   {
-    title: "Athenian Marvels Unveiled",
-    subtitle:
-      "Best of Athens in a Day: Uncover the City's Rich History and Iconic Landmarks",
+    id: "athenian-marvels",
+    slug: "athens-marvels",
+    image: "/images/tours/athenian_marvels.jpg",
     cost: "499",
     hours: 8,
-    image: "/images/tours/athenian_marvels.jpg",
-    slug: "athens-marvels",
-    description: [
-      "Experience the very best of Athens in one comprehensive private tour designed to showcase the city's iconic landmarks, rich history, and vibrant culture. This carefully crafted journey takes you through 2,500 years of history in comfort and style.",
-      "Begin your exploration at the magnificent Acropolis, where you'll witness the architectural brilliance of the Parthenon and enjoy panoramic views of Athens. Continue to the state-of-the-art Acropolis Museum to discover treasures of ancient Greek civilization.",
-      "Your tour includes visits to the Temple of Zeus, Hadrian's Arch, the historic Plaka district, and the Parliament building to witness the ceremonial Changing of the Guard. Throughout the day, your knowledgeable driver will provide fascinating insights about Athens' past and present.",
-      "This tour offers a perfect blend of history, culture, and modern city life, giving you a comprehensive understanding of Greece's remarkable capital.",
-    ],
-    highlights: [
-      "Private luxury transportation between all sites",
-      "Visit to the Acropolis and Parthenon",
-      "Exploration of the historic Plaka district",
-      "Panoramic city tour including key landmarks",
-      "Changing of the Guard ceremony",
-      "Free time for authentic Greek dining",
-    ],
-    includes: [
-      "Luxury private vehicle and professional driver",
-      "Hotel/accommodation pickup and drop-off",
-      "Bottled water and refreshments",
-      "Free Wi-Fi in vehicle",
-      "All taxes and fees",
-    ],
+    translations: {
+      "en-US": {
+        title: "Athenian Marvels Unveiled",
+        subtitle: "Best of Athens in a Day: Uncover the City's Rich History and Iconic Landmarks",
+        description: [
+          "Experience the very best of Athens in one comprehensive private tour designed to showcase the city's iconic landmarks, rich history, and vibrant culture. This carefully crafted journey takes you through 2,500 years of history in comfort and style.",
+          "Begin your exploration at the magnificent Acropolis, where you'll witness the architectural brilliance of the Parthenon and enjoy panoramic views of Athens. Continue to the state-of-the-art Acropolis Museum to discover treasures of ancient Greek civilization.",
+          "Your tour includes visits to the Temple of Zeus, Hadrian's Arch, the historic Plaka district, and the Parliament building to witness the ceremonial Changing of the Guard. Throughout the day, your knowledgeable driver will provide fascinating insights about Athens' past and present.",
+          "This tour offers a perfect blend of history, culture, and modern city life, giving you a comprehensive understanding of Greece's remarkable capital.",
+        ],
+        highlights: [
+          "Private luxury transportation between all sites",
+          "Visit to the Acropolis and Parthenon",
+          "Exploration of the historic Plaka district",
+          "Panoramic city tour including key landmarks",
+          "Changing of the Guard ceremony",
+          "Free time for authentic Greek dining",
+        ],
+        includes: [
+          "Luxury private vehicle and professional driver",
+          "Hotel/accommodation pickup and drop-off",
+          "Bottled water and refreshments",
+          "Free Wi-Fi in vehicle",
+          "All taxes and fees",
+        ],
+      },
+      "el": {
+        title: "Τα Θαύματα της Αθήνας",
+        subtitle: "Το Καλύτερο της Αθήνας σε Μια Μέρα: Ανακαλύψτε την Πλούσια Ιστορία και τα Εμβληματικά Μνημεία της Πόλης",
+        description: [
+          "Βιώστε το καλύτερο της Αθήνας σε μια ολοκληρωμένη ιδιωτική περιήγηση σχεδιασμένη να παρουσιάσει τα εμβληματικά μνημεία, την πλούσια ιστορία και τον ζωντανό πολιτισμό της πόλης. Αυτό το προσεκτικά σχεδιασμένο ταξίδι σας οδηγεί μέσα από 2,500 χρόνια ιστορίας με άνεση και στυλ.",
+          "Ξεκινήστε την εξερεύνησή σας στην μεγαλειώδη Ακρόπολη, όπου θα θαυμάσετε την αρχιτεκτονική μεγαλοπρέπεια του Παρθενώνα και θα απολαύσετε πανοραμική θέα της Αθήνας. Συνεχίστε στο σύγχρονο Μουσείο Ακρόπολης για να ανακαλύψετε θησαυρούς του αρχαίου ελληνικού πολιτισμού.",
+          "Η περιήγησή σας περιλαμβάνει επισκέψεις στον Ναό του Δία, την Αψίδα του Αδριανού, την ιστορική συνοικία της Πλάκας και το Κτήριο της Βουλής για να παρακολουθήσετε την τελετή της Αλλαγής της Φρουράς. Καθ' όλη τη διάρκεια της ημέρας, ο γνώστης οδηγός σας θα παρέχει συναρπαστικές πληροφορίες για το παρελθόν και το παρόν της Αθήνας.",
+          "Αυτή η περιήγηση προσφέρει την τέλεια μίξη ιστορίας, πολιτισμού και σύγχρονης αστικής ζωής, δίνοντάς σας μια ολοκληρωμένη κατανόηση της αξιοσημείωτης πρωτεύουσας της Ελλάδας.",
+        ],
+        highlights: [
+          "Ιδιωτική πολυτελής μεταφορά μεταξύ όλων των σημείων",
+          "Επίσκεψη στην Ακρόπολη και τον Παρθενώνα",
+          "Εξερεύνηση της ιστορικής συνοικίας της Πλάκας",
+          "Πανοραμική περιήγηση της πόλης με τα σημαντικότερα μνημεία",
+          "Τελετή της Αλλαγής της Φρουράς",
+          "Ελεύθερος χρόνος για αυθεντικό ελληνικό φαγητό",
+        ],
+        includes: [
+          "Πολυτελές ιδιωτικό όχημα και επαγγελματίας οδηγός",
+          "Παραλαβή και επιστροφή από το ξενοδοχείο/κατάλυμα",
+          "Εμφιαλωμένο νερό και αναψυκτικά",
+          "Δωρεάν Wi-Fi στο όχημα",
+          "Όλοι οι φόροι και τα τέλη",
+        ],
+      },
+    },
   },
   {
     title: "Athens Unveiled",

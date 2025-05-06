@@ -78,16 +78,21 @@ const ToursSection = () => {
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {tours.map((tour, index) => (
-            <TourCard
-              key={index}
-              image={tour.image}
-              title={tour.title}
-              subtitle={tour.subtitle}
-              duration={tour.hours}
-              slug={tour.slug}
-            />
-          ))}
+          {tours.map((tour, index) => {
+            const translatedContent = tour?.translations?.[locale];
+            if (!translatedContent) return null;
+            
+            return (
+              <TourCard
+                key={index}
+                image={tour.image}
+                title={translatedContent.title}
+                subtitle={translatedContent.subtitle}
+                duration={tour.hours}
+                slug={tour.slug}
+              />
+            );
+          })}
         </div>
 
         <div className="text-center mt-10">

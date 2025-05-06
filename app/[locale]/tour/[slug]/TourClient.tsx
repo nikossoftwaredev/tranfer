@@ -23,6 +23,7 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
   const t = useTranslations("Tours.tourDetails");
   const toursT = useTranslations("Tours");
   const tour = tours.find((tour) => tour.slug === slug);
+  const translatedContent = tour?.translations?.[locale];
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<string>("");
 
@@ -62,8 +63,21 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
     // Implement actual form submission logic here
   };
 
-  if (!tour) {
-    return <div className="container mx-auto px-4 py-12">Tour not found</div>;
+  if (!tour || !translatedContent) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Tour not found</h1>
+          <Link
+            href={`/${locale}/#tours`}
+            className="flex items-center justify-center text-primary hover:underline"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            {t("back")}
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -72,7 +86,7 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
       <div className="relative h-[50vh] md:h-[60vh]">
         <Image
           src={tour.image}
-          alt={tour.title}
+          alt={translatedContent.title}
           fill
           className="object-cover"
           priority
@@ -81,9 +95,9 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
         <div className="absolute inset-0 flex items-center">
           <div className="container mx-auto px-4">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-              {tour.title}
+              {translatedContent.title}
             </h1>
-            <p className="text-xl text-white/90 max-w-2xl">{tour.subtitle}</p>
+            <p className="text-xl text-white/90 max-w-2xl">{translatedContent.subtitle}</p>
           </div>
         </div>
       </div>
@@ -98,6 +112,45 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
           {t("back")}
         </Link>
 
+        {/* Description */}
+        <div className="prose prose-lg max-w-none mb-12">
+          {translatedContent.description.map((paragraph, index) => (
+            <p key={index} className="mb-4">
+              {paragraph}
+            </p>
+          ))}
+        </div>
+
+        {/* Highlights */}
+        {translatedContent.highlights && (
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold mb-4">{t("highlights")}</h2>
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {translatedContent.highlights.map((highlight, index) => (
+                <li key={index} className="flex items-start">
+                  <CheckCircle2 className="h-5 w-5 text-primary mr-2 mt-1 flex-shrink-0" />
+                  <span>{highlight}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* What's Included */}
+        {translatedContent.includes && (
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold mb-4">{t("includes")}</h2>
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {translatedContent.includes.map((item, index) => (
+                <li key={index} className="flex items-start">
+                  <CheckCircle2 className="h-5 w-5 text-primary mr-2 mt-1 flex-shrink-0" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Tour Details */}
           <div className="lg:col-span-2">
@@ -109,42 +162,6 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
                 </span>
               </div>
             </div>
-
-            <div className="prose prose-lg dark:prose-invert max-w-none mb-8">
-              {tour.description.map((paragraph, index) => (
-                <p key={index}>{paragraph}</p>
-              ))}
-            </div>
-
-            {/* Tour Highlights */}
-            {tour.highlights && (
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-4">{t("highlights")}</h2>
-                <ul className="space-y-2">
-                  {tour.highlights.map((highlight, index) => (
-                    <li key={index} className="flex items-start">
-                      <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mr-2 mt-1" />
-                      <span>{highlight}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* What's Included */}
-            {tour.includes && (
-              <div>
-                <h2 className="text-2xl font-bold mb-4">{t("includes")}</h2>
-                <ul className="space-y-2">
-                  {tour.includes.map((item, index) => (
-                    <li key={index} className="flex items-start">
-                      <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mr-2 mt-1" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </div>
 
           {/* Booking Section */}
