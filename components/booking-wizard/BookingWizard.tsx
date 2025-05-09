@@ -13,8 +13,7 @@ import JourneyDetailsStep from "./steps/JourneyDetailsStep";
 import TravelPreferencesStep from "./steps/TravelPreferencesStep";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
-import { ArrowLeft, ArrowRight, Check, Loader2 } from "lucide-react";
-import { cn } from "../../lib/utils";
+import { ArrowLeft, Check, Loader2 } from "lucide-react";
 import { tours } from "../../lib/data/tours";
 
 type BookingWizardProps = {
@@ -136,109 +135,82 @@ const BookingWizardContent = () => {
         </p>
       </div>
 
-      {/* Stepper */}
-      <div className="flex justify-center mb-8">
-        <StepIndicator />
-      </div>
-
       {/* Content */}
       <div className="max-w-4xl mx-auto">
         <Card className="bg-background/80 backdrop-blur-sm border-2 min-h-[400px]">
           <CardContent className="p-6">
-            {/* Steps */}
+            {/* Back button for non-first steps */}
+            {!isFirstStep && (
+              <button
+                onClick={prevStep}
+                className="text-muted-foreground hover:text-primary transition-colors mb-6"
+                disabled={isSubmitting}
+                aria-label="Go back"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </button>
+            )}
+
+            {/* Step content with step title at the top */}
             <div className="mb-8">
-              {currentStep === "personalInfo" && <PersonalInfoStep />}
-              {currentStep === "journeyDetails" && <JourneyDetailsStep />}
-              {currentStep === "travelPreferences" && <TravelPreferencesStep />}
+              <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                {currentStep === "personalInfo" && (
+                  <>{t("wizard.personalInfoTitle")}</>
+                )}
+                {currentStep === "journeyDetails" && (
+                  <>{t("wizard.journeyDetailsTitle")}</>
+                )}
+                {currentStep === "travelPreferences" && (
+                  <>{t("wizard.travelPreferencesTitle")}</>
+                )}
+              </h3>
+
+              <div className="space-y-6">
+                {currentStep === "personalInfo" && <PersonalInfoStep />}
+                {currentStep === "journeyDetails" && <JourneyDetailsStep />}
+                {currentStep === "travelPreferences" && (
+                  <TravelPreferencesStep />
+                )}
+              </div>
             </div>
 
             {/* Navigation */}
-            <div className="flex justify-between pt-6 border-t">
-              <Button
-                variant="outline"
-                onClick={prevStep}
-                disabled={isFirstStep || isSubmitting}
-                className={cn("gap-2", isFirstStep && "invisible")}
-              >
-                <ArrowLeft className="h-4 w-4" />
-                {t("form.back")}
-              </Button>
-
-              <div>
-                {isLastStep ? (
-                  <Button
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={isSubmitting || !isStepComplete(currentStep)}
-                    className="gap-2"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        {t("form.submitting")}
-                      </>
-                    ) : (
-                      <>
-                        {t("form.submit")}
-                        <Check className="h-4 w-4" />
-                      </>
-                    )}
-                  </Button>
-                ) : (
-                  <Button
-                    type="button"
-                    onClick={nextStep}
-                    disabled={!isStepComplete(currentStep)}
-                    className="gap-2"
-                  >
-                    {t("form.next")}
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                )}
-              </div>
+            <div className="flex flex-col gap-4">
+              {isLastStep ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleSubmit}
+                  disabled={isSubmitting || !isStepComplete(currentStep)}
+                  className="w-full gap-2"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      {t("form.submitting")}
+                    </>
+                  ) : (
+                    <>
+                      {t("form.submit")}
+                      <Check className="h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={nextStep}
+                  disabled={!isStepComplete(currentStep)}
+                  className="w-full"
+                >
+                  Continue
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>
       </div>
-    </div>
-  );
-};
-
-// Stepper component
-const StepIndicator = () => {
-  const { currentStep } = useBookingWizard();
-  const t = useTranslations("Booking.wizard");
-
-  const steps = [
-    { id: "personalInfo", label: t("personalInfo") },
-    { id: "journeyDetails", label: t("journeyDetails") },
-    { id: "travelPreferences", label: t("travelPreferences") },
-  ];
-
-  return (
-    <div className="flex items-center justify-center flex-wrap gap-4">
-      {steps.map((step, index) => (
-        <div key={step.id} className="flex items-center">
-          <div
-            className={cn(
-              "flex items-center justify-center w-10 h-10 rounded-full border text-sm font-medium",
-              currentStep === step.id
-                ? "bg-primary text-primary-foreground border-primary"
-                : "bg-background border-muted-foreground/30"
-            )}
-          >
-            {index + 1}
-          </div>
-
-          <div className="ml-2">
-            <div className="text-sm font-medium">{step.label}</div>
-          </div>
-
-          {index < steps.length - 1 && (
-            <div className="w-12 h-0.5 bg-muted-foreground/30 mx-2"></div>
-          )}
-        </div>
-      ))}
     </div>
   );
 };
