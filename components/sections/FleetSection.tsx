@@ -24,8 +24,8 @@ const VehicleCard = ({
   category,
   capacity,
   luggage,
-  features,
   tags = [],
+  description,
 }: VehicleProps) => {
   const t = useTranslations("Fleet");
   const { selectedVehicle, setSelectedVehicle } = useVehicle();
@@ -49,32 +49,10 @@ const VehicleCard = ({
         return "Eco-Friendly";
       case "premium":
         return t("tags.premium");
+      case "largeGroups":
+        return "Large Groups";
       default:
         return tag;
-    }
-  };
-
-  const getFeatureTranslation = (feature: string) => {
-    switch (feature) {
-      case "driver":
-        return t("commonFeatures.driver");
-      case "leather":
-        return t("commonFeatures.leather");
-      case "climate":
-        return t("commonFeatures.climate");
-      case "water":
-        return t("commonFeatures.water");
-      case "charging":
-        return t("commonFeatures.charging");
-      case "legroom":
-        return t("commonFeatures.legroom");
-      case "premium":
-        return t("commonFeatures.premium");
-      case "zero":
-        // Fallback for missing translation
-        return "Zero Emissions";
-      default:
-        return feature;
     }
   };
 
@@ -135,17 +113,11 @@ const VehicleCard = ({
           </div>
         </div>
 
-        <div className="border-t border-border pt-4">
-          <h4 className="text-sm font-medium mb-2">{t("features")}:</h4>
-          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-1 text-sm text-muted-foreground">
-            {features.map((feature, index) => (
-              <li key={index} className="flex items-center gap-1">
-                <span className="h-1.5 w-1.5 rounded-full bg-primary flex-shrink-0" />
-                {getFeatureTranslation(feature)}
-              </li>
-            ))}
-          </ul>
-        </div>
+        {description && (
+          <div className="mb-4 text-sm text-muted-foreground">
+            {description}
+          </div>
+        )}
       </CardContent>
 
       {/* Book Button */}
