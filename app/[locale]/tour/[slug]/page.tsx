@@ -13,7 +13,7 @@ type PageProps = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const tour = tours.find((tour) => tour.slug === slug);
 
   if (!tour) {
@@ -22,9 +22,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
+  // Access translations based on locale, fallback to en-US if not available
+  const translationLocale = tour.translations[locale] ? locale : "en-US";
+  const translation = tour.translations[translationLocale];
+
   return {
-    title: `${tour.title} | Poseidon Transfers`,
-    description: tour.subtitle,
+    title: `${translation.title} | Poseidon Transfers`,
+    description: translation.subtitle,
     openGraph: {
       images: [tour.image],
     },

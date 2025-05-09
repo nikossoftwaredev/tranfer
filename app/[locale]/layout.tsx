@@ -6,14 +6,22 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "../../i18n/routing";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Toaster } from "../../components/ui/toaster";
 import { VehicleProvider } from "../../contexts/VehicleContext";
 import WhatsAppButton from "../../components/ui/WhatsAppButton";
+import { DOMAIN, PHONE_NUMBER } from "@/lib/data/config";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
+
+// Define viewport export for the layout
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#1E293B",
+};
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -32,11 +40,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: t("title"),
     description: t("description"),
-    metadataBase: new URL("https://poseidontranfer.vercel.app"),
+    metadataBase: new URL(DOMAIN),
     openGraph: {
       title: t("title"),
       description: t("description"),
-      url: "https://poseidontranfer.vercel.app",
+      url: DOMAIN,
       siteName: t("siteName"),
       images: [
         {
@@ -76,13 +84,25 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} className="dark">
+      <head>
+        {/* Add preconnect for faster loading of external resources */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+
+        {/* Add preload for critical resources */}
+        <link rel="preload" href="/images/hero-greece.jpg" as="image" />
+      </head>
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <VehicleProvider>
             <Header />
             <main>{children}</main>
             <Footer />
-            <WhatsAppButton phoneNumber="+306912345678" />
+            <WhatsAppButton phoneNumber={PHONE_NUMBER} />
             <Toaster />
           </VehicleProvider>
         </NextIntlClientProvider>

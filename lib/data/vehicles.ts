@@ -15,7 +15,7 @@ export const vehicles: VehicleConfig[] = [
     category: "Luxury Sedan",
     capacity: "Up to 3 passengers",
     luggage: "2 large suitcases",
-    features: ["driver", "wifi", "leather", "climate", "water", "charging"],
+    features: ["driver", "leather", "climate", "water", "charging"],
     tags: ["businessClass", "vip"],
   },
   {
@@ -24,7 +24,7 @@ export const vehicles: VehicleConfig[] = [
     category: "Luxury Van",
     capacity: "Up to 7 passengers",
     luggage: "6 large suitcases",
-    features: ["driver", "wifi", "leather", "climate", "legroom", "charging"],
+    features: ["driver", "leather", "climate", "legroom", "charging"],
     tags: ["familyFriendly", "groupTravel"],
   },
   {
@@ -33,7 +33,7 @@ export const vehicles: VehicleConfig[] = [
     category: "Luxury Minivan",
     capacity: "Up to 7 passengers",
     luggage: "6 large suitcases",
-    features: ["driver", "wifi", "leather", "climate", "legroom", "premium"],
+    features: ["driver", "leather", "climate", "legroom", "premium"],
     tags: ["familyFriendly", "groupTravel", "premium"],
   },
 ];

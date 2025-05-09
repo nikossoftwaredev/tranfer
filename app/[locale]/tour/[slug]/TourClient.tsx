@@ -1,22 +1,18 @@
 "use client";
 
-import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { useLocale } from "next-intl";
 import { tours } from "../../../../lib/data/tours";
 import BookingSection from "../../../../components/sections/BookingSection";
-import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../../../components/ui/card";
 import { Button } from "../../../../components/ui/button";
-import { ArrowLeft, MapPin, Clock, Users, Luggage } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../../components/ui/select";
 
 type TourClientProps = {
   locale: string;
@@ -62,7 +58,9 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
         />
         <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
           <div className="text-center text-white">
-            <h1 className="text-4xl font-bold mb-4">{translatedContent.title}</h1>
+            <h1 className="text-4xl font-bold mb-4">
+              {translatedContent.title}
+            </h1>
             <p className="text-xl">{translatedContent.subtitle}</p>
           </div>
         </div>
@@ -78,43 +76,47 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
                 <CardTitle>{t("book.title")}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">{translatedContent.description}</p>
+                <p className="text-muted-foreground">
+                  {translatedContent.description}
+                </p>
               </CardContent>
             </Card>
 
-            {translatedContent.highlights && translatedContent.highlights.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t("highlights")}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="list-disc list-inside space-y-2">
-                    {translatedContent.highlights.map((highlight, index) => (
-                      <li key={index} className="text-muted-foreground">
-                        {highlight}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            )}
+            {translatedContent.highlights &&
+              translatedContent.highlights.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{t("highlights")}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="list-disc list-inside space-y-2">
+                      {translatedContent.highlights.map((highlight, index) => (
+                        <li key={index} className="text-muted-foreground">
+                          {highlight}
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              )}
 
-            {translatedContent.includes && translatedContent.includes.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>{t("includes")}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="list-disc list-inside space-y-2">
-                    {translatedContent.includes.map((item, index) => (
-                      <li key={index} className="text-muted-foreground">
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            )}
+            {translatedContent.includes &&
+              translatedContent.includes.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{t("includes")}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="list-disc list-inside space-y-2">
+                      {translatedContent.includes.map((item, index) => (
+                        <li key={index} className="text-muted-foreground">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              )}
           </div>
 
           {/* Booking Section */}

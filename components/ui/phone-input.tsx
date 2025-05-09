@@ -9,33 +9,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./select";
-import { Flag } from "lucide-react";
 
-// Common country codes with their flags
+// Common country codes
 const countryCodes = [
-  { code: "+1", country: "US", flag: "🇺🇸" },
-  { code: "+44", country: "GB", flag: "🇬🇧" },
-  { code: "+30", country: "GR", flag: "🇬🇷" },
-  { code: "+49", country: "DE", flag: "🇩🇪" },
-  { code: "+33", country: "FR", flag: "🇫🇷" },
-  { code: "+39", country: "IT", flag: "🇮🇹" },
-  { code: "+34", country: "ES", flag: "🇪🇸" },
-  { code: "+31", country: "NL", flag: "🇳🇱" },
-  { code: "+7", country: "RU", flag: "🇷🇺" },
-  { code: "+86", country: "CN", flag: "🇨🇳" },
-  { code: "+81", country: "JP", flag: "🇯🇵" },
-  { code: "+82", country: "KR", flag: "🇰🇷" },
-  { code: "+91", country: "IN", flag: "🇮🇳" },
-  { code: "+61", country: "AU", flag: "🇦🇺" },
-  { code: "+55", country: "BR", flag: "🇧🇷" },
-  { code: "+52", country: "MX", flag: "🇲🇽" },
-  { code: "+27", country: "ZA", flag: "🇿🇦" },
-  { code: "+20", country: "EG", flag: "🇪🇬" },
-  { code: "+971", country: "AE", flag: "🇦🇪" },
-  { code: "+65", country: "SG", flag: "🇸🇬" },
+  { code: "+1" },
+  { code: "+44" },
+  { code: "+30" },
+  { code: "+49" },
+  { code: "+33" },
+  { code: "+39" },
+  { code: "+34" },
+  { code: "+31" },
+  { code: "+7" },
+  { code: "+86" },
+  { code: "+81" },
+  { code: "+82" },
+  { code: "+91" },
+  { code: "+61" },
+  { code: "+55" },
+  { code: "+52" },
+  { code: "+27" },
+  { code: "+20" },
+  { code: "+971" },
+  { code: "+65" },
 ];
 
-export interface PhoneInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+export interface PhoneInputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
   label?: string;
   error?: string;
   containerClassName?: string;
@@ -45,16 +45,19 @@ export interface PhoneInputProps extends Omit<React.InputHTMLAttributes<HTMLInpu
 }
 
 export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
-  ({ 
-    label, 
-    error, 
-    containerClassName, 
-    className, 
-    value = "", 
-    countryCode = "+30", 
-    onChange,
-    ...props 
-  }, ref) => {
+  (
+    {
+      label,
+      error,
+      containerClassName,
+      className,
+      value = "",
+      countryCode = "+30",
+      onChange,
+      ...props
+    },
+    ref
+  ) => {
     const [selectedCountryCode, setSelectedCountryCode] = useState(countryCode);
     const [phoneNumber, setPhoneNumber] = useState(value);
 
@@ -81,18 +84,15 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
             value={selectedCountryCode}
             onValueChange={handleCountryCodeChange}
           >
-            <SelectTrigger className="w-[100px]">
+            <SelectTrigger className="w-[80px]">
               <SelectValue placeholder="Code">
-                {countryCodes.find(c => c.code === selectedCountryCode)?.flag || "🌍"} {selectedCountryCode}
+                {selectedCountryCode}
               </SelectValue>
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="max-h-[180px]">
               {countryCodes.map((country) => (
                 <SelectItem key={country.code} value={country.code}>
-                  <div className="flex items-center gap-2">
-                    <span>{country.flag}</span>
-                    <span>{country.code}</span>
-                  </div>
+                  {country.code}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -116,4 +116,4 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
   }
 );
 
-PhoneInput.displayName = "PhoneInput"; 
+PhoneInput.displayName = "PhoneInput";
