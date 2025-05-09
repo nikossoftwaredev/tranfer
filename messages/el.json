@@ -185,7 +185,20 @@
       "notesPlaceholder": "Τυχόν ειδικές απαιτήσεις, στοιχεία πτήσης ή πληροφορίες για το πλοίο...",
       "submit": "Αποστολή Αιτήματος Κράτησης",
       "flightNumber": "Αριθμός Πτήσης",
-      "flightNumberPlaceholder": "Εισάγετε τον αριθμό πτήσης"
+      "flightNumberPlaceholder": "Εισάγετε τον αριθμό πτήσης",
+      "back": "Πίσω",
+      "next": "Επόμενο",
+      "submitting": "Υποβολή...",
+      "passport": "Διαβατήριο (Προαιρετικό)",
+      "passportPlaceholder": "Εισάγετε τον αριθμό διαβατηρίου"
+    },
+    "wizard": {
+      "personalInfo": "Προσωπικά Στοιχεία",
+      "journeyDetails": "Λεπτομέρειες Διαδρομής",
+      "travelPreferences": "Προτιμήσεις Ταξιδιού",
+      "personalInfoTitle": "Προσωπικές Πληροφορίες",
+      "journeyDetailsTitle": "Λεπτομέρειες Διαδρομής",
+      "travelPreferencesTitle": "Προτιμήσεις Ταξιδιού"
     }
   },
   "Contact": {

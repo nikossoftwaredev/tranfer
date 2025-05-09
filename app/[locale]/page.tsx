@@ -6,7 +6,7 @@ import ToursSection from "../../components/sections/ToursSection";
 import AboutSection from "../../components/sections/AboutSection";
 import TestimonialsSection from "../../components/sections/TestimonialsSection";
 import ContactSection from "../../components/sections/ContactSection";
-import BookingSection from "../../components/sections/BookingSection";
+import BookingWizardSection from "../../components/sections/BookingWizardSection";
 import { routing } from "../../i18n/routing";
 import type { Metadata, Viewport } from "next";
 import { DOMAIN } from "@/lib/data/config";
@@ -100,7 +100,7 @@ const Home = () => {
       <ToursSection />
       <AboutSection />
       <TestimonialsSection />
-      <BookingSection />
+      <BookingWizardSection />
       <ContactSection />
     </main>
   );

@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { tours } from "../../../../lib/data/tours";
-import BookingSection from "../../../../components/sections/BookingSection";
+import BookingWizardSection from "../../../../components/sections/BookingWizardSection";
 import {
   Card,
   CardContent,
@@ -121,7 +121,7 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
 
           {/* Booking Section */}
           <div className="md:col-span-1">
-            <BookingSection tourSlug={slug} />
+            <BookingWizardSection tourSlug={slug} />
           </div>
         </div>
       </div>

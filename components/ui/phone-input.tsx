@@ -69,7 +69,8 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     };
 
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newPhone = e.target.value;
+      // Limit to digits only and max 10 characters
+      const newPhone = e.target.value.replace(/[^\d]/g, "").slice(0, 10);
       setPhoneNumber(newPhone);
       if (onChange) {
         onChange({ phone: newPhone, countryCode: selectedCountryCode });

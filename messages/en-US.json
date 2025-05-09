@@ -182,7 +182,22 @@
       "special": "Special Requests",
       "notes": "Additional Notes",
       "notesPlaceholder": "Any special requirements, flight details, or island ferry information...",
-      "submit": "Send Booking Request"
+      "submit": "Send Booking Request",
+      "back": "Back",
+      "next": "Next",
+      "submitting": "Submitting...",
+      "passport": "Passport (Optional)",
+      "passportPlaceholder": "Enter passport number",
+      "flightNumber": "Flight Number",
+      "flightNumberPlaceholder": "Enter your flight number"
+    },
+    "wizard": {
+      "personalInfo": "Personal Info",
+      "journeyDetails": "Journey Details",
+      "travelPreferences": "Travel Preferences",
+      "personalInfoTitle": "Personal Information",
+      "journeyDetailsTitle": "Journey Details",
+      "travelPreferencesTitle": "Travel Preferences"
     }
   },
   "Contact": {
