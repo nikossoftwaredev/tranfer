@@ -59,7 +59,6 @@ type FormState = {
 
 const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
   const t = useTranslations("Booking");
-  const tf = useTranslations("Booking.form");
   const { selectedVehicle, setSelectedVehicle } = useVehicle();
   const { toast } = useToast();
   const locale = useLocale();
@@ -309,7 +308,7 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                     <InputWithIcon
                       id="fullName"
                       name="fullName"
-                      label={tf("fullName")}
+                      label={t("form.fullName")}
                       value={formState.fullName}
                       onChange={handleChange}
                       autoComplete="name"
@@ -319,7 +318,7 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                     <InputWithIcon
                       id="email"
                       name="email"
-                      label={tf("email")}
+                      label={t("form.email")}
                       value={formState.email}
                       onChange={handleChange}
                       type="email"
@@ -333,7 +332,7 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                         className="flex items-center gap-2"
                       >
                         <Phone className="h-4 w-4" />
-                        {tf("phone")}
+                        {t("form.phone")}
                       </Label>
                       <PhoneInput
                         id="phone"
@@ -363,7 +362,7 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                           className="flex items-center gap-2"
                         >
                           <MapPin className="h-4 w-4" />
-                          {tf("pickupLabel")}
+                          {t("form.pickupLabel")}
                         </Label>
                         <LocationAutocomplete
                           value={formState.pickupLocation}
@@ -377,7 +376,7 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                           className="flex items-center gap-2"
                         >
                           <MapPin className="h-4 w-4" />
-                          {tf("dropoff")}
+                          {t("form.dropoff")}
                         </Label>
                         <LocationAutocomplete
                           value={formState.dropoffLocation}
@@ -393,12 +392,12 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                           className="flex items-center gap-2"
                         >
                           <Calendar className="h-4 w-4" />
-                          {tf("date")}
+                          {t("form.date")}
                         </Label>
                         <DatePicker
                           date={formState.date || new Date()}
                           setDate={handleDateChange}
-                          placeholder={tf("date")}
+                          placeholder={t("form.date")}
                         />
                       </div>
                       <div className="space-y-2">
@@ -407,12 +406,12 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                           className="flex items-center gap-2"
                         >
                           <Clock className="h-4 w-4" />
-                          {tf("time")}
+                          {t("form.time")}
                         </Label>
                         <TimePicker
                           value={formState.time}
                           onChange={handleTimeChange}
-                          label={tf("time")}
+                          label={t("form.time")}
                         />
                       </div>
                     </div>
@@ -435,14 +434,16 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                           className="flex items-center gap-2"
                         >
                           <Users className="h-4 w-4" />
-                          {tf("passengers")}
+                          {t("form.passengers")}
                         </Label>
                         <Select
                           value={formState.passengers}
                           onValueChange={handlePassengersChange}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder={tf("selectPassengers")} />
+                            <SelectValue
+                              placeholder={t("form.selectPassengers")}
+                            />
                           </SelectTrigger>
                           <SelectContent className="max-h-[300px]">
                             {[...Array(10)].map((_, i) => (
@@ -464,7 +465,7 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                           className="flex items-center gap-2"
                         >
                           <Luggage className="h-4 w-4" />
-                          {tf("luggage")}
+                          {t("form.luggage")}
                         </Label>
                         <Select
                           value={formState.luggage}
@@ -472,7 +473,7 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                         >
                           <SelectTrigger>
                             <SelectValue
-                              placeholder={tf("luggagePlaceholder")}
+                              placeholder={t("form.luggagePlaceholder")}
                             />
                           </SelectTrigger>
                           <SelectContent className="max-h-[300px]">
@@ -496,7 +497,7 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                           className="flex items-center gap-2"
                         >
                           <BabyIcon className="h-4 w-4" />
-                          {tf("childSeat")}
+                          {t("form.childSeat")}
                         </Label>
                         <Select
                           value={formState.childSeats}
@@ -504,7 +505,7 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                         >
                           <SelectTrigger>
                             <SelectValue
-                              placeholder={tf("childSeatPlaceholder")}
+                              placeholder={t("form.childSeatPlaceholder")}
                             />
                           </SelectTrigger>
                           <SelectContent className="max-h-[300px]">
@@ -577,14 +578,14 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                         className="flex items-center gap-2"
                       >
                         <FileText className="h-4 w-4" />
-                        {tf("notes")}
+                        {t("form.notes")}
                       </Label>
                       <Textarea
                         id="notes"
                         name="notes"
                         value={formState.notes}
                         onChange={handleChange}
-                        placeholder={tf("notesPlaceholder")}
+                        placeholder={t("form.notesPlaceholder")}
                         className="min-h-[120px]"
                       />
                     </div>
@@ -600,7 +601,7 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                   >
                     {isSubmitting ? (
                       <>
-                        <span className="opacity-0">{tf("submit")}</span>
+                        <span className="opacity-0">{t("form.submit")}</span>
                         <span className="absolute inset-0 flex items-center justify-center">
                           <svg
                             className="animate-spin h-5 w-5 text-white"
@@ -625,7 +626,7 @@ const BookingSection = ({ tourSlug }: { tourSlug?: string }) => {
                         </span>
                       </>
                     ) : (
-                      tf("submit")
+                      t("form.submit")
                     )}
                   </Button>
                 </div>
