@@ -89,11 +89,12 @@ export default async function RootLayout({
         {/* Add preconnect for faster loading of external resources */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
         {/* Add preload for critical resources */}
-        <link rel="preload" href="/images/hero-greece.jpg" as="image" />
+        <link rel="preload" href="/images/hero-greece.jpg" as="image" priority="high" />
       </head>
-      {/* Google Ads Conversion Tracking */}
+      {/* Google Ads Conversion Tracking - with defer to improve page load */}
       <Script src="https://www.googletagmanager.com/gtag/js?id=AW-17068303985" strategy="afterInteractive" />
       <Script id="google-ads" strategy="afterInteractive">
         {`
@@ -103,7 +104,7 @@ export default async function RootLayout({
           gtag('config', 'AW-17068303985');
         `}
       </Script>
-      <body>
+      <body className="min-h-screen antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <VehicleProvider>
             <Header />

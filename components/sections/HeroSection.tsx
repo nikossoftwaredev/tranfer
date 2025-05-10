@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -25,19 +27,16 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-2xl text-white">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4">
-            <span className="gold-text block mb-1 sm:mb-2">{t("title")}</span>
+            <span className="gold-text block mb-1 sm:mb-2">Athens VIP Transfer Service</span>
             <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
-              {t("subtitle")}
+              Luxury Private Transfers & Tours in Greece
             </span>
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-white/90 mb-6 sm:mb-8 line-clamp-3 sm:line-clamp-none">
             {t("description")}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <Link
-              href="/#booking"
-              className="cta-button text-center py-2.5 sm:py-3"
-            >
+            <Link href="/#booking" className="cta-button text-center py-2.5 sm:py-3">
               {t("bookNow")}
             </Link>
           </div>

@@ -2,6 +2,7 @@ import { tours } from "../../../../lib/data/tours";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import TourClient from "./TourClient";
+import { DOMAIN } from "@/lib/data/config";
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
@@ -26,10 +27,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const translationLocale = tour.translations[locale] ? locale : "en-US";
   const translation = tour.translations[translationLocale];
 
+  // Create a more descriptive title and description
+  const title = `${translation.title} | Private Tour from Athens`;
+  const description = `Experience ${
+    translation.title
+  } with our private guided tour from Athens. Professional driver, luxury vehicle, ${
+    translation.duration
+  } hours, includes ${translation.includes?.[0] || "personalized service"}. Book now!`;
+
   return {
-    title: `${translation.title} | Poseidon Transfers`,
-    description: translation.subtitle,
+    title: title,
+    description: description,
     openGraph: {
+      title: title,
+      description: description,
+      images: [tour.image],
+      url: `${DOMAIN}/${locale}/tour/${slug}`,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: title,
+      description: description,
       images: [tour.image],
     },
   };
