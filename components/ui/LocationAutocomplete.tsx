@@ -88,7 +88,6 @@ export const LocationAutocomplete = ({ value, onChange, isPickupLocation = false
             {value ? (
               <div className="truncate">
                 <div className="font-medium truncate">{value.structured_formatting.main_text}</div>
-                <div className="text-xs text-muted-foreground truncate">{value.description}</div>
               </div>
             ) : (
               "Search location..."

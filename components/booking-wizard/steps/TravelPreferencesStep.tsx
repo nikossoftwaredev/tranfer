@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Label } from "../../ui/label";
-import { Luggage, BabyIcon, Users, FileText, Plane, Info } from "lucide-react";
+import { Luggage, BabyIcon, Users, FileText, Plane, Car } from "lucide-react";
 import { useBookingWizard } from "../../../contexts/BookingWizardContext";
 import { Textarea } from "../../ui/textarea";
 import { Input } from "../../ui/input";
@@ -41,14 +41,14 @@ const TravelPreferencesStep = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="space-y-2">
-          <Label htmlFor="passengers" className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
+        <div className="space-y-3">
+          <Label htmlFor="passengers" className="flex items-center gap-2 text-base font-medium">
+            <Users className="h-5 w-5 text-primary" />
             {t("form.passengers")}
           </Label>
-          <div className="flex justify-center">
+          <div className="w-full">
             <NumberInput
               id="passengers"
               value={parseInt(formState.passengers || "1")}
@@ -56,18 +56,19 @@ const TravelPreferencesStep = () => {
               min={1}
               max={15}
               aria-label={t("form.passengers")}
-              className="mx-auto"
-              inputClassName="w-20"
+              className="w-full"
+              inputClassName="w-full md:w-20"
+              buttonClassName="bg-muted hover:bg-muted/80"
             />
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="luggage" className="flex items-center gap-2">
-            <Luggage className="h-4 w-4" />
+        <div className="space-y-3">
+          <Label htmlFor="luggage" className="flex items-center gap-2 text-base font-medium">
+            <Luggage className="h-5 w-5 text-primary" />
             {t("form.luggage")}
           </Label>
-          <div className="flex justify-center">
+          <div className="w-full">
             <NumberInput
               id="luggage"
               value={parseInt(formState.luggage || "0")}
@@ -75,18 +76,19 @@ const TravelPreferencesStep = () => {
               min={0}
               max={15}
               aria-label={t("form.luggage")}
-              className="mx-auto"
-              inputClassName="w-20"
+              className="w-full"
+              inputClassName="w-full md:w-20"
+              buttonClassName="bg-muted hover:bg-muted/80"
             />
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="childSeats" className="flex items-center gap-2">
-            <BabyIcon className="h-4 w-4" />
+        <div className="space-y-3">
+          <Label htmlFor="childSeats" className="flex items-center gap-2 text-base font-medium">
+            <BabyIcon className="h-5 w-5 text-primary" />
             {t("form.childSeat")}
           </Label>
-          <div className="flex justify-center">
+          <div className="w-full">
             <NumberInput
               id="childSeats"
               value={parseInt(formState.childSeats || "0")}
@@ -94,36 +96,37 @@ const TravelPreferencesStep = () => {
               min={0}
               max={3}
               aria-label={t("form.childSeat")}
-              className="mx-auto"
-              inputClassName="w-20"
+              className="w-full"
+              inputClassName="w-full md:w-20"
+              buttonClassName="bg-muted hover:bg-muted/80"
             />
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <Label htmlFor="flightNumber" className="flex items-center gap-2">
-            <Plane className="h-4 w-4" />
+        <div className="space-y-3">
+          <Label htmlFor="flightNumber" className="flex items-center gap-2 text-base font-medium">
+            <Plane className="h-5 w-5 text-primary" />
             {t("form.flightNumber")}
           </Label>
           <Input
             id="flightNumber"
             name="flightNumber"
-            placeholder={t("form.flightNumberPlaceholder")}
+            placeholder="e.g. BA1234, LH456"
             value={formState.flightNumber}
             onChange={handleChange}
             className="w-full"
           />
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="selectedVehicle" className="flex items-center gap-2">
-            <Info className="h-4 w-4" />
+        <div className="space-y-3">
+          <Label htmlFor="selectedVehicle" className="flex items-center gap-2 text-base font-medium">
+            <Car className="h-5 w-5 text-primary" />
             {t("form.vehicle")}
           </Label>
           <Select value={formState.selectedVehicle} onValueChange={handleVehicleChange}>
-            <SelectTrigger>
+            <SelectTrigger className="w-full">
               <SelectValue placeholder={t("form.selectVehicle")} />
             </SelectTrigger>
             <SelectContent className="max-h-[300px]">
@@ -137,9 +140,9 @@ const TravelPreferencesStep = () => {
         </div>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="notes" className="flex items-center gap-2">
-          <FileText className="h-4 w-4" />
+      <div className="space-y-3">
+        <Label htmlFor="notes" className="flex items-center gap-2 text-base font-medium">
+          <FileText className="h-5 w-5 text-primary" />
           {t("form.notes")}
         </Label>
         <Textarea
@@ -148,7 +151,7 @@ const TravelPreferencesStep = () => {
           value={formState.notes}
           onChange={handleChange}
           placeholder={t("form.notesPlaceholder")}
-          className="min-h-[120px]"
+          className="min-h-[120px] w-full"
         />
       </div>
     </div>

@@ -19,7 +19,7 @@ const PersonalInfoStep = () => {
     return (
       <div className="mb-6">
         <h4 className="text-lg font-medium mb-3 flex items-center gap-2">
-          <User className="h-5 w-5" />
+          <User className="h-5 w-5 text-primary" />
           {t("form.title")}
         </h4>
         <div className="space-y-2">
@@ -51,8 +51,8 @@ const PersonalInfoStep = () => {
       {/* Personal Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <Label htmlFor="fullName" className="flex items-center gap-2">
-            <User className="h-4 w-4" />
+          <Label htmlFor="fullName" className="flex items-center gap-2 text-base font-medium">
+            <User className="h-5 w-5 text-primary" />
             {t("form.fullName")}
           </Label>
           <Input
@@ -62,14 +62,14 @@ const PersonalInfoStep = () => {
             onChange={handleChange}
             autoComplete="name"
             required
-            className={`w-full ${validationErrors.fullName ? "border-red-500" : ""}`}
+            className={`w-full ${validationErrors.fullName ? "border-rose-300" : ""}`}
           />
-          {validationErrors.fullName && <p className="text-red-500 text-sm mt-1">{validationErrors.fullName}</p>}
+          {validationErrors.fullName && <p className="text-rose-400 text-sm mt-1">{validationErrors.fullName}</p>}
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email" className="flex items-center gap-2">
-            <Mail className="h-4 w-4" />
+          <Label htmlFor="email" className="flex items-center gap-2 text-base font-medium">
+            <Mail className="h-5 w-5 text-primary" />
             {t("form.email")}
           </Label>
           <Input
@@ -80,15 +80,15 @@ const PersonalInfoStep = () => {
             type="email"
             autoComplete="email"
             required
-            className={`w-full ${validationErrors.email ? "border-red-500" : ""}`}
+            className={`w-full ${validationErrors.email ? "border-rose-300" : ""}`}
           />
-          {validationErrors.email && <p className="text-red-500 text-sm mt-1">{validationErrors.email}</p>}
+          {validationErrors.email && <p className="text-rose-400 text-sm mt-1">{validationErrors.email}</p>}
         </div>
 
         {/* Phone number - now in left column on desktop */}
         <div className="space-y-2">
-          <Label htmlFor="phone" className="flex items-center gap-2">
-            <Phone className="h-4 w-4" />
+          <Label htmlFor="phone" className="flex items-center gap-2 text-base font-medium">
+            <Phone className="h-5 w-5 text-primary" />
             {t("form.phone")}
           </Label>
           <PhoneInput
@@ -98,15 +98,15 @@ const PersonalInfoStep = () => {
             countryCode={formState.countryCode}
             onChange={handlePhoneChange}
             required
-            className={validationErrors.phone ? "border-red-500" : ""}
+            className={validationErrors.phone ? "border-rose-300" : ""}
           />
-          {validationErrors.phone && <p className="text-red-500 text-sm mt-1">{validationErrors.phone}</p>}
+          {validationErrors.phone && <p className="text-rose-400 text-sm mt-1">{validationErrors.phone}</p>}
         </div>
 
         {/* Passport field (optional) - now in right column on desktop */}
         <div className="space-y-2">
-          <Label htmlFor="passport" className="flex items-center gap-2">
-            <IdCard className="h-4 w-4" />
+          <Label htmlFor="passport" className="flex items-center gap-2 text-base font-medium">
+            <IdCard className="h-5 w-5 text-primary" />
             {t("form.passport")}
           </Label>
           <Input

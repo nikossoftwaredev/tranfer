@@ -37,11 +37,11 @@ const JourneyDetailsStep = () => {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <Label htmlFor="pickupLocation" className="flex items-center gap-2">
-            <MapPin className="h-4 w-4" />
+          <Label htmlFor="pickupLocation" className="flex items-center gap-2 text-base font-medium">
+            <MapPin className="h-5 w-5 text-primary" />
             {t("form.pickupLabel")}
           </Label>
-          <div className={validationErrors.pickupLocation ? "border-red-500 rounded-md" : ""}>
+          <div className={validationErrors.pickupLocation ? "border-rose-300 rounded-md" : ""}>
             <LocationAutocomplete
               value={formState.pickupLocation}
               onChange={handlePickupLocationChange}
@@ -49,36 +49,36 @@ const JourneyDetailsStep = () => {
             />
           </div>
           {validationErrors.pickupLocation && (
-            <p className="text-red-500 text-sm mt-1">{validationErrors.pickupLocation}</p>
+            <p className="text-rose-400 text-sm mt-1">{validationErrors.pickupLocation}</p>
           )}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="dropoffLocation" className="flex items-center gap-2">
-            <MapPin className="h-4 w-4" />
+          <Label htmlFor="dropoffLocation" className="flex items-center gap-2 text-base font-medium">
+            <MapPin className="h-5 w-5 text-primary" />
             {t("form.dropoff")}
           </Label>
-          <div className={validationErrors.dropoffLocation ? "border-red-500 rounded-md" : ""}>
+          <div className={validationErrors.dropoffLocation ? "border-rose-300 rounded-md" : ""}>
             <LocationAutocomplete value={formState.dropoffLocation} onChange={handleDropoffLocationChange} />
           </div>
           {validationErrors.dropoffLocation && (
-            <p className="text-red-500 text-sm mt-1">{validationErrors.dropoffLocation}</p>
+            <p className="text-rose-400 text-sm mt-1">{validationErrors.dropoffLocation}</p>
           )}
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <Label htmlFor="date" className="flex items-center gap-2">
-            <Calendar className="h-4 w-4" />
+          <Label htmlFor="date" className="flex items-center gap-2 text-base font-medium">
+            <Calendar className="h-5 w-5 text-primary" />
             {t("form.date")}
           </Label>
-          <div className={validationErrors.date ? "border-red-500 rounded-md" : ""}>
+          <div className={validationErrors.date ? "border-rose-300 rounded-md" : ""}>
             <DatePicker date={formState.date || new Date()} setDate={handleDateChange} placeholder={t("form.date")} />
           </div>
-          {validationErrors.date && <p className="text-red-500 text-sm mt-1">{validationErrors.date}</p>}
+          {validationErrors.date && <p className="text-rose-400 text-sm mt-1">{validationErrors.date}</p>}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="time" className="flex items-center gap-2">
-            <Clock className="h-4 w-4" />
+          <Label htmlFor="time" className="flex items-center gap-2 text-base font-medium">
+            <Clock className="h-5 w-5 text-primary" />
             {t("form.time")}
           </Label>
           <TimePicker value={formState.time} onChange={handleTimeChange} label={t("form.time")} />

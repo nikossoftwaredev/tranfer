@@ -1,38 +1,6 @@
 "use server";
 
-interface BookingFormData {
-  fullName: string;
-  email: string;
-  phone: string;
-  countryCode: string;
-  pickupLocation:
-    | {
-        label: string;
-        value: string;
-        description?: string;
-        coordinates?: string;
-      }
-    | undefined;
-  dropoffLocation:
-    | {
-        label: string;
-        value: string;
-        description?: string;
-        coordinates?: string;
-      }
-    | undefined;
-  date: Date | undefined;
-  time: string;
-  isoDateTime?: string;
-  passengers: string;
-  luggage: string;
-  childSeats: string;
-  flightNumber: string;
-  notes: string;
-  selectedTour: string;
-  vehicle: string;
-  bookingType?: string;
-}
+import { BookingFormState } from "../contexts/BookingWizardContext";
 
 interface ContactFormData {
   name: string;
@@ -100,12 +68,12 @@ ${formData.message}
   return sendToTelegram(message);
 }
 
-export async function sendTelegramBookingMessage(formData: BookingFormData) {
+export async function sendTelegramBookingMessage(formData: BookingFormState) {
   // Format the date and time in a clear, readable format
   let formattedDate = "Not specified";
   let formattedTime = formData.time || "Not specified";
   // First check if isoDateTime was passed directly from the form
-  let isoDateTime = formData.isoDateTime || "Not specified";
+  let isoDateTime = "Not specified";
 
   if (formData.date) {
     const date = new Date(formData.date);
@@ -172,10 +140,68 @@ export async function sendTelegramBookingMessage(formData: BookingFormData) {
   }
 
   // Make sure pickup location is properly accessed
-  const pickupLabel = formData.pickupLocation?.label || "Not specified";
-  const pickupCoordinates = formData.pickupLocation?.coordinates || "Not available";
-  const dropoffLabel = formData.dropoffLocation?.label || "Not specified";
-  const dropoffCoordinates = formData.dropoffLocation?.coordinates || "Not available";
+  let pickupLabel = "Not specified";
+  let pickupCoordinates = "";
+
+  if (formData.pickupLocation) {
+    pickupLabel =
+      formData.pickupLocation.structured_formatting?.main_text ||
+      formData.pickupLocation.description ||
+      "Not specified";
+
+    // More robust check for coordinates
+    if (
+      formData.pickupLocation.coordinates &&
+      typeof formData.pickupLocation.coordinates === "object" &&
+      "lat" in formData.pickupLocation.coordinates &&
+      "lng" in formData.pickupLocation.coordinates &&
+      formData.pickupLocation.coordinates.lat !== undefined &&
+      formData.pickupLocation.coordinates.lng !== undefined
+    ) {
+      pickupCoordinates = `${formData.pickupLocation.coordinates.lat},${formData.pickupLocation.coordinates.lng}`;
+    } else if (typeof formData.pickupLocation.coordinates === "string") {
+      // Handle case where coordinates might be a string
+      pickupCoordinates = formData.pickupLocation.coordinates;
+    }
+  }
+
+  let dropoffLabel = "Not specified";
+  let dropoffCoordinates = "";
+
+  if (formData.dropoffLocation) {
+    dropoffLabel =
+      formData.dropoffLocation.structured_formatting?.main_text ||
+      formData.dropoffLocation.description ||
+      "Not specified";
+
+    // More robust check for coordinates
+    if (
+      formData.dropoffLocation.coordinates &&
+      typeof formData.dropoffLocation.coordinates === "object" &&
+      "lat" in formData.dropoffLocation.coordinates &&
+      "lng" in formData.dropoffLocation.coordinates &&
+      formData.dropoffLocation.coordinates.lat !== undefined &&
+      formData.dropoffLocation.coordinates.lng !== undefined
+    ) {
+      dropoffCoordinates = `${formData.dropoffLocation.coordinates.lat},${formData.dropoffLocation.coordinates.lng}`;
+    } else if (typeof formData.dropoffLocation.coordinates === "string") {
+      // Handle case where coordinates might be a string
+      dropoffCoordinates = formData.dropoffLocation.coordinates;
+    }
+  }
+
+  // Debug info in console (will only show in server logs)
+  console.log("Pickup location:", formData.pickupLocation);
+  console.log("Dropoff location:", formData.dropoffLocation);
+
+  // Create Google Maps links if coordinates are available
+  const pickupMapsLink = pickupCoordinates
+    ? `[View on Google Maps](https://www.google.com/maps?q=${pickupCoordinates})`
+    : "No coordinates available";
+
+  const dropoffMapsLink = dropoffCoordinates
+    ? `[View on Google Maps](https://www.google.com/maps?q=${dropoffCoordinates})`
+    : "No coordinates available";
 
   // Construct the message with copiable text fields
   const message = `
@@ -185,12 +211,15 @@ export async function sendTelegramBookingMessage(formData: BookingFormData) {
 👤 Name: ${makeCopiable(formData.fullName)}
 📧 Email: ${makeCopiable(formData.email)}
 📞 Phone: ${makeCopiable(formData.countryCode + formData.phone)}
+${formData.passport ? `🪪 Passport: ${makeCopiable(formData.passport)}` : ""}
 
 *Trip Details:*
-📍 Pickup Location: ${makeCopiable(pickupLabel)}
-📍 Pickup Coordinates: ${makeCopiable(pickupCoordinates)}
-🏁 Dropoff Location: ${makeCopiable(dropoffLabel)}
-🏁 Dropoff Coordinates: ${makeCopiable(dropoffCoordinates)}
+📍 *Pickup:* ${makeCopiable(pickupLabel)}
+   ${pickupMapsLink}
+   
+🏁 *Dropoff:* ${makeCopiable(dropoffLabel)}
+   ${dropoffMapsLink}
+   
 📅 Date: ${makeCopiable(formattedDate)}
 ⏰ Time: ${makeCopiable(formattedTime)}
 
@@ -199,8 +228,8 @@ export async function sendTelegramBookingMessage(formData: BookingFormData) {
 🧳 Luggage: ${makeCopiable(formData.luggage)}
 👶 Child Seats: ${makeCopiable(formData.childSeats)}
 ✈️ Flight Number: ${makeCopiable(formData.flightNumber || "Not specified")}
-🚗 Vehicle: ${makeCopiable(formData.vehicle)}
-📋 Booking Type: ${makeCopiable(formData.bookingType || "Regular Transfer")}
+🚗 Vehicle: ${makeCopiable(formData.selectedVehicle)}
+📋 Booking Type: ${makeCopiable("Regular Transfer")}
 
 *Tour Selection:*
 ${formData.selectedTour ? `🏛️ Selected Tour: ${makeCopiable(formData.selectedTour)}` : "No specific tour selected"}

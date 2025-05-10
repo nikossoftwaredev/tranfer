@@ -44,53 +44,9 @@ const BookingWizardContent = () => {
   const handleSubmit = useCallback(async () => {
     setIsSubmitting(true);
 
-    // Format ISO datetime string for clarity across timezones
-    let isoDateTime = "Not specified";
-
-    if (formState.date) {
-      const dateObj = new Date(formState.date);
-
-      // If time is also provided, parse and add it to the date
-      if (formState.time) {
-        const [hours, minutes] = formState.time.split(":").map(Number);
-        dateObj.setHours(hours, minutes);
-      }
-
-      isoDateTime = dateObj.toISOString();
-    }
-
-    // Extract coordinates from locations if available
-    const pickupCoordinates = formState.pickupLocation?.coordinates
-      ? `${formState.pickupLocation.coordinates.lat},${formState.pickupLocation.coordinates.lng}`
-      : "Not available";
-
-    const dropoffCoordinates = formState.dropoffLocation?.coordinates
-      ? `${formState.dropoffLocation.coordinates.lat},${formState.dropoffLocation.coordinates.lng}`
-      : "Not available";
-
     try {
       // Send form data to Telegram
-      await sendTelegramBookingMessage({
-        ...formState,
-        phone: formState.phone,
-        vehicle: formState.selectedVehicle || "Not specified",
-        pickupLocation: {
-          ...formState.pickupLocation,
-          label: formState.pickupLocation?.structured_formatting.main_text || "Not specified",
-          value: formState.pickupLocation?.place_id || "Not specified",
-          description: formState.pickupLocation?.description || "Not specified",
-          coordinates: pickupCoordinates,
-        },
-        dropoffLocation: {
-          ...formState.dropoffLocation,
-          label: formState.dropoffLocation?.structured_formatting.main_text || "Not specified",
-          value: formState.dropoffLocation?.place_id || "Not specified",
-          description: formState.dropoffLocation?.description || "Not specified",
-          coordinates: dropoffCoordinates,
-        },
-        isoDateTime: isoDateTime,
-        bookingType: formState.selectedTour ? "Tour Booking" : "Transfer",
-      });
+      await sendTelegramBookingMessage(formState);
 
       toast.success(t("success.title"), {
         description: t("success.message"),
