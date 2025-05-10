@@ -92,7 +92,7 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
         {/* Add preload for critical resources */}
-        <link rel="preload" href="/images/hero-greece.jpg" as="image" priority="high" />
+        <link rel="preload" href="/images/hero-greece.jpg" as="image" />
       </head>
       {/* Google Ads Conversion Tracking - with defer to improve page load */}
       <Script src="https://www.googletagmanager.com/gtag/js?id=AW-17068303985" strategy="afterInteractive" />
