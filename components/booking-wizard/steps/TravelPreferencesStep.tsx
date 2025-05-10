@@ -6,13 +6,7 @@ import { Luggage, BabyIcon, Users, FileText, Plane, Info } from "lucide-react";
 import { useBookingWizard } from "../../../contexts/BookingWizardContext";
 import { Textarea } from "../../ui/textarea";
 import { Input } from "../../ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
 import { vehicles } from "../../../lib/data/vehicles";
 import { NumberInput } from "../../ui/number-input";
 
@@ -21,9 +15,7 @@ const TravelPreferencesStep = () => {
   const { formState, updateFormState } = useBookingWizard();
 
   // Handle input changes
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     updateFormState({ [name]: value });
   };
@@ -56,14 +48,18 @@ const TravelPreferencesStep = () => {
             <Users className="h-4 w-4" />
             {t("form.passengers")}
           </Label>
-          <NumberInput
-            id="passengers"
-            value={parseInt(formState.passengers || "1")}
-            onChange={handlePassengersChange}
-            min={1}
-            max={15}
-            aria-label={t("form.passengers")}
-          />
+          <div className="flex justify-center">
+            <NumberInput
+              id="passengers"
+              value={parseInt(formState.passengers || "1")}
+              onChange={handlePassengersChange}
+              min={1}
+              max={15}
+              aria-label={t("form.passengers")}
+              className="mx-auto"
+              inputClassName="w-20"
+            />
+          </div>
         </div>
 
         <div className="space-y-2">
@@ -71,14 +67,18 @@ const TravelPreferencesStep = () => {
             <Luggage className="h-4 w-4" />
             {t("form.luggage")}
           </Label>
-          <NumberInput
-            id="luggage"
-            value={parseInt(formState.luggage || "0")}
-            onChange={handleLuggageChange}
-            min={0}
-            max={15}
-            aria-label={t("form.luggage")}
-          />
+          <div className="flex justify-center">
+            <NumberInput
+              id="luggage"
+              value={parseInt(formState.luggage || "0")}
+              onChange={handleLuggageChange}
+              min={0}
+              max={15}
+              aria-label={t("form.luggage")}
+              className="mx-auto"
+              inputClassName="w-20"
+            />
+          </div>
         </div>
 
         <div className="space-y-2">
@@ -86,14 +86,18 @@ const TravelPreferencesStep = () => {
             <BabyIcon className="h-4 w-4" />
             {t("form.childSeat")}
           </Label>
-          <NumberInput
-            id="childSeats"
-            value={parseInt(formState.childSeats || "0")}
-            onChange={handleChildSeatsChange}
-            min={0}
-            max={3}
-            aria-label={t("form.childSeat")}
-          />
+          <div className="flex justify-center">
+            <NumberInput
+              id="childSeats"
+              value={parseInt(formState.childSeats || "0")}
+              onChange={handleChildSeatsChange}
+              min={0}
+              max={3}
+              aria-label={t("form.childSeat")}
+              className="mx-auto"
+              inputClassName="w-20"
+            />
+          </div>
         </div>
       </div>
 
@@ -118,17 +122,14 @@ const TravelPreferencesStep = () => {
             <Info className="h-4 w-4" />
             {t("form.vehicle")}
           </Label>
-          <Select
-            value={formState.selectedVehicle}
-            onValueChange={handleVehicleChange}
-          >
+          <Select value={formState.selectedVehicle} onValueChange={handleVehicleChange}>
             <SelectTrigger>
               <SelectValue placeholder={t("form.selectVehicle")} />
             </SelectTrigger>
             <SelectContent className="max-h-[300px]">
               {vehicles.map((vehicle) => (
                 <SelectItem key={vehicle.model} value={vehicle.model}>
-                  {vehicle.model} ({vehicle.category})
+                  {vehicle.model}
                 </SelectItem>
               ))}
             </SelectContent>

@@ -11,7 +11,7 @@ import { PlacePrediction } from "../../../server_actions/googleSearchActions";
 
 const JourneyDetailsStep = () => {
   const t = useTranslations("Booking");
-  const { formState, updateFormState } = useBookingWizard();
+  const { formState, updateFormState, validationErrors } = useBookingWizard();
 
   // Handle date changes
   const handleDateChange = (date: Date | undefined) => {
@@ -41,18 +41,28 @@ const JourneyDetailsStep = () => {
             <MapPin className="h-4 w-4" />
             {t("form.pickupLabel")}
           </Label>
-          <LocationAutocomplete
-            value={formState.pickupLocation}
-            onChange={handlePickupLocationChange}
-            isPickupLocation
-          />
+          <div className={validationErrors.pickupLocation ? "border-red-500 rounded-md" : ""}>
+            <LocationAutocomplete
+              value={formState.pickupLocation}
+              onChange={handlePickupLocationChange}
+              isPickupLocation
+            />
+          </div>
+          {validationErrors.pickupLocation && (
+            <p className="text-red-500 text-sm mt-1">{validationErrors.pickupLocation}</p>
+          )}
         </div>
         <div className="space-y-2">
           <Label htmlFor="dropoffLocation" className="flex items-center gap-2">
             <MapPin className="h-4 w-4" />
             {t("form.dropoff")}
           </Label>
-          <LocationAutocomplete value={formState.dropoffLocation} onChange={handleDropoffLocationChange} />
+          <div className={validationErrors.dropoffLocation ? "border-red-500 rounded-md" : ""}>
+            <LocationAutocomplete value={formState.dropoffLocation} onChange={handleDropoffLocationChange} />
+          </div>
+          {validationErrors.dropoffLocation && (
+            <p className="text-red-500 text-sm mt-1">{validationErrors.dropoffLocation}</p>
+          )}
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -61,7 +71,10 @@ const JourneyDetailsStep = () => {
             <Calendar className="h-4 w-4" />
             {t("form.date")}
           </Label>
-          <DatePicker date={formState.date || new Date()} setDate={handleDateChange} placeholder={t("form.date")} />
+          <div className={validationErrors.date ? "border-red-500 rounded-md" : ""}>
+            <DatePicker date={formState.date || new Date()} setDate={handleDateChange} placeholder={t("form.date")} />
+          </div>
+          {validationErrors.date && <p className="text-red-500 text-sm mt-1">{validationErrors.date}</p>}
         </div>
         <div className="space-y-2">
           <Label htmlFor="time" className="flex items-center gap-2">

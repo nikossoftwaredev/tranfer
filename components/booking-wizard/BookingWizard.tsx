@@ -10,7 +10,7 @@ import JourneyDetailsStep from "./steps/JourneyDetailsStep";
 import TravelPreferencesStep from "./steps/TravelPreferencesStep";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
-import { ArrowLeft, Check, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { tours } from "../../lib/data/tours";
 
 type BookingWizardProps = {
@@ -76,15 +76,15 @@ const BookingWizardContent = () => {
         vehicle: formState.selectedVehicle || "Not specified",
         pickupLocation: {
           ...formState.pickupLocation,
-          label: formState.pickupLocation?.name || "Not specified",
-          value: formState.pickupLocation?.uniqueKey || "Not specified",
+          label: formState.pickupLocation?.structured_formatting.main_text || "Not specified",
+          value: formState.pickupLocation?.place_id || "Not specified",
           description: formState.pickupLocation?.description || "Not specified",
           coordinates: pickupCoordinates,
         },
         dropoffLocation: {
           ...formState.dropoffLocation,
-          label: formState.dropoffLocation?.name || "Not specified",
-          value: formState.dropoffLocation?.uniqueKey || "Not specified",
+          label: formState.dropoffLocation?.structured_formatting.main_text || "Not specified",
+          value: formState.dropoffLocation?.place_id || "Not specified",
           description: formState.dropoffLocation?.description || "Not specified",
           coordinates: dropoffCoordinates,
         },
@@ -148,21 +148,18 @@ const BookingWizardContent = () => {
               {isLastStep ? (
                 <Button
                   type="button"
-                  variant="outline"
+                  variant="default"
                   onClick={handleSubmit}
                   disabled={isSubmitting || !isStepComplete(currentStep)}
-                  className="w-full gap-2"
+                  className="w-full"
                 >
                   {isSubmitting ? (
                     <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
                       {t("form.submitting")}
                     </>
                   ) : (
-                    <>
-                      {t("form.submit")}
-                      <Check className="h-4 w-4" />
-                    </>
+                    "Book Now"
                   )}
                 </Button>
               ) : (

@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { InputWithIcon } from "../../ui/input-with-icon";
 import { PhoneInput } from "../../ui/phone-input";
 import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
@@ -11,7 +10,7 @@ import { useMemo } from "react";
 
 const PersonalInfoStep = () => {
   const t = useTranslations("Booking");
-  const { formState, updateFormState } = useBookingWizard();
+  const { formState, updateFormState, validationErrors } = useBookingWizard();
 
   // Display selected tour if available
   const selectedTourSection = useMemo(() => {
@@ -24,22 +23,14 @@ const PersonalInfoStep = () => {
           {t("form.title")}
         </h4>
         <div className="space-y-2">
-          <Input
-            id="selectedTour"
-            name="selectedTour"
-            value={formState.selectedTour}
-            disabled
-            className="bg-muted"
-          />
+          <Input id="selectedTour" name="selectedTour" value={formState.selectedTour} disabled className="bg-muted" />
         </div>
       </div>
     );
   }, [formState.selectedTour, t]);
 
   // Handle input changes
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     updateFormState({ [name]: value });
   };
@@ -59,27 +50,40 @@ const PersonalInfoStep = () => {
 
       {/* Personal Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <InputWithIcon
-          id="fullName"
-          name="fullName"
-          label={t("form.fullName")}
-          value={formState.fullName}
-          onChange={handleChange}
-          autoComplete="name"
-          required
-          icon={<User className="h-4 w-4" />}
-        />
-        <InputWithIcon
-          id="email"
-          name="email"
-          label={t("form.email")}
-          value={formState.email}
-          onChange={handleChange}
-          type="email"
-          autoComplete="email"
-          required
-          icon={<Mail className="h-4 w-4" />}
-        />
+        <div className="space-y-2">
+          <Label htmlFor="fullName" className="flex items-center gap-2">
+            <User className="h-4 w-4" />
+            {t("form.fullName")}
+          </Label>
+          <Input
+            id="fullName"
+            name="fullName"
+            value={formState.fullName}
+            onChange={handleChange}
+            autoComplete="name"
+            required
+            className={`w-full ${validationErrors.fullName ? "border-red-500" : ""}`}
+          />
+          {validationErrors.fullName && <p className="text-red-500 text-sm mt-1">{validationErrors.fullName}</p>}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="email" className="flex items-center gap-2">
+            <Mail className="h-4 w-4" />
+            {t("form.email")}
+          </Label>
+          <Input
+            id="email"
+            name="email"
+            value={formState.email}
+            onChange={handleChange}
+            type="email"
+            autoComplete="email"
+            required
+            className={`w-full ${validationErrors.email ? "border-red-500" : ""}`}
+          />
+          {validationErrors.email && <p className="text-red-500 text-sm mt-1">{validationErrors.email}</p>}
+        </div>
 
         {/* Phone number - now in left column on desktop */}
         <div className="space-y-2">
@@ -94,7 +98,9 @@ const PersonalInfoStep = () => {
             countryCode={formState.countryCode}
             onChange={handlePhoneChange}
             required
+            className={validationErrors.phone ? "border-red-500" : ""}
           />
+          {validationErrors.phone && <p className="text-red-500 text-sm mt-1">{validationErrors.phone}</p>}
         </div>
 
         {/* Passport field (optional) - now in right column on desktop */}
