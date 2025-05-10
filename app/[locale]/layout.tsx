@@ -11,6 +11,7 @@ import { Toaster } from "sonner";
 import { VehicleProvider } from "../../contexts/VehicleContext";
 import WhatsAppButton from "../../components/ui/WhatsAppButton";
 import { DOMAIN, PHONE_NUMBER } from "@/lib/data/config";
+import Script from "next/script";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -92,6 +93,16 @@ export default async function RootLayout({
         {/* Add preload for critical resources */}
         <link rel="preload" href="/images/hero-greece.jpg" as="image" />
       </head>
+      {/* Google Ads Conversion Tracking */}
+      <Script src="https://www.googletagmanager.com/gtag/js?id=AW-17068303985" strategy="afterInteractive" />
+      <Script id="google-ads" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'AW-17068303985');
+        `}
+      </Script>
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <VehicleProvider>
