@@ -13,6 +13,7 @@ import { NumberInput } from "../../ui/number-input";
 const TravelPreferencesStep = () => {
   const t = useTranslations("Booking");
   const { formState, updateFormState } = useBookingWizard();
+  const isTourBooking = !!formState.selectedTour;
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -120,24 +121,26 @@ const TravelPreferencesStep = () => {
           />
         </div>
 
-        <div className="space-y-3">
-          <Label htmlFor="selectedVehicle" className="flex items-center gap-2 text-base font-medium">
-            <Car className="h-5 w-5 text-primary" />
-            {t("form.vehicle")}
-          </Label>
-          <Select value={formState.selectedVehicle} onValueChange={handleVehicleChange}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder={t("form.selectVehicle")} />
-            </SelectTrigger>
-            <SelectContent className="max-h-[300px]">
-              {vehicles.map((vehicle) => (
-                <SelectItem key={vehicle.model} value={vehicle.model}>
-                  {vehicle.model}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        {!isTourBooking && (
+          <div className="space-y-3">
+            <Label htmlFor="selectedVehicle" className="flex items-center gap-2 text-base font-medium">
+              <Car className="h-5 w-5 text-primary" />
+              {t("form.vehicle")}
+            </Label>
+            <Select value={formState.selectedVehicle} onValueChange={handleVehicleChange}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder={t("form.selectVehicle")} />
+              </SelectTrigger>
+              <SelectContent className="max-h-[300px]">
+                {vehicles.map((vehicle) => (
+                  <SelectItem key={vehicle.model} value={vehicle.model}>
+                    {vehicle.model}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
       </div>
 
       <div className="space-y-3">

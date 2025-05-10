@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { tours } from "../../../../lib/data/tours";
 import BookingWizardSection from "../../../../components/sections/BookingWizardSection";
-import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/ui/card";
+import { Card, CardContent, CardHeader } from "../../../../components/ui/card";
 import { Button } from "../../../../components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -24,7 +24,7 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
       <div className="min-h-screen flex items-center justify-center">
         <Card className="max-w-md w-full">
           <CardHeader>
-            <CardTitle className="text-center">Tour Not Found</CardTitle>
+            <h2 className="font-semibold leading-none tracking-tight text-center">Tour Not Found</h2>
           </CardHeader>
           <CardContent className="text-center">
             <p className="mb-4">The requested tour could not be found.</p>
@@ -60,7 +60,7 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
           <div className="md:col-span-2 space-y-8">
             <Card>
               <CardHeader>
-                <CardTitle as="h2">{t("book.title")}</CardTitle>
+                <h2 className="font-semibold leading-none tracking-tight">{t("book.title")}</h2>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">{translatedContent.description}</p>
@@ -70,7 +70,7 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
             {translatedContent.highlights && translatedContent.highlights.length > 0 && (
               <Card>
                 <CardHeader>
-                  <CardTitle as="h2">{t("highlights")}</CardTitle>
+                  <h2 className="font-semibold leading-none tracking-tight">{t("highlights")}</h2>
                 </CardHeader>
                 <CardContent>
                   <ul className="list-disc list-inside space-y-2">
@@ -87,7 +87,7 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
             {translatedContent.includes && translatedContent.includes.length > 0 && (
               <Card>
                 <CardHeader>
-                  <CardTitle as="h2">{t("includes")}</CardTitle>
+                  <h2 className="font-semibold leading-none tracking-tight">{t("includes")}</h2>
                 </CardHeader>
                 <CardContent>
                   <ul className="list-disc list-inside space-y-2">

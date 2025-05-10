@@ -31,9 +31,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = `${translation.title} | Private Tour from Athens`;
   const description = `Experience ${
     translation.title
-  } with our private guided tour from Athens. Professional driver, luxury vehicle, ${
-    translation.duration
-  } hours, includes ${translation.includes?.[0] || "personalized service"}. Book now!`;
+  } with our private guided tour from Athens. Professional driver, luxury vehicle, includes ${
+    translation.includes?.[0] || "personalized service"
+  }. Book now!`;
 
   return {
     title: title,

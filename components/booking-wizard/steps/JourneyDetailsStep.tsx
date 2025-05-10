@@ -12,6 +12,7 @@ import { PlacePrediction } from "../../../server_actions/googleSearchActions";
 const JourneyDetailsStep = () => {
   const t = useTranslations("Booking");
   const { formState, updateFormState, validationErrors } = useBookingWizard();
+  const isTourBooking = !!formState.selectedTour;
 
   // Handle date changes
   const handleDateChange = (date: Date | undefined) => {
@@ -35,11 +36,11 @@ const JourneyDetailsStep = () => {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className={`grid grid-cols-1 ${!isTourBooking ? "md:grid-cols-2" : ""} gap-6`}>
         <div className="space-y-2">
           <Label htmlFor="pickupLocation" className="flex items-center gap-2 text-base font-medium">
             <MapPin className="h-5 w-5 text-primary" />
-            {t("form.pickupLabel")}
+            {isTourBooking ? "Your Pickup Location" : t("form.pickupLabel")}
           </Label>
           <div className={validationErrors.pickupLocation ? "border-rose-300 rounded-md" : ""}>
             <LocationAutocomplete
@@ -52,18 +53,21 @@ const JourneyDetailsStep = () => {
             <p className="text-rose-400 text-sm mt-1">{validationErrors.pickupLocation}</p>
           )}
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="dropoffLocation" className="flex items-center gap-2 text-base font-medium">
-            <MapPin className="h-5 w-5 text-primary" />
-            {t("form.dropoff")}
-          </Label>
-          <div className={validationErrors.dropoffLocation ? "border-rose-300 rounded-md" : ""}>
-            <LocationAutocomplete value={formState.dropoffLocation} onChange={handleDropoffLocationChange} />
+
+        {!isTourBooking && (
+          <div className="space-y-2">
+            <Label htmlFor="dropoffLocation" className="flex items-center gap-2 text-base font-medium">
+              <MapPin className="h-5 w-5 text-primary" />
+              {t("form.dropoff")}
+            </Label>
+            <div className={validationErrors.dropoffLocation ? "border-rose-300 rounded-md" : ""}>
+              <LocationAutocomplete value={formState.dropoffLocation} onChange={handleDropoffLocationChange} />
+            </div>
+            {validationErrors.dropoffLocation && (
+              <p className="text-rose-400 text-sm mt-1">{validationErrors.dropoffLocation}</p>
+            )}
           </div>
-          {validationErrors.dropoffLocation && (
-            <p className="text-rose-400 text-sm mt-1">{validationErrors.dropoffLocation}</p>
-          )}
-        </div>
+        )}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">

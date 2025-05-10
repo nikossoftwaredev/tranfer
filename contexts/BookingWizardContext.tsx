@@ -135,6 +135,7 @@ export const BookingWizardProvider: React.FC<{
   const validateCurrentStep = useCallback((): boolean => {
     let isValid = true;
     const errors: ValidationErrors = {};
+    const isTourBooking = !!formState.selectedTour;
 
     try {
       switch (currentStep) {
@@ -152,14 +153,38 @@ export const BookingWizardProvider: React.FC<{
           break;
 
         case "journeyDetails":
-          const journeyDetails = {
-            pickupLocation: formState.pickupLocation,
-            dropoffLocation: formState.dropoffLocation,
-            date: formState.date,
-            time: formState.time,
-          };
+          // For tours, we don't need a dropoff location (it's defined by the tour)
+          if (isTourBooking) {
+            // Only validate pickup location and date/time for tours
+            const tourJourneyDetails = {
+              pickupLocation: formState.pickupLocation,
+              date: formState.date,
+              time: formState.time,
+            };
 
-          journeyDetailsSchema.parse(journeyDetails);
+            z.object({
+              pickupLocation: z
+                .object({})
+                .nullable()
+                .refine((val) => val !== null && val !== undefined, {
+                  message: "Please select a pickup location from the dropdown",
+                }),
+              date: z.date({
+                required_error: "Please select a travel date",
+                invalid_type_error: "Please select a valid date for your journey",
+              }),
+              time: z.string(),
+            }).parse(tourJourneyDetails);
+          } else {
+            const journeyDetails = {
+              pickupLocation: formState.pickupLocation,
+              dropoffLocation: formState.dropoffLocation,
+              date: formState.date,
+              time: formState.time,
+            };
+
+            journeyDetailsSchema.parse(journeyDetails);
+          }
           break;
 
         case "travelPreferences":
@@ -218,13 +243,21 @@ export const BookingWizardProvider: React.FC<{
 
   const isStepComplete = useCallback(
     (step: WizardStep): boolean => {
+      const isTourBooking = !!formState.selectedTour;
+
       // This now just performs a simple check without validation
       // The actual validation happens in validateCurrentStep when trying to move to next step
       switch (step) {
         case "personalInfo":
           return !!formState.fullName && !!formState.email && !!formState.phone;
         case "journeyDetails":
-          return !!formState.pickupLocation && !!formState.dropoffLocation && !!formState.date;
+          if (isTourBooking) {
+            // For tours, we only need pickup location and date
+            return !!formState.pickupLocation && !!formState.date;
+          } else {
+            // For regular transfers, we need both pickup and dropoff
+            return !!formState.pickupLocation && !!formState.dropoffLocation && !!formState.date;
+          }
         case "travelPreferences":
           return true; // Optional fields, so always complete
         default:
