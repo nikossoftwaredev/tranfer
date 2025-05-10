@@ -2,12 +2,9 @@
 
 import { useTranslations, useLocale } from "next-intl";
 import { useCallback, useMemo, useState } from "react";
-import { useToast } from "../../hooks/use-toast";
-import { sendTelegramMessage } from "../../server_actions/telegram";
-import {
-  BookingWizardProvider,
-  useBookingWizard,
-} from "../../contexts/BookingWizardContext";
+import { toast } from "sonner";
+import { sendTelegramBookingMessage } from "../../server_actions/telegram";
+import { BookingWizardProvider, useBookingWizard } from "../../contexts/BookingWizardContext";
 import PersonalInfoStep from "./steps/PersonalInfoStep";
 import JourneyDetailsStep from "./steps/JourneyDetailsStep";
 import TravelPreferencesStep from "./steps/TravelPreferencesStep";
@@ -25,10 +22,7 @@ const BookingWizard = ({ tourSlug }: BookingWizardProps) => {
   const locale = useLocale();
 
   // Get the selected tour if tourSlug is provided
-  const selectedTour = useMemo(
-    () => (tourSlug ? tours.find((tour) => tour.slug === tourSlug) : undefined),
-    [tourSlug]
-  );
+  const selectedTour = useMemo(() => (tourSlug ? tours.find((tour) => tour.slug === tourSlug) : undefined), [tourSlug]);
 
   const initialTour = selectedTour?.translations[locale]?.title || "";
 
@@ -42,16 +36,7 @@ const BookingWizard = ({ tourSlug }: BookingWizardProps) => {
 // The content component that uses the context
 const BookingWizardContent = () => {
   const t = useTranslations("Booking");
-  const { toast } = useToast();
-  const {
-    formState,
-    currentStep,
-    nextStep,
-    prevStep,
-    isLastStep,
-    isFirstStep,
-    isStepComplete,
-  } = useBookingWizard();
+  const { formState, currentStep, nextStep, prevStep, isLastStep, isFirstStep, isStepComplete } = useBookingWizard();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -85,7 +70,7 @@ const BookingWizardContent = () => {
 
     try {
       // Send form data to Telegram
-      await sendTelegramMessage({
+      await sendTelegramBookingMessage({
         ...formState,
         phone: formState.phone,
         vehicle: formState.selectedVehicle || "Not specified",
@@ -100,39 +85,31 @@ const BookingWizardContent = () => {
           ...formState.dropoffLocation,
           label: formState.dropoffLocation?.name || "Not specified",
           value: formState.dropoffLocation?.uniqueKey || "Not specified",
-          description:
-            formState.dropoffLocation?.description || "Not specified",
+          description: formState.dropoffLocation?.description || "Not specified",
           coordinates: dropoffCoordinates,
         },
         isoDateTime: isoDateTime,
         bookingType: formState.selectedTour ? "Tour Booking" : "Transfer",
       });
 
-      toast({
-        variant: "default",
-        title: t("success.title"),
+      toast.success(t("success.title"), {
         description: t("success.message"),
       });
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description:
-          "There was a problem submitting your request. Please try again later or contact us directly.",
+      toast.error("Error", {
+        description: "There was a problem submitting your request. Please try again later or contact us directly.",
       });
       console.error("Form submission error:", error);
     } finally {
       setIsSubmitting(false);
     }
-  }, [formState, t, toast]);
+  }, [formState, t]);
 
   return (
     <div className="container mx-auto px-4">
       <div className="text-center mb-12">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("title")}</h2>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
-          {t("description")}
-        </p>
+        <p className="text-muted-foreground max-w-2xl mx-auto">{t("description")}</p>
       </div>
 
       {/* Content */}
@@ -154,23 +131,15 @@ const BookingWizardContent = () => {
             {/* Step content with step title at the top */}
             <div className="mb-8">
               <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                {currentStep === "personalInfo" && (
-                  <>{t("wizard.personalInfoTitle")}</>
-                )}
-                {currentStep === "journeyDetails" && (
-                  <>{t("wizard.journeyDetailsTitle")}</>
-                )}
-                {currentStep === "travelPreferences" && (
-                  <>{t("wizard.travelPreferencesTitle")}</>
-                )}
+                {currentStep === "personalInfo" && <>{t("wizard.personalInfoTitle")}</>}
+                {currentStep === "journeyDetails" && <>{t("wizard.journeyDetailsTitle")}</>}
+                {currentStep === "travelPreferences" && <>{t("wizard.travelPreferencesTitle")}</>}
               </h3>
 
               <div className="space-y-6">
                 {currentStep === "personalInfo" && <PersonalInfoStep />}
                 {currentStep === "journeyDetails" && <JourneyDetailsStep />}
-                {currentStep === "travelPreferences" && (
-                  <TravelPreferencesStep />
-                )}
+                {currentStep === "travelPreferences" && <TravelPreferencesStep />}
               </div>
             </div>
 

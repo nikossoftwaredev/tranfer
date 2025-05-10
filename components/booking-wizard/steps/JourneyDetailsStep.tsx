@@ -7,7 +7,7 @@ import { useBookingWizard } from "../../../contexts/BookingWizardContext";
 import { DatePicker } from "../../ui/date-picker";
 import { TimePicker } from "../../ui/time-picker";
 import { LocationAutocomplete } from "../../ui/LocationAutocomplete";
-import { LocationOption } from "../../ui/LocationAutocomplete";
+import { PlacePrediction } from "../../../server_actions/googleSearchActions";
 
 const JourneyDetailsStep = () => {
   const t = useTranslations("Booking");
@@ -24,12 +24,12 @@ const JourneyDetailsStep = () => {
   };
 
   // Handle pickup location changes
-  const handlePickupLocationChange = (value: LocationOption) => {
+  const handlePickupLocationChange = (value: PlacePrediction & { coordinates?: { lat: number; lng: number } }) => {
     updateFormState({ pickupLocation: value });
   };
 
   // Handle dropoff location changes
-  const handleDropoffLocationChange = (value: LocationOption) => {
+  const handleDropoffLocationChange = (value: PlacePrediction & { coordinates?: { lat: number; lng: number } }) => {
     updateFormState({ dropoffLocation: value });
   };
 
@@ -44,7 +44,7 @@ const JourneyDetailsStep = () => {
           <LocationAutocomplete
             value={formState.pickupLocation}
             onChange={handlePickupLocationChange}
-            isPickupLocation={true}
+            isPickupLocation
           />
         </div>
         <div className="space-y-2">
@@ -52,11 +52,7 @@ const JourneyDetailsStep = () => {
             <MapPin className="h-4 w-4" />
             {t("form.dropoff")}
           </Label>
-          <LocationAutocomplete
-            value={formState.dropoffLocation}
-            onChange={handleDropoffLocationChange}
-            isPickupLocation={false}
-          />
+          <LocationAutocomplete value={formState.dropoffLocation} onChange={handleDropoffLocationChange} />
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -65,22 +61,14 @@ const JourneyDetailsStep = () => {
             <Calendar className="h-4 w-4" />
             {t("form.date")}
           </Label>
-          <DatePicker
-            date={formState.date || new Date()}
-            setDate={handleDateChange}
-            placeholder={t("form.date")}
-          />
+          <DatePicker date={formState.date || new Date()} setDate={handleDateChange} placeholder={t("form.date")} />
         </div>
         <div className="space-y-2">
           <Label htmlFor="time" className="flex items-center gap-2">
             <Clock className="h-4 w-4" />
             {t("form.time")}
           </Label>
-          <TimePicker
-            value={formState.time}
-            onChange={handleTimeChange}
-            label={t("form.time")}
-          />
+          <TimePicker value={formState.time} onChange={handleTimeChange} label={t("form.time")} />
         </div>
       </div>
     </div>

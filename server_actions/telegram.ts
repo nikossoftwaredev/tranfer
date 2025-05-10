@@ -1,6 +1,6 @@
 "use server";
 
-interface FormData {
+interface BookingFormData {
   fullName: string;
   email: string;
   phone: string;
@@ -34,7 +34,14 @@ interface FormData {
   bookingType?: string;
 }
 
-export async function sendTelegramMessage(formData: FormData) {
+interface ContactFormData {
+  name: string;
+  email: string;
+  message: string;
+}
+
+// Common function to send messages to telegram
+const sendToTelegram = async (message: string) => {
   const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
   const TELEGRAM_CHAT_IDS = ["2128860501", "6416185160"];
 
@@ -42,6 +49,58 @@ export async function sendTelegramMessage(formData: FormData) {
     throw new Error("Telegram credentials not configured");
   }
 
+  try {
+    for (const chatId of TELEGRAM_CHAT_IDS) {
+      const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+          parse_mode: "Markdown",
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Failed to send message to Telegram: ${JSON.stringify(errorData)}`);
+      }
+    }
+
+    return { success: true };
+  } catch (error) {
+    // No need to log, just re-throw
+    throw error;
+  }
+};
+
+// Helper function to create copiable text blocks
+const makeCopiable = (value: string): string => {
+  // Use inline code formatting for simple values
+  return `\`${value}\``;
+};
+
+export async function sendTelegramContactMessage(formData: ContactFormData) {
+  // Construct the message with copiable text fields
+  const message = `
+💬 *New Contact Form Submission*
+
+*Contact Information:*
+👤 Name: ${makeCopiable(formData.name)}
+📧 Email: ${makeCopiable(formData.email)}
+
+*Message:*
+\`\`\`
+${formData.message}
+\`\`\`
+`;
+
+  return sendToTelegram(message);
+}
+
+export async function sendTelegramBookingMessage(formData: BookingFormData) {
   // Format the date and time in a clear, readable format
   let formattedDate = "Not specified";
   let formattedTime = formData.time || "Not specified";
@@ -112,19 +171,11 @@ export async function sendTelegramMessage(formData: FormData) {
     }
   }
 
-  // Helper function to create copiable text blocks
-  const makeCopiable = (value: string): string => {
-    // Use inline code formatting for simple values
-    return `\`${value}\``;
-  };
-
   // Make sure pickup location is properly accessed
   const pickupLabel = formData.pickupLocation?.label || "Not specified";
-  const pickupCoordinates =
-    formData.pickupLocation?.coordinates || "Not available";
+  const pickupCoordinates = formData.pickupLocation?.coordinates || "Not available";
   const dropoffLabel = formData.dropoffLocation?.label || "Not specified";
-  const dropoffCoordinates =
-    formData.dropoffLocation?.coordinates || "Not available";
+  const dropoffCoordinates = formData.dropoffLocation?.coordinates || "Not available";
 
   // Construct the message with copiable text fields
   const message = `
@@ -152,11 +203,7 @@ export async function sendTelegramMessage(formData: FormData) {
 📋 Booking Type: ${makeCopiable(formData.bookingType || "Regular Transfer")}
 
 *Tour Selection:*
-${
-  formData.selectedTour
-    ? `🏛️ Selected Tour: ${makeCopiable(formData.selectedTour)}`
-    : "No specific tour selected"
-}
+${formData.selectedTour ? `🏛️ Selected Tour: ${makeCopiable(formData.selectedTour)}` : "No specific tour selected"}
 
 *Notes:*
 \`\`\`
@@ -164,34 +211,5 @@ ${formData.notes || "No additional notes"}
 \`\`\`
 `;
 
-  try {
-    for (const chatId of TELEGRAM_CHAT_IDS) {
-      const response = await fetch(
-        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text: message,
-            parse_mode: "Markdown",
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          `Failed to send message to Telegram: ${JSON.stringify(errorData)}`
-        );
-      }
-    }
-
-    return { success: true };
-  } catch (error) {
-    // No need to log, just re-throw
-    throw error;
-  }
+  return sendToTelegram(message);
 }

@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  Phone,
-  Mail,
-  Instagram,
-  Facebook,
-  MapPin,
-  Send,
-  Clock,
-} from "lucide-react";
+import { Phone, Mail, Instagram, Facebook, MapPin, Send, Clock } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { PHONE_NUMBER, EMAIL } from "../../lib/data/config";
 import { useState } from "react";
@@ -17,6 +9,8 @@ import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import SectionHeading from "../ui/SectionHeading";
+import { sendTelegramContactMessage } from "../../server_actions/telegram";
+import { toast } from "sonner";
 
 const ContactSection = () => {
   const t = useTranslations("Contact");
@@ -25,11 +19,10 @@ const ContactSection = () => {
     email: "",
     message: "",
   });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormState((prev) => ({ ...prev, [name]: value }));
   };
@@ -38,31 +31,45 @@ const ContactSection = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      // Send message using the telegram server action
+      const result = await sendTelegramContactMessage({
+        name: formState.name,
+        email: formState.email,
+        message: formState.message,
+      });
+
+      if (result.success) {
+        toast.success("Message sent successfully!", {
+          description: "We'll get back to you soon.",
+        });
+        setFormState({ name: "", email: "", message: "" });
+      } else {
+        toast.error("Failed to send message", {
+          description: "Please try again or contact us directly.",
+        });
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      toast.error("Error", {
+        description: "Failed to send message. Please try again.",
+      });
+    } finally {
       setIsSubmitting(false);
-      setFormState({ name: "", email: "", message: "" });
-      // Here you would typically show a success message
-    }, 1000);
+    }
   };
 
   return (
     <section id="contact" className="section-padding bg-muted/50">
       <div className="container mx-auto px-4">
-        <SectionHeading
-          title={t("title")}
-          description={t("description")}
-          className="mb-12"
-        />
+        <SectionHeading title={t("title")} description={t("description")} className="mb-12" />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
           {/* Contact Information */}
           <Card className="overflow-hidden border border-primary/10">
             <div className="bg-primary text-primary-foreground p-6">
               <h3 className="text-xl font-semibold">{t("title")}</h3>
-              <p className="mt-2 text-primary-foreground/80">
-                Get in touch with us
-              </p>
+              <p className="mt-2 text-primary-foreground/80">Get in touch with us</p>
             </div>
 
             <CardContent className="p-6 space-y-6">
@@ -83,10 +90,7 @@ const ContactSection = () => {
                 <Mail className="h-5 w-5 text-primary flex-shrink-0 mt-1" />
                 <div className="ml-4">
                   <h4 className="font-medium mb-1">{t("athens.email")}</h4>
-                  <a
-                    href={`mailto:${EMAIL}`}
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
+                  <a href={`mailto:${EMAIL}`} className="text-muted-foreground hover:text-primary transition-colors">
                     {EMAIL}
                   </a>
                 </div>
@@ -104,9 +108,7 @@ const ContactSection = () => {
                 <Clock className="h-5 w-5 text-primary flex-shrink-0 mt-1" />
                 <div className="ml-4">
                   <h4 className="font-medium mb-1">Working Hours</h4>
-                  <p className="text-muted-foreground">
-                    24/7 - Always available for you
-                  </p>
+                  <p className="text-muted-foreground">24/7 - Always available for you</p>
                 </div>
               </div>
 
@@ -143,10 +145,7 @@ const ContactSection = () => {
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium mb-1"
-                  >
+                  <label htmlFor="name" className="block text-sm font-medium mb-1">
                     Name
                   </label>
                   <Input
@@ -160,10 +159,7 @@ const ContactSection = () => {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium mb-1"
-                  >
+                  <label htmlFor="email" className="block text-sm font-medium mb-1">
                     Email
                   </label>
                   <Input
@@ -178,10 +174,7 @@ const ContactSection = () => {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-medium mb-1"
-                  >
+                  <label htmlFor="message" className="block text-sm font-medium mb-1">
                     Message
                   </label>
                   <Textarea
@@ -195,11 +188,7 @@ const ContactSection = () => {
                   />
                 </div>
 
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={isSubmitting}
-                >
+                <Button type="submit" className="w-full" disabled={isSubmitting}>
                   {isSubmitting ? (
                     "Sending..."
                   ) : (

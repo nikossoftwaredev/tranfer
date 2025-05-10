@@ -7,7 +7,7 @@ import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "../../i18n/routing";
 import type { Metadata, Viewport } from "next";
-import { Toaster } from "../../components/ui/toaster";
+import { Toaster } from "sonner";
 import { VehicleProvider } from "../../contexts/VehicleContext";
 import WhatsAppButton from "../../components/ui/WhatsAppButton";
 import { DOMAIN, PHONE_NUMBER } from "@/lib/data/config";
@@ -87,11 +87,7 @@ export default async function RootLayout({
       <head>
         {/* Add preconnect for faster loading of external resources */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
         {/* Add preload for critical resources */}
         <link rel="preload" href="/images/hero-greece.jpg" as="image" />
@@ -103,7 +99,7 @@ export default async function RootLayout({
             <main>{children}</main>
             <Footer />
             <WhatsAppButton phoneNumber={PHONE_NUMBER} />
-            <Toaster />
+            <Toaster theme="dark" position="bottom-right" richColors />
           </VehicleProvider>
         </NextIntlClientProvider>
       </body>
