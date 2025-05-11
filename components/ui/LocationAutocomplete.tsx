@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { MapPin, ChevronsUpDown, Loader2 } from "lucide-react";
+import { MapPin, ChevronsUpDown, Loader2, MapPinOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -82,8 +82,11 @@ export const LocationAutocomplete = ({ value, onChange, isPickupLocation = false
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between h-auto min-h-[44px] py-2"
+          className="w-full justify-between h-auto min-h-[44px] py-2 pl-10 relative"
         >
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary">
+            {isPickupLocation ? <MapPin className="h-5 w-5" /> : <MapPinOff className="h-5 w-5" />}
+          </div>
           <div className="flex-1 text-left overflow-hidden truncate">
             {value ? (
               <div className="truncate">

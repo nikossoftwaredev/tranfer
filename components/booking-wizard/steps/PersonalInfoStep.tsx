@@ -7,6 +7,7 @@ import { Input } from "../../ui/input";
 import { User, Mail, Phone, IdCard } from "lucide-react";
 import { useBookingWizard } from "../../../contexts/BookingWizardContext";
 import { useMemo } from "react";
+import { InputWithIcon } from "../../ui/input-with-icon";
 
 const PersonalInfoStep = () => {
   const t = useTranslations("Booking");
@@ -51,28 +52,27 @@ const PersonalInfoStep = () => {
       {/* Personal Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <Label htmlFor="fullName" className="flex items-center gap-2 text-base font-medium">
-            <User className="h-5 w-5 text-primary" />
-            {t("form.fullName")}
+          <Label htmlFor="fullName" className="text-base font-medium">
+            {t("form.fullName")} <span className="text-primary">*</span>
           </Label>
-          <Input
+          <InputWithIcon
             id="fullName"
             name="fullName"
             value={formState.fullName}
             onChange={handleChange}
             autoComplete="name"
             required
+            icon={<User className="h-5 w-5 text-primary" />}
             className={`w-full ${validationErrors.fullName ? "border-rose-300" : ""}`}
           />
           {validationErrors.fullName && <p className="text-rose-400 text-sm mt-1">{validationErrors.fullName}</p>}
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email" className="flex items-center gap-2 text-base font-medium">
-            <Mail className="h-5 w-5 text-primary" />
-            {t("form.email")}
+          <Label htmlFor="email" className="text-base font-medium">
+            {t("form.email")} <span className="text-primary">*</span>
           </Label>
-          <Input
+          <InputWithIcon
             id="email"
             name="email"
             value={formState.email}
@@ -80,6 +80,7 @@ const PersonalInfoStep = () => {
             type="email"
             autoComplete="email"
             required
+            icon={<Mail className="h-5 w-5 text-primary" />}
             className={`w-full ${validationErrors.email ? "border-rose-300" : ""}`}
           />
           {validationErrors.email && <p className="text-rose-400 text-sm mt-1">{validationErrors.email}</p>}
@@ -87,9 +88,8 @@ const PersonalInfoStep = () => {
 
         {/* Phone number - now in left column on desktop */}
         <div className="space-y-2">
-          <Label htmlFor="phone" className="flex items-center gap-2 text-base font-medium">
-            <Phone className="h-5 w-5 text-primary" />
-            {t("form.phone")}
+          <Label htmlFor="phone" className="text-base font-medium">
+            {t("form.phone")} <span className="text-primary">*</span>
           </Label>
           <PhoneInput
             id="phone"
@@ -99,22 +99,23 @@ const PersonalInfoStep = () => {
             onChange={handlePhoneChange}
             required
             className={validationErrors.phone ? "border-rose-300" : ""}
+            icon={<Phone className="h-5 w-5 text-primary" />}
           />
           {validationErrors.phone && <p className="text-rose-400 text-sm mt-1">{validationErrors.phone}</p>}
         </div>
 
         {/* Passport field (optional) - now in right column on desktop */}
         <div className="space-y-2">
-          <Label htmlFor="passport" className="flex items-center gap-2 text-base font-medium">
-            <IdCard className="h-5 w-5 text-primary" />
+          <Label htmlFor="passport" className="text-base font-medium">
             {t("form.passport")}
           </Label>
-          <Input
+          <InputWithIcon
             id="passport"
             name="passport"
             value={formState.passport}
             onChange={handleChange}
             placeholder={t("form.passportPlaceholder")}
+            icon={<IdCard className="h-5 w-5 text-primary" />}
             className="w-full"
           />
         </div>

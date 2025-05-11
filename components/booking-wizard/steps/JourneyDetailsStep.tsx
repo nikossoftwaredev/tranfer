@@ -2,12 +2,12 @@
 
 import { useTranslations } from "next-intl";
 import { Label } from "../../ui/label";
-import { MapPin, Calendar, Clock } from "lucide-react";
+import { Calendar, Clock } from "lucide-react";
 import { useBookingWizard } from "../../../contexts/BookingWizardContext";
-import { DatePicker } from "../../ui/date-picker";
-import { TimePicker } from "../../ui/time-picker";
 import { LocationAutocomplete } from "../../ui/LocationAutocomplete";
 import { PlacePrediction } from "../../../server_actions/googleSearchActions";
+import { InputWithIcon } from "@/components/ui/input-with-icon";
+import { cn } from "@/lib/utils";
 
 const JourneyDetailsStep = () => {
   const t = useTranslations("Booking");
@@ -35,12 +35,12 @@ const JourneyDetailsStep = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className={cn("space-y-6", isTourBooking ? "md:space-y-8" : "")}>
       <div className={`grid grid-cols-1 ${!isTourBooking ? "md:grid-cols-2" : ""} gap-6`}>
         <div className="space-y-2">
-          <Label htmlFor="pickupLocation" className="flex items-center gap-2 text-base font-medium">
-            <MapPin className="h-5 w-5 text-primary" />
+          <Label htmlFor="pickupLocation" className="text-base font-medium flex items-center">
             {isTourBooking ? "Your Pickup Location" : t("form.pickupLabel")}
+            <span className="ml-1 text-primary font-medium">*</span>
           </Label>
           <div className={validationErrors.pickupLocation ? "border-rose-300 rounded-md" : ""}>
             <LocationAutocomplete
@@ -56,9 +56,9 @@ const JourneyDetailsStep = () => {
 
         {!isTourBooking && (
           <div className="space-y-2">
-            <Label htmlFor="dropoffLocation" className="flex items-center gap-2 text-base font-medium">
-              <MapPin className="h-5 w-5 text-primary" />
+            <Label htmlFor="dropoffLocation" className="text-base font-medium flex items-center">
               {t("form.dropoff")}
+              <span className="ml-1 text-primary font-medium">*</span>
             </Label>
             <div className={validationErrors.dropoffLocation ? "border-rose-300 rounded-md" : ""}>
               <LocationAutocomplete value={formState.dropoffLocation} onChange={handleDropoffLocationChange} />
@@ -69,23 +69,37 @@ const JourneyDetailsStep = () => {
           </div>
         )}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="date" className="flex items-center gap-2 text-base font-medium">
-            <Calendar className="h-5 w-5 text-primary" />
+          <Label htmlFor="date" className="text-base font-medium flex items-center">
             {t("form.date")}
+            <span className="ml-1 text-primary font-medium">*</span>
           </Label>
-          <div className={validationErrors.date ? "border-rose-300 rounded-md" : ""}>
-            <DatePicker date={formState.date || new Date()} setDate={handleDateChange} placeholder={t("form.date")} />
-          </div>
-          {validationErrors.date && <p className="text-rose-400 text-sm mt-1">{validationErrors.date}</p>}
+          <InputWithIcon
+            icon={<Calendar className="h-5 w-5 text-primary" />}
+            type="date"
+            id="date"
+            value={formState.date ? formState.date.toISOString().split("T")[0] : ""}
+            onChange={(e) => handleDateChange(new Date(e.target.value))}
+            required
+            className="w-full"
+          />
         </div>
+
         <div className="space-y-2">
-          <Label htmlFor="time" className="flex items-center gap-2 text-base font-medium">
-            <Clock className="h-5 w-5 text-primary" />
+          <Label htmlFor="time" className="text-base font-medium flex items-center">
             {t("form.time")}
+            <span className="ml-1 text-primary font-medium">*</span>
           </Label>
-          <TimePicker value={formState.time} onChange={handleTimeChange} label={t("form.time")} />
+          <InputWithIcon
+            icon={<Clock className="h-5 w-5 text-primary" />}
+            type="time"
+            id="time"
+            value={formState.time}
+            onChange={(e) => handleTimeChange(e.target.value)}
+            required
+            className="w-full"
+          />
         </div>
       </div>
     </div>
