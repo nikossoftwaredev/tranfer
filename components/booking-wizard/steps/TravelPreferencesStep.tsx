@@ -2,13 +2,14 @@
 
 import { useTranslations } from "next-intl";
 import { Label } from "../../ui/label";
-import { Luggage, BabyIcon, Users, FileText, Plane, Car } from "lucide-react";
+import { Luggage, BabyIcon, Users, FileText, Plane, Car, UserCheck } from "lucide-react";
 import { useBookingWizard } from "../../../contexts/BookingWizardContext";
 import { Textarea } from "../../ui/textarea";
 import { Input } from "../../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
 import { vehicles } from "../../../lib/data/vehicles";
 import { NumberInput } from "../../ui/number-input";
+import { Checkbox } from "@radix-ui/react-checkbox";
 
 const TravelPreferencesStep = () => {
   const t = useTranslations("Booking");
@@ -39,6 +40,11 @@ const TravelPreferencesStep = () => {
   // Handle vehicle selection
   const handleVehicleChange = (value: string) => {
     updateFormState({ selectedVehicle: value });
+  };
+
+  // Handle include guide change
+  const handleIncludeGuideChange = (checked: boolean) => {
+    updateFormState({ includeGuide: checked });
   };
 
   return (
@@ -142,6 +148,21 @@ const TravelPreferencesStep = () => {
           </div>
         )}
       </div>
+
+      {isTourBooking && (
+        <div className="flex items-start space-x-2">
+          <Checkbox id="includeGuide" checked={formState.includeGuide} onCheckedChange={handleIncludeGuideChange} />
+          <div className="grid gap-1.5 leading-none">
+            <Label htmlFor="includeGuide" className="flex items-center gap-2 text-base font-medium cursor-pointer">
+              <UserCheck className="h-5 w-5 text-primary" />
+              Include Professional Tour Guide
+            </Label>
+            <p className="text-sm text-muted-foreground">
+              Add a licensed professional guide who will provide detailed historical and cultural commentary
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="space-y-3">
         <Label htmlFor="notes" className="flex items-center gap-2 text-base font-medium">

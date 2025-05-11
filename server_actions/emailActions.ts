@@ -89,6 +89,10 @@ export const sendBookingConfirmationEmail = async (formData: BookingFormState) =
     const whatsappNumber = PHONE_NUMBER.replace(/\s+/g, "");
     const whatsappLink = `https://wa.me/${whatsappNumber}`;
 
+    // Get tour name if tour booking
+    const isTourBooking = !!formData.selectedTour;
+    const tourGuideInfo = isTourBooking && formData.includeGuide ? "Yes (Professional licensed guide included)" : "No";
+
     // Build plain text email content (fallback)
     const subject = `Transfer Booking Confirmation`;
     const body = `
@@ -101,6 +105,8 @@ export const sendBookingConfirmationEmail = async (formData: BookingFormState) =
       - To: ${dropoffLocation}
       - Date: ${formattedDate}
       - Time: ${formData.time || "Not specified"}
+      ${isTourBooking ? `- Tour: ${formData.selectedTour}` : ""}
+      ${isTourBooking ? `- Tour Guide: ${formData.includeGuide ? "Yes" : "No"}` : ""}
       
       Additional Information:
       - Passengers: ${formData.passengers}
@@ -254,23 +260,27 @@ export const sendBookingConfirmationEmail = async (formData: BookingFormState) =
               <div class="detail-value">${formData.childSeats}</div>
             </div>
             
-            ${
-              formData.flightNumber
-                ? `
             <div class="detail-row">
-              <div class="detail-label">Flight:</div>
-              <div class="detail-value">${formData.flightNumber}</div>
+              <div class="detail-label">Flight Number:</div>
+              <div class="detail-value">${formData.flightNumber || "Not specified"}</div>
             </div>
-            `
-                : ""
-            }
             
-            ${
-              formData.selectedVehicle
-                ? `
             <div class="detail-row">
               <div class="detail-label">Vehicle:</div>
-              <div class="detail-value">${formData.selectedVehicle}</div>
+              <div class="detail-value">${formData.selectedVehicle || "Standard"}</div>
+            </div>
+            
+            ${
+              isTourBooking
+                ? `
+            <div class="detail-row">
+              <div class="detail-label">Tour:</div>
+              <div class="detail-value">${formData.selectedTour}</div>
+            </div>
+            
+            <div class="detail-row">
+              <div class="detail-label">Tour Guide:</div>
+              <div class="detail-value">${tourGuideInfo}</div>
             </div>
             `
                 : ""
@@ -287,36 +297,21 @@ export const sendBookingConfirmationEmail = async (formData: BookingFormState) =
                 : ""
             }
           </div>
-          
-          ${
-            formData.selectedTour
-              ? `
-          <div class="section">
-            <div class="section-title">Tour Details</div>
-            <div class="detail-row">
-              <div class="detail-label">Selected Tour:</div>
-              <div class="detail-value">${formData.selectedTour}</div>
-            </div>
-          </div>
-          `
-              : ""
-          }
-        </div>
-        
-        <div class="contact">
-          <p><strong>Need to make changes to your booking?</strong></p>
-          <p>Please contact our customer service team at ${PHONE_NUMBER}.</p>
-          <a href="${whatsappLink}" class="whatsapp-btn" target="_blank">Contact us on WhatsApp</a>
-        </div>
-        
-        <div class="footer">
-          <p>Thank you for choosing our service!</p>
-          <p>© ${new Date().getFullYear()} Transfer Service. All rights reserved.</p>
-        </div>
-      </div>
-    </body>
-    </html>
-    `;
+         
+         <div class="contact">
+           <p><strong>Need to make changes to your booking?</strong></p>
+           <p>Please contact our customer service team at ${PHONE_NUMBER}.</p>
+           <a href="${whatsappLink}" class="whatsapp-btn" target="_blank">Contact us on WhatsApp</a>
+         </div>
+         
+         <div class="footer">
+           <p>Thank you for choosing our service!</p>
+           <p>© ${new Date().getFullYear()} Transfer Service. All rights reserved.</p>
+         </div>
+       </div>
+     </body>
+     </html>
+     `;
 
     // Send the email with HTML
     const result = await sendEmail({

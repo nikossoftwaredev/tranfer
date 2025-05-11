@@ -10,16 +10,14 @@ import Link from "next/link";
 import Image from "next/image";
 
 type TourClientProps = {
-  locale: string;
   slug: string;
 };
 
-const TourClient = ({ locale, slug }: TourClientProps) => {
+const TourClient = ({ slug }: TourClientProps) => {
   const t = useTranslations("Tours.tourDetails");
   const tour = tours.find((tour) => tour.slug === slug);
-  const translatedContent = tour?.translations[locale];
 
-  if (!tour || !translatedContent) {
+  if (!tour) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Card className="max-w-md w-full">
@@ -44,37 +42,37 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <div className="relative h-[60vh] w-full">
-        <Image src={tour.image} alt={translatedContent.title} fill className="object-cover" priority />
+        <Image src={tour.image} alt={tour.title} fill className="object-cover" priority />
         <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
           <div className="text-center text-white">
-            <h1 className="text-4xl font-bold mb-4">{translatedContent.title}</h1>
-            <p className="text-xl">{translatedContent.subtitle}</p>
+            <h1 className="text-4xl font-bold mb-4">{tour.title}</h1>
+            <p className="text-xl">{tour.subtitle}</p>
           </div>
         </div>
       </div>
 
-      {/* Tour Details */}
+      {/* Tour Details - Content first, booking form at bottom for all screen sizes */}
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="space-y-16">
           {/* Main Content */}
-          <div className="md:col-span-2 space-y-8">
-            <Card>
+          <div className="max-w-4xl mx-auto space-y-12">
+            <Card className="shadow-md">
               <CardHeader>
                 <h2 className="font-semibold leading-none tracking-tight">{t("book.title")}</h2>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">{translatedContent.description}</p>
+                <p className="text-muted-foreground">{tour.description}</p>
               </CardContent>
             </Card>
 
-            {translatedContent.highlights && translatedContent.highlights.length > 0 && (
-              <Card>
+            {tour.highlights && tour.highlights.length > 0 && (
+              <Card className="shadow-md">
                 <CardHeader>
                   <h2 className="font-semibold leading-none tracking-tight">{t("highlights")}</h2>
                 </CardHeader>
                 <CardContent>
                   <ul className="list-disc list-inside space-y-2">
-                    {translatedContent.highlights.map((highlight, index) => (
+                    {tour.highlights.map((highlight: string, index: number) => (
                       <li key={index} className="text-muted-foreground">
                         {highlight}
                       </li>
@@ -84,14 +82,14 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
               </Card>
             )}
 
-            {translatedContent.includes && translatedContent.includes.length > 0 && (
-              <Card>
+            {tour.includes && tour.includes.length > 0 && (
+              <Card className="shadow-md">
                 <CardHeader>
                   <h2 className="font-semibold leading-none tracking-tight">{t("includes")}</h2>
                 </CardHeader>
                 <CardContent>
                   <ul className="list-disc list-inside space-y-2">
-                    {translatedContent.includes.map((item, index) => (
+                    {tour.includes.map((item: string, index: number) => (
                       <li key={index} className="text-muted-foreground">
                         {item}
                       </li>
@@ -102,8 +100,8 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
             )}
           </div>
 
-          {/* Booking Section */}
-          <div className="md:col-span-1">
+          {/* Booking Section - at the bottom for all screen sizes */}
+          <div className="max-w-3xl mx-auto pt-8">
             <BookingWizardSection tourSlug={slug} />
           </div>
         </div>

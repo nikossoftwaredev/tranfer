@@ -13,13 +13,7 @@ type TourCardProps = {
   slug: string;
 };
 
-const TourCard = ({
-  image,
-  title,
-  subtitle,
-  duration,
-  slug,
-}: TourCardProps) => {
+const TourCard = ({ image, title, subtitle, duration, slug }: TourCardProps) => {
   const t = useTranslations("Tours");
   const locale = useLocale();
 
@@ -30,13 +24,7 @@ const TourCard = ({
     >
       {/* Tour Image */}
       <div className="h-48 bg-cover bg-center relative overflow-hidden">
-        <Image
-          src={image}
-          alt={title}
-          width={400}
-          height={240}
-          className="w-full h-full object-cover"
-        />
+        <Image src={image} alt={title} width={400} height={240} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/60" />
 
         {/* Duration Badge */}
@@ -71,38 +59,24 @@ const ToursSection = () => {
   return (
     <section id="tours" className="section-padding">
       <div className="container mx-auto px-4">
-        <SectionHeading
-          title={t("title")}
-          description={t("description")}
-          className="mb-12"
-        />
+        <SectionHeading title={t("title")} description={t("description")} className="mb-12" />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {tours.map((tour, index) => {
-            const translatedContent = tour?.translations?.[locale];
-            if (!translatedContent) return null;
-            
-            return (
-              <TourCard
-                key={index}
-                image={tour.image}
-                title={translatedContent.title}
-                subtitle={translatedContent.subtitle}
-                duration={tour.hours}
-                slug={tour.slug}
-              />
-            );
-          })}
+          {tours.map((tour, index) => (
+            <TourCard
+              key={index}
+              image={tour.image}
+              title={tour.title}
+              subtitle={tour.subtitle}
+              duration={tour.hours}
+              slug={tour.slug}
+            />
+          ))}
         </div>
 
         <div className="text-center mt-10">
-          <p className="text-muted-foreground mb-4">
-            {t("customTour.description")}
-          </p>
-          <Link
-            href={`/${locale}/#contact`}
-            className="cta-button inline-block"
-          >
+          <p className="text-muted-foreground mb-4">{t("customTour.description")}</p>
+          <Link href={`/${locale}/#contact`} className="cta-button inline-block">
             {t("customTour.requestButton")}
           </Link>
         </div>

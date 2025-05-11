@@ -23,16 +23,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  // Access translations based on locale, fallback to en-US if not available
-  const translationLocale = tour.translations[locale] ? locale : "en-US";
-  const translation = tour.translations[translationLocale];
-
   // Create a more descriptive title and description
-  const title = `${translation.title} | Private Tour from Athens`;
+  const title = `${tour.title} | Private Tour from Athens`;
   const description = `Experience ${
-    translation.title
+    tour.title
   } with our private guided tour from Athens. Professional driver, luxury vehicle, includes ${
-    translation.includes?.[0] || "personalized service"
+    tour.includes?.[0] || "personalized service"
   }. Book now!`;
 
   return {
@@ -62,12 +58,12 @@ export async function generateStaticParams() {
 }
 
 export default async function TourPage({ params }: PageProps) {
-  const { locale, slug } = await params;
+  const { slug } = await params;
   const tour = tours.find((tour) => tour.slug === slug);
 
   if (!tour) {
     notFound();
   }
 
-  return <TourClient locale={locale} slug={slug} />;
+  return <TourClient slug={slug} />;
 }

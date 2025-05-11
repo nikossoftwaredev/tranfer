@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { sendTelegramBookingMessage } from "../../server_actions/telegram";
@@ -20,12 +20,10 @@ type BookingWizardProps = {
 
 // The main wizard component that uses the context provider
 const BookingWizard = ({ tourSlug }: BookingWizardProps) => {
-  const locale = useLocale();
-
   // Get the selected tour if tourSlug is provided
   const selectedTour = useMemo(() => (tourSlug ? tours.find((tour) => tour.slug === tourSlug) : undefined), [tourSlug]);
 
-  const initialTour = selectedTour?.translations[locale]?.title || "";
+  const initialTour = selectedTour?.title || "";
 
   return (
     <BookingWizardProvider initialTour={initialTour}>

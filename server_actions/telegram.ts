@@ -68,177 +68,97 @@ ${formData.message}
   return sendToTelegram(message);
 }
 
-export async function sendTelegramBookingMessage(formData: BookingFormState) {
-  // Format the date and time in a clear, readable format
-  let formattedDate = "Not specified";
-  let formattedTime = formData.time || "Not specified";
-  // First check if isoDateTime was passed directly from the form
-  let isoDateTime = "Not specified";
+export const sendTelegramBookingMessage = async (formData: BookingFormState) => {
+  try {
+    const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+    const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
-  if (formData.date) {
-    const date = new Date(formData.date);
-
-    // Format date in a clear format
-    formattedDate = date.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-
-    // Handle time if provided
-    if (formData.time && formData.time.includes(":")) {
-      const [hours, minutes] = formData.time.split(":");
-
-      if (hours && minutes) {
-        try {
-          const hoursInt = parseInt(hours, 10);
-          const minutesInt = parseInt(minutes, 10);
-
-          // Validate the parsed values
-          if (
-            !isNaN(hoursInt) &&
-            !isNaN(minutesInt) &&
-            hoursInt >= 0 &&
-            hoursInt < 24 &&
-            minutesInt >= 0 &&
-            minutesInt < 60
-          ) {
-            date.setHours(hoursInt, minutesInt, 0, 0);
-
-            // Format time in 24-hour format
-            formattedTime = date.toLocaleTimeString("en-GB", {
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: false,
-            });
-
-            // Only create ISO format if not already provided
-            if (isoDateTime === "Not specified") {
-              isoDateTime = date.toISOString();
-            }
-          }
-        } catch {
-          // In case of error, fallback to default time
-          date.setHours(12, 0, 0, 0);
-          formattedTime = "12:00";
-
-          if (isoDateTime === "Not specified") {
-            isoDateTime = date.toISOString();
-          }
-        }
-      } else {
-        // If time format is invalid, set to noon by default
-        date.setHours(12, 0, 0, 0);
-        formattedTime = "12:00";
-
-        // Only create ISO format if not already provided
-        if (isoDateTime === "Not specified") {
-          isoDateTime = date.toISOString();
-        }
-      }
+    if (!TOKEN || !CHAT_ID) {
+      console.error("Telegram bot token or chat ID is missing");
+      return {
+        success: false,
+        message: "Telegram configuration is missing",
+      };
     }
-  }
 
-  // Make sure pickup location is properly accessed
-  let pickupLabel = "Not specified";
-  let pickupCoordinates = "";
-
-  if (formData.pickupLocation) {
-    pickupLabel =
-      formData.pickupLocation.structured_formatting?.main_text ||
-      formData.pickupLocation.description ||
-      "Not specified";
-
-    // More robust check for coordinates
-    if (
-      formData.pickupLocation.coordinates &&
-      typeof formData.pickupLocation.coordinates === "object" &&
-      "lat" in formData.pickupLocation.coordinates &&
-      "lng" in formData.pickupLocation.coordinates &&
-      formData.pickupLocation.coordinates.lat !== undefined &&
-      formData.pickupLocation.coordinates.lng !== undefined
-    ) {
-      pickupCoordinates = `${formData.pickupLocation.coordinates.lat},${formData.pickupLocation.coordinates.lng}`;
-    } else if (typeof formData.pickupLocation.coordinates === "string") {
-      // Handle case where coordinates might be a string
-      pickupCoordinates = formData.pickupLocation.coordinates;
+    // Format date for display
+    let formattedDate = "Not specified";
+    if (formData.date) {
+      const date = new Date(formData.date);
+      formattedDate = date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
     }
-  }
 
-  let dropoffLabel = "Not specified";
-  let dropoffCoordinates = "";
+    // Get location names
+    const pickupLocation = formData.pickupLocation?.structured_formatting?.main_text || "Not specified";
+    const dropoffLocation = formData.dropoffLocation?.structured_formatting?.main_text || "Not specified";
 
-  if (formData.dropoffLocation) {
-    dropoffLabel =
-      formData.dropoffLocation.structured_formatting?.main_text ||
-      formData.dropoffLocation.description ||
-      "Not specified";
+    // Determine if this is a tour booking
+    const isTourBooking = !!formData.selectedTour;
+    const tourGuideInfo = isTourBooking && formData.includeGuide ? "Yes (Professional licensed guide)" : "No";
 
-    // More robust check for coordinates
-    if (
-      formData.dropoffLocation.coordinates &&
-      typeof formData.dropoffLocation.coordinates === "object" &&
-      "lat" in formData.dropoffLocation.coordinates &&
-      "lng" in formData.dropoffLocation.coordinates &&
-      formData.dropoffLocation.coordinates.lat !== undefined &&
-      formData.dropoffLocation.coordinates.lng !== undefined
-    ) {
-      dropoffCoordinates = `${formData.dropoffLocation.coordinates.lat},${formData.dropoffLocation.coordinates.lng}`;
-    } else if (typeof formData.dropoffLocation.coordinates === "string") {
-      // Handle case where coordinates might be a string
-      dropoffCoordinates = formData.dropoffLocation.coordinates;
-    }
-  }
+    // Create message text
+    const messageText = `
+🚨 NEW BOOKING 🚨
 
-  // Debug info in console (will only show in server logs)
-  console.log("Pickup location:", formData.pickupLocation);
-  console.log("Dropoff location:", formData.dropoffLocation);
+👤 Customer: ${formData.fullName}
+✉️ Email: ${formData.email}
+📱 Phone: ${formData.countryCode} ${formData.phone}
+${formData.passport ? `🛂 Passport: ${formData.passport}` : ""}
 
-  // Create Google Maps links if coordinates are available
-  const pickupMapsLink = pickupCoordinates
-    ? `[View on Google Maps](https://www.google.com/maps?q=${pickupCoordinates})`
-    : "No coordinates available";
+📍 From: ${pickupLocation}
+📍 To: ${dropoffLocation}
+🗓️ Date: ${formattedDate}
+⏰ Time: ${formData.time || "Not specified"}
 
-  const dropoffMapsLink = dropoffCoordinates
-    ? `[View on Google Maps](https://www.google.com/maps?q=${dropoffCoordinates})`
-    : "No coordinates available";
+${isTourBooking ? `🏛️ Tour: ${formData.selectedTour}` : ""}
+${isTourBooking ? `🎭 Tour Guide: ${tourGuideInfo}` : ""}
 
-  // Construct the message with copiable text fields
-  const message = `
-🚗 *New Booking Request*
+👥 Passengers: ${formData.passengers}
+🧳 Luggage: ${formData.luggage}
+👶 Child Seats: ${formData.childSeats}
+✈️ Flight: ${formData.flightNumber || "Not specified"}
+🚘 Vehicle: ${formData.selectedVehicle || "Not specified"}
 
-*Personal Information:*
-👤 Name: ${makeCopiable(formData.fullName)}
-📧 Email: ${makeCopiable(formData.email)}
-📞 Phone: ${makeCopiable(formData.countryCode + formData.phone)}
-${formData.passport ? `🪪 Passport: ${makeCopiable(formData.passport)}` : ""}
-
-*Trip Details:*
-📍 *Pickup:* ${makeCopiable(pickupLabel)}
-   ${pickupMapsLink}
-   
-🏁 *Dropoff:* ${makeCopiable(dropoffLabel)}
-   ${dropoffMapsLink}
-   
-📅 Date: ${makeCopiable(formattedDate)}
-⏰ Time: ${makeCopiable(formattedTime)}
-
-*Additional Information:*
-👥 Passengers: ${makeCopiable(formData.passengers)}
-🧳 Luggage: ${makeCopiable(formData.luggage)}
-👶 Child Seats: ${makeCopiable(formData.childSeats)}
-✈️ Flight Number: ${makeCopiable(formData.flightNumber || "Not specified")}
-🚗 Vehicle: ${makeCopiable(formData.selectedVehicle)}
-📋 Booking Type: ${makeCopiable("Regular Transfer")}
-
-*Tour Selection:*
-${formData.selectedTour ? `🏛️ Selected Tour: ${makeCopiable(formData.selectedTour)}` : "No specific tour selected"}
-
-*Notes:*
-\`\`\`
-${formData.notes || "No additional notes"}
-\`\`\`
+${formData.notes ? `📝 Notes: ${formData.notes}` : ""}
 `;
 
-  return sendToTelegram(message);
-}
+    // Send message
+    const telegramApiUrl = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
+    const response = await fetch(telegramApiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: messageText,
+        parse_mode: "HTML",
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!data.ok) {
+      console.error("Failed to send Telegram message:", data);
+      return {
+        success: false,
+        message: "Failed to send Telegram notification",
+      };
+    }
+
+    return {
+      success: true,
+      message: "Telegram notification sent successfully",
+    };
+  } catch (error) {
+    console.error("Error sending Telegram message:", error);
+    return {
+      success: false,
+      message: "Failed to send Telegram notification",
+    };
+  }
+};

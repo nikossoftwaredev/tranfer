@@ -26,6 +26,7 @@ export type BookingFormState = {
   flightNumber: string;
   selectedVehicle: string;
   notes: string;
+  includeGuide: boolean; // Optional tour guide
 
   // If on tour page
   selectedTour: string;
@@ -106,6 +107,7 @@ const initialFormState: BookingFormState = {
   flightNumber: "",
   selectedVehicle: "",
   notes: "",
+  includeGuide: false,
   selectedTour: "",
 };
 
