@@ -30,8 +30,7 @@ const TimePickerComponent = ({ value, onChange }: TimePickerProps) => {
   }, [value, onChange]);
 
   // Parse hours and minutes from value, defaulting to 12:00 if format is invalid
-  const [hoursStr, minutesStr] =
-    value && value.split(":").length === 2 ? value.split(":") : ["12", "00"];
+  const [hoursStr, minutesStr] = value && value.split(":").length === 2 ? value.split(":") : ["12", "00"];
 
   // Convert to integers for selection
   const hoursValue = parseInt(hoursStr);
@@ -83,13 +82,7 @@ const TimePickerComponent = ({ value, onChange }: TimePickerProps) => {
             <span className="sr-only">Open time picker</span>
           </Button>
         </PopoverTrigger>
-        <PopoverContent
-          className="w-auto p-0"
-          align="start"
-          sideOffset={4}
-          style={{ zIndex: 9999 }}
-          forceMount
-        >
+        <PopoverContent className="w-auto p-0" align="start" sideOffset={4} style={{ zIndex: 9999 }} forceMount>
           <div className="flex h-[300px] divide-x border-t">
             {/* Hours Column */}
             <ScrollArea className="w-auto">
@@ -99,11 +92,7 @@ const TimePickerComponent = ({ value, onChange }: TimePickerProps) => {
                     type="button"
                     key={hour}
                     variant={hoursValue === hour ? "default" : "ghost"}
-                    className={cn(
-                      "rounded-none h-10",
-                      hoursValue === hour &&
-                        "bg-primary text-primary-foreground"
-                    )}
+                    className={cn("rounded-none h-10", hoursValue === hour && "bg-primary text-primary-foreground")}
                     onClick={() => handleHoursSelect(hour)}
                   >
                     {hour.toString().padStart(2, "0")}
@@ -119,11 +108,7 @@ const TimePickerComponent = ({ value, onChange }: TimePickerProps) => {
                     type="button"
                     key={minute}
                     variant={minutesValue === minute ? "default" : "ghost"}
-                    className={cn(
-                      "rounded-none h-10",
-                      minutesValue === minute &&
-                        "bg-primary text-primary-foreground"
-                    )}
+                    className={cn("rounded-none h-10", minutesValue === minute && "bg-primary text-primary-foreground")}
                     onClick={() => handleMinutesSelect(minute)}
                   >
                     {minute.toString().padStart(2, "0")}
