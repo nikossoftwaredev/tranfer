@@ -17,3 +17,15 @@
 17. add passport
 18.luxury sedan - luxury van - luxury tha sou pw 
 19. clickable to thl kai email
+
+
+
+!1 na ftiajoume thn forma gia kinito πχ. sta tours den leitourgei to systima kratisewn
+2 problimata sthn allagh glwssas
+3 tha feigei to fleet afou den exoume eikones apo to arxiko site kai tha mpei mono me koumpi sto leeder kai tha exei mono fotos
+4 tha mpei epilogi oximatos sto booking opoy to oxima tha diamorfwnei kai tin timi tou transfer - tour 
+Mini Van – Mercedes Vito​ -up to 8 persons 8 baggage
+Mini Van – Mercedes V-Class up 7 people 7 baggage 
+Mini Bus – Mercedes Sprinter up 15 persons 15 baggage
+child seats +10 eyro
+5 . sta tours den xreiazetai aritmos ptisis
