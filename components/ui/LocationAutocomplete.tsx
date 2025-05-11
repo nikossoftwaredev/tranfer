@@ -1,95 +1,23 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
-import { Plane, MapPin, ChevronsUpDown } from "lucide-react";
+import { useState, useCallback } from "react";
+import { MapPin, ChevronsUpDown, Loader2, MapPinOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { useDebounce } from "@/hooks/use-debounce";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { searchPlaces, getPlaceDetails, PlacePrediction } from "../../server_actions/googleSearchActions";
+import debounce from "lodash.debounce";
 
-interface NominatimResult {
-  place_id: number;
-  osm_type?: string;
-  osm_id?: number;
-  display_name: string;
-  name?: string;
-  address: {
-    house_number?: string;
-    road?: string;
-    suburb?: string;
-    city?: string;
-    town?: string;
-    municipality?: string;
-    state?: string;
-    country?: string;
-    postcode?: string;
-    [key: string]: string | undefined;
-  };
-  boundingbox?: string[];
-  lat?: string;
-  lon?: string;
-}
-
-export interface LocationOption {
-  id: string;
-  name: string;
-  description?: string;
-  uniqueKey: string;
-  isAirport?: boolean;
-  coordinates?: {
-    lat: number;
-    lng: number;
-  };
-}
-
-const formatAddress = (address: NominatimResult["address"]) => {
-  const parts = [];
-  if (address.house_number) parts.push(address.house_number);
-  if (address.road) parts.push(address.road);
-  if (address.suburb) parts.push(address.suburb);
-  if (address.city) parts.push(address.city);
-  if (address.town) parts.push(address.town);
-  if (address.state) parts.push(address.state);
-  if (address.country) parts.push(address.country);
-  return parts.join(", ");
-};
-
-const isAirport = (result: NominatimResult): boolean => {
-  const lowerDisplayName = result.display_name.toLowerCase();
-  return (
-    lowerDisplayName.includes("airport") ||
-    lowerDisplayName.includes("aeroporto") ||
-    lowerDisplayName.includes("aeropuerto") ||
-    lowerDisplayName.includes("aeroport")
-  );
-};
-
-interface Props {
-  value?: LocationOption;
-  onChange: (location: LocationOption) => void;
+interface LocationAutocompleteProps {
+  value?: PlacePrediction & { coordinates?: { lat: number; lng: number } };
+  onChange: (location: PlacePrediction & { coordinates?: { lat: number; lng: number } }) => void;
   isPickupLocation?: boolean;
 }
 
-export const LocationAutocomplete = ({
-  value,
-  onChange,
-  isPickupLocation = false,
-}: Props) => {
+export const LocationAutocomplete = ({ value, onChange, isPickupLocation = false }: LocationAutocompleteProps) => {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const debouncedQuery = useDebounce(query, 300);
-  const [locations, setLocations] = useState<LocationOption[]>([]);
+  const [locations, setLocations] = useState<PlacePrediction[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const searchLocations = useCallback(async (searchQuery: string) => {
@@ -101,54 +29,9 @@ export const LocationAutocomplete = ({
     setIsLoading(true);
 
     try {
-      // Use our own API endpoint instead of directly calling Nominatim
-      const response = await fetch(
-        `/api/location?q=${encodeURIComponent(searchQuery)}`
-      );
-
-      if (!response.ok) {
-        throw new Error(`API request failed with status ${response.status}`);
-      }
-
-      const data: NominatimResult[] = await response.json();
-
-      if (data && Array.isArray(data)) {
-        const formattedLocations: LocationOption[] = data.map((result) => {
-          // Extract display name parts for a more user-friendly name
-          const displayNameParts = result.display_name.split(", ");
-          let name =
-            result.name ||
-            (displayNameParts.length > 0
-              ? displayNameParts[0]
-              : result.display_name);
-
-          // Clean up hotel names
-          if (name.toLowerCase().includes("hotel")) {
-            name = name.replace(/hotel/i, "Hotel").trim();
-          }
-
-          const airportCheck = isAirport(result);
-
-          // Extract coordinates if available
-          const coordinates =
-            result.lat && result.lon
-              ? { lat: parseFloat(result.lat), lng: parseFloat(result.lon) }
-              : undefined;
-
-          return {
-            id: result.place_id.toString(),
-            name,
-            description: formatAddress(result.address),
-            uniqueKey: `${result.place_id}_${result.display_name}`,
-            isAirport: airportCheck,
-            coordinates: coordinates,
-          };
-        });
-
-        setLocations(formattedLocations);
-      } else {
-        setLocations([]);
-      }
+      // Use our server action to search Google Places API
+      const results = await searchPlaces(searchQuery);
+      setLocations(results);
     } catch (error) {
       console.error("Error fetching locations:", error);
       setLocations([]);
@@ -157,13 +40,40 @@ export const LocationAutocomplete = ({
     }
   }, []);
 
-  useEffect(() => {
-    if (debouncedQuery) {
-      searchLocations(debouncedQuery);
-    } else {
-      setLocations([]);
+  const handleSelectLocation = async (location: PlacePrediction) => {
+    try {
+      const details = await getPlaceDetails(location.place_id);
+      if (details) {
+        // Add coordinates to the location
+        const locationWithCoordinates = {
+          ...location,
+          coordinates: details.coordinates,
+        };
+        onChange(locationWithCoordinates);
+      } else {
+        onChange(location);
+      }
+    } catch (error) {
+      console.error("Error fetching location details:", error);
+      onChange(location);
     }
-  }, [debouncedQuery, searchLocations]);
+    setOpen(false);
+  };
+
+  const debouncedSearch = useCallback(
+    debounce((searchQuery: string) => {
+      searchLocations(searchQuery);
+    }, 300),
+    [searchLocations]
+  );
+
+  const onValueChange = useCallback(
+    (value: string) => {
+      setQuery(value);
+      debouncedSearch(value);
+    },
+    [debouncedSearch]
+  );
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -172,17 +82,15 @@ export const LocationAutocomplete = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between h-auto min-h-[44px] py-2"
+          className="w-full justify-between h-auto min-h-[44px] py-2 pl-10 relative"
         >
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary">
+            {isPickupLocation ? <MapPin className="h-5 w-5" /> : <MapPinOff className="h-5 w-5" />}
+          </div>
           <div className="flex-1 text-left overflow-hidden truncate">
             {value ? (
               <div className="truncate">
-                <div className="font-medium truncate">{value.name}</div>
-                {value.description && (
-                  <div className="text-xs text-muted-foreground truncate">
-                    {value.description}
-                  </div>
-                )}
+                <div className="font-medium truncate">{value.structured_formatting.main_text}</div>
               </div>
             ) : (
               "Search location..."
@@ -196,61 +104,51 @@ export const LocationAutocomplete = ({
         align="start"
         style={{ width: "var(--radix-popover-trigger-width)" }}
       >
-        <Command>
+        <Command shouldFilter={false} className="bg-background">
           <CommandInput
-            placeholder={
-              isPickupLocation
-                ? "Enter airport, hotel, or place in Greece..."
-                : "Enter destination in Greece..."
-            }
+            placeholder={isPickupLocation ? "Enter airport, hotel, or place..." : "Enter destination..."}
             value={query}
-            onValueChange={setQuery}
+            onValueChange={onValueChange}
             className="h-10"
           />
           <CommandList className="max-h-[300px] overflow-auto">
-            <CommandEmpty>
-              {isLoading ? (
-                <div className="py-6 text-center text-sm">Searching...</div>
-              ) : query.length < 2 ? (
+            {isLoading && (
+              <div className="py-6 text-center text-sm flex items-center justify-center">
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                Searching...
+              </div>
+            )}
+
+            {!isLoading && query.length < 2 && (
+              <CommandEmpty>
+                <div className="py-6 text-center text-sm">Type at least 2 characters to search for locations...</div>
+              </CommandEmpty>
+            )}
+
+            {!isLoading && query.length >= 2 && locations.length === 0 && (
+              <CommandEmpty>
                 <div className="py-6 text-center text-sm">
-                  Type at least 2 characters to search...
+                  No locations found. Try different spelling or more general terms.
                 </div>
-              ) : (
-                <div className="py-6 text-center text-sm text-wrap">
-                  No locations found. Try different spelling or more general
-                  terms.
-                </div>
-              )}
-            </CommandEmpty>
-            {locations.length > 0 && (
+              </CommandEmpty>
+            )}
+
+            {!isLoading && locations.length > 0 && (
               <CommandGroup>
                 {locations.map((location) => (
                   <CommandItem
-                    key={location.uniqueKey}
-                    value={location.uniqueKey}
-                    onSelect={() => {
-                      onChange(location);
-                      setOpen(false);
-                    }}
-                    className="cursor-pointer py-3"
+                    key={`${location.place_id}_${isPickupLocation ? "pickup" : "dropoff"}`}
+                    value={location.place_id}
+                    onSelect={() => handleSelectLocation(location)}
+                    className="cursor-pointer py-3 data-[selected=true]:bg-card data-[highlighted=true]:bg-card"
                   >
                     <div className="flex items-start w-full overflow-hidden">
                       <div className="mr-2 mt-1 flex-shrink-0">
-                        {location.isAirport ? (
-                          <Plane className="h-4 w-4 text-primary" />
-                        ) : (
-                          <MapPin className="h-4 w-4 text-primary" />
-                        )}
+                        <MapPin className="h-4 w-4 text-primary" />
                       </div>
                       <div className="flex-1 overflow-hidden">
-                        <div className="font-medium text-sm truncate">
-                          {location.name}
-                        </div>
-                        {location.description && (
-                          <div className="text-xs text-muted-foreground truncate">
-                            {location.description}
-                          </div>
-                        )}
+                        <div className="font-medium text-sm truncate">{location.structured_formatting.main_text}</div>
+                        <div className="text-xs text-foreground/70 truncate">{location.description}</div>
                       </div>
                     </div>
                   </CommandItem>

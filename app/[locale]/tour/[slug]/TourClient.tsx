@@ -2,13 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { tours } from "../../../../lib/data/tours";
-import BookingSection from "../../../../components/sections/BookingSection";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../../../components/ui/card";
+import BookingWizardSection from "../../../../components/sections/BookingWizardSection";
+import { Card, CardContent, CardHeader } from "../../../../components/ui/card";
 import { Button } from "../../../../components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -29,7 +24,7 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
       <div className="min-h-screen flex items-center justify-center">
         <Card className="max-w-md w-full">
           <CardHeader>
-            <CardTitle className="text-center">Tour Not Found</CardTitle>
+            <h2 className="font-semibold leading-none tracking-tight text-center">Tour Not Found</h2>
           </CardHeader>
           <CardContent className="text-center">
             <p className="mb-4">The requested tour could not be found.</p>
@@ -49,18 +44,10 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <div className="relative h-[60vh] w-full">
-        <Image
-          src={tour.image}
-          alt={translatedContent.title}
-          fill
-          className="object-cover"
-          priority
-        />
+        <Image src={tour.image} alt={translatedContent.title} fill className="object-cover" priority />
         <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
           <div className="text-center text-white">
-            <h1 className="text-4xl font-bold mb-4">
-              {translatedContent.title}
-            </h1>
+            <h1 className="text-4xl font-bold mb-4">{translatedContent.title}</h1>
             <p className="text-xl">{translatedContent.subtitle}</p>
           </div>
         </div>
@@ -73,55 +60,51 @@ const TourClient = ({ locale, slug }: TourClientProps) => {
           <div className="md:col-span-2 space-y-8">
             <Card>
               <CardHeader>
-                <CardTitle>{t("book.title")}</CardTitle>
+                <h2 className="font-semibold leading-none tracking-tight">{t("book.title")}</h2>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">
-                  {translatedContent.description}
-                </p>
+                <p className="text-muted-foreground">{translatedContent.description}</p>
               </CardContent>
             </Card>
 
-            {translatedContent.highlights &&
-              translatedContent.highlights.length > 0 && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>{t("highlights")}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="list-disc list-inside space-y-2">
-                      {translatedContent.highlights.map((highlight, index) => (
-                        <li key={index} className="text-muted-foreground">
-                          {highlight}
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              )}
+            {translatedContent.highlights && translatedContent.highlights.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <h2 className="font-semibold leading-none tracking-tight">{t("highlights")}</h2>
+                </CardHeader>
+                <CardContent>
+                  <ul className="list-disc list-inside space-y-2">
+                    {translatedContent.highlights.map((highlight, index) => (
+                      <li key={index} className="text-muted-foreground">
+                        {highlight}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            )}
 
-            {translatedContent.includes &&
-              translatedContent.includes.length > 0 && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>{t("includes")}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="list-disc list-inside space-y-2">
-                      {translatedContent.includes.map((item, index) => (
-                        <li key={index} className="text-muted-foreground">
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              )}
+            {translatedContent.includes && translatedContent.includes.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <h2 className="font-semibold leading-none tracking-tight">{t("includes")}</h2>
+                </CardHeader>
+                <CardContent>
+                  <ul className="list-disc list-inside space-y-2">
+                    {translatedContent.includes.map((item, index) => (
+                      <li key={index} className="text-muted-foreground">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            )}
           </div>
 
           {/* Booking Section */}
           <div className="md:col-span-1">
-            <BookingSection tourSlug={slug} />
+            <BookingWizardSection tourSlug={slug} />
           </div>
         </div>
       </div>

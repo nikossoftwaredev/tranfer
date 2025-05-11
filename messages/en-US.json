@@ -1,9 +1,9 @@
 {
   "Metadata": {
-    "title": "Poseidon Transfers and Tours | Premium Transportation Services in Greece",
-    "description": "Experience luxury transportation and guided tours across Greece with Poseidon Transfers and Tours. Professional chauffeurs, premium fleet, and personalized service.",
-    "siteName": "Poseidon Transfers and Tours",
-    "imageAlt": "Luxury Transfer and Tour Services in Greece"
+    "title": "Poseidon VIP Transfers & Guided Tours | Athens, Greece",
+    "description": "Luxury private transfers in Athens with professional chauffeurs. Airport transfers, guided tours to Delphi & Ancient sites, premium Mercedes fleet. Book your 5-star VIP transportation experience in Greece.",
+    "siteName": "Poseidon Transfers & Tours",
+    "imageAlt": "Luxury VIP Transfers and Premium Guided Tours in Athens, Greece"
   },
   "Navigation": {
     "home": "Home",
@@ -15,7 +15,7 @@
     "bookNow": "Book Now"
   },
   "Hero": {
-    "title": "Poseidon Transfers and Tours",
+    "title": "Poseidon Transfers & Tours",
     "subtitle": "Luxury Private Transfers and Guided Tours in Greece",
     "description": "Reliable, safe and premium transport services and guided tours throughout Athens and the Islands.",
     "bookNow": "Book Now",
@@ -160,20 +160,20 @@
       "title": "Book Your Transfer",
       "pickupLabel": "Pickup Location",
       "pickupPlaceholder": "Enter Pickup Location...",
-      "fullName": "Full Name*",
-      "email": "Email Address*",
-      "phone": "Phone Number*",
+      "fullName": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
       "trip": "Trip Details",
-      "dropoff": "Dropoff Location*",
+      "dropoff": "Dropoff Location",
       "dropoffPlaceholder": "Enter Dropoff Location...",
-      "date": "Date*",
-      "time": "Time*",
+      "date": "Date",
+      "time": "Time",
       "additional": "Additional Details",
-      "passengers": "Number of Passengers*",
+      "passengers": "Passengers",
       "selectPassengers": "Select number of passengers",
       "vehicle": "Preferred Vehicle",
       "selectVehicle": "Select a vehicle (optional)",
-      "luggage": "Number of Luggage*",
+      "luggage": "Luggage",
       "luggagePlaceholder": "Select number of bags",
       "luggagePlural": "bags",
       "childSeat": "Child Seats",
@@ -182,7 +182,22 @@
       "special": "Special Requests",
       "notes": "Additional Notes",
       "notesPlaceholder": "Any special requirements, flight details, or island ferry information...",
-      "submit": "Send Booking Request"
+      "submit": "Send Booking Request",
+      "back": "Back",
+      "next": "Next",
+      "submitting": "Submitting...",
+      "flightNumber": "Flight Number",
+      "flightNumberPlaceholder": "Enter your flight number",
+      "passport": "Passport",
+      "passportPlaceholder": "Enter passport number"
+    },
+    "wizard": {
+      "personalInfo": "Personal Info",
+      "journeyDetails": "Journey Details",
+      "travelPreferences": "Travel Preferences",
+      "personalInfoTitle": "Personal Information",
+      "journeyDetailsTitle": "Journey Details",
+      "travelPreferencesTitle": "Travel Preferences"
     }
   },
   "Contact": {
@@ -220,4 +235,4 @@
     "privacy": "Privacy Policy",
     "terms": "Terms & Conditions"
   }
-} 
+}

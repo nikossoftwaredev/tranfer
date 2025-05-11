@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 1.pick up times - ελληνικα αγγλικα 
 2.search locations - να ψαχνει ελλαδα - λεξεις κλειδια πχ airport ελευθεριος βενιζελος
 3.να μπει εφαρμογη στις κρατησεις να καταγραφει ποσα lugage EXEI O πελατης
@@ -29,3 +30,4 @@ Mini Van – Mercedes V-Class up 7 people 7 baggage
 Mini Bus – Mercedes Sprinter up 15 persons 15 baggage
 child seats +10 eyro
 5 . sta tours den xreiazetai aritmos ptisis
+

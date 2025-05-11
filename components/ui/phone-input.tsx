@@ -2,13 +2,7 @@ import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Input } from "./input";
 import { Label } from "./label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
 
 // Common country codes
 const countryCodes = [
@@ -34,30 +28,18 @@ const countryCodes = [
   { code: "+65" },
 ];
 
-export interface PhoneInputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+export interface PhoneInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
   label?: string;
   error?: string;
   containerClassName?: string;
   value?: string;
   countryCode?: string;
+  icon?: React.ReactNode;
   onChange?: (value: { phone: string; countryCode: string }) => void;
 }
 
 export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
-  (
-    {
-      label,
-      error,
-      containerClassName,
-      className,
-      value = "",
-      countryCode = "+30",
-      onChange,
-      ...props
-    },
-    ref
-  ) => {
+  ({ label, error, containerClassName, className, value = "", countryCode = "+30", onChange, icon, ...props }, ref) => {
     const [selectedCountryCode, setSelectedCountryCode] = useState(countryCode);
     const [phoneNumber, setPhoneNumber] = useState(value);
 
@@ -69,7 +51,8 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     };
 
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newPhone = e.target.value;
+      // Limit to digits only and max 10 characters
+      const newPhone = e.target.value.replace(/[^\d]/g, "").slice(0, 10);
       setPhoneNumber(newPhone);
       if (onChange) {
         onChange({ phone: newPhone, countryCode: selectedCountryCode });
@@ -80,14 +63,9 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
       <div className={cn("space-y-2", containerClassName)}>
         {label && <Label htmlFor={props.id}>{label}</Label>}
         <div className="flex gap-2">
-          <Select
-            value={selectedCountryCode}
-            onValueChange={handleCountryCodeChange}
-          >
+          <Select value={selectedCountryCode} onValueChange={handleCountryCodeChange}>
             <SelectTrigger className="w-[80px]">
-              <SelectValue placeholder="Code">
-                {selectedCountryCode}
-              </SelectValue>
+              <SelectValue placeholder="Code">{selectedCountryCode}</SelectValue>
             </SelectTrigger>
             <SelectContent className="max-h-[180px]">
               {countryCodes.map((country) => (
@@ -97,18 +75,22 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               ))}
             </SelectContent>
           </Select>
-          <Input
-            ref={ref}
-            className={cn(
-              "flex-1",
-              error && "border-destructive focus-visible:ring-destructive",
-              className
-            )}
-            value={phoneNumber}
-            onChange={handlePhoneChange}
-            type="tel"
-            {...props}
-          />
+          <div className="relative flex-1">
+            {icon && <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{icon}</div>}
+            <Input
+              ref={ref}
+              className={cn(
+                "flex-1",
+                icon && "pl-10",
+                error && "border-destructive focus-visible:ring-destructive",
+                className
+              )}
+              value={phoneNumber}
+              onChange={handlePhoneChange}
+              type="tel"
+              {...props}
+            />
+          </div>
         </div>
         {error && <p className="text-sm text-destructive">{error}</p>}
       </div>

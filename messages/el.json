@@ -2,7 +2,7 @@
   "Metadata": {
     "title": "Poseidon Transfers and Tours | Premium Υπηρεσίες Μεταφοράς και Περιηγήσεις στην Ελλάδα",
     "description": "Απολαύστε πολυτελείς μεταφορές και οδηγούμενες περιηγήσεις σε όλη την Ελλάδα με την Poseidon Transfers and Tours. Επαγγελματίες οδηγοί, πολυτελής στόλος και εξατομικευμένες υπηρεσίες.",
-    "siteName": "Poseidon Transfers and Tours",
+    "siteName": "Poseidon Transfers & Tours",
     "imageAlt": "Πολυτελείς Υπηρεσίες Μεταφοράς και Περιηγήσεις στην Ελλάδα"
   },
   "Navigation": {
@@ -15,7 +15,7 @@
     "bookNow": "Κράτηση Τώρα"
   },
   "Hero": {
-    "title": "Poseidon Transfers and Tours",
+    "title": "Poseidon Transfers & Tours",
     "subtitle": "Πολυτελείς Ιδιωτικές Μεταφορές και Οδηγούμενες Περιηγήσεις στην Ελλάδα",
     "description": "Αξιόπιστες, ασφαλείς και premium υπηρεσίες μεταφοράς και περιηγήσεις σε όλη την Αθήνα και τα νησιά.",
     "bookNow": "Κράτηση Τώρα",
@@ -103,10 +103,10 @@
       "book": {
         "title": "Κράτηση Περιήγησης",
         "description": "Έτοιμοι να ζήσετε αυτή την καταπληκτική περιήγηση; Συμπληρώστε την παρακάτω φόρμα για να ζητήσετε την κράτησή σας.",
-        "fullName": "Ονοματεπώνυμο*",
-        "email": "Email*",
-        "date": "Προτιμώμενη Ημερομηνία*",
-        "passengers": "Αριθμός Επιβατών*",
+        "fullName": "Ονοματεπώνυμο",
+        "email": "Email",
+        "date": "Προτιμώμενη Ημερομηνία",
+        "passengers": "Αριθμός Επιβατών",
         "selectPassengers": "Επιλέξτε αριθμό επιβατών",
         "passenger": "Επιβάτης",
         "passengers": "Επιβάτες",
@@ -161,20 +161,20 @@
       "title": "Κράτηση Μεταφοράς",
       "pickupLabel": "Σημείο Παραλαβής",
       "pickupPlaceholder": "Εισάγετε σημείο παραλαβής...",
-      "fullName": "Ονοματεπώνυμο*",
-      "email": "Διεύθυνση Email*",
-      "phone": "Τηλέφωνο*",
+      "fullName": "Ονοματεπώνυμο",
+      "email": "Διεύθυνση Email",
+      "phone": "Τηλέφωνο",
       "trip": "Στοιχεία Διαδρομής",
-      "dropoff": "Σημείο Προορισμού*",
+      "dropoff": "Σημείο Προορισμού",
       "dropoffPlaceholder": "Εισάγετε σημείο προορισμού...",
-      "date": "Ημερομηνία*",
-      "time": "Ώρα*",
+      "date": "Ημερομηνία",
+      "time": "Ώρα",
       "additional": "Επιπλέον Στοιχεία",
-      "passengers": "Αριθμός Επιβατών*",
+      "passengers": "Επιβάτες",
       "selectPassengers": "Επιλέξτε αριθμό επιβατών",
       "vehicle": "Προτιμώμενο Όχημα",
       "selectVehicle": "Επιλέξτε όχημα (προαιρετικό)",
-      "luggage": "Αριθμός Αποσκευών*",
+      "luggage": "Αποσκευές",
       "luggagePlaceholder": "Επιλέξτε αριθμό αποσκευών",
       "luggagePlural": "αποσκευές",
       "childSeat": "Παιδικά Καθίσματα",
@@ -185,7 +185,20 @@
       "notesPlaceholder": "Τυχόν ειδικές απαιτήσεις, στοιχεία πτήσης ή πληροφορίες για το πλοίο...",
       "submit": "Αποστολή Αιτήματος Κράτησης",
       "flightNumber": "Αριθμός Πτήσης",
-      "flightNumberPlaceholder": "Εισάγετε τον αριθμό πτήσης"
+      "flightNumberPlaceholder": "Εισάγετε τον αριθμό πτήσης",
+      "back": "Πίσω",
+      "next": "Επόμενο",
+      "submitting": "Υποβολή...",
+      "passport": "Διαβατήριο",
+      "passportPlaceholder": "Εισάγετε τον αριθμό διαβατηρίου"
+    },
+    "wizard": {
+      "personalInfo": "Προσωπικά Στοιχεία",
+      "journeyDetails": "Λεπτομέρειες Διαδρομής",
+      "travelPreferences": "Προτιμήσεις Ταξιδιού",
+      "personalInfoTitle": "Προσωπικές Πληροφορίες",
+      "journeyDetailsTitle": "Λεπτομέρειες Διαδρομής",
+      "travelPreferencesTitle": "Προτιμήσεις Ταξιδιού"
     }
   },
   "Contact": {
@@ -207,10 +220,10 @@
     },
     "form": {
       "title": "Στείλτε Μήνυμα",
-      "fullName": "Ονοματεπώνυμο*",
-      "email": "Email*",
-      "subject": "Θέμα*",
-      "message": "Μήνυμα*",
+      "fullName": "Ονοματεπώνυμο",
+      "email": "Email",
+      "subject": "Θέμα",
+      "message": "Μήνυμα",
       "submit": "Αποστολή Μηνύματος"
     }
   },
@@ -223,4 +236,4 @@
     "privacy": "Πολιτική Απορρήτου",
     "terms": "Όροι & Προϋποθέσεις"
   }
-} 
+}

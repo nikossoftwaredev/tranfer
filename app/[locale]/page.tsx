@@ -6,9 +6,10 @@ import ToursSection from "../../components/sections/ToursSection";
 import AboutSection from "../../components/sections/AboutSection";
 import TestimonialsSection from "../../components/sections/TestimonialsSection";
 import ContactSection from "../../components/sections/ContactSection";
-import BookingSection from "../../components/sections/BookingSection";
+import BookingWizardSection from "../../components/sections/BookingWizardSection";
 import { routing } from "../../i18n/routing";
 import type { Metadata, Viewport } from "next";
+import { DOMAIN } from "@/lib/data/config";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -31,8 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     namespace: "Metadata",
   });
 
-  const baseUrl = "https://poseidontransfer.com";
-  const canonicalUrl = `${baseUrl}/${locale}`;
+  const canonicalUrl = `${DOMAIN}/${locale}`;
 
   return {
     title: {
@@ -40,22 +40,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       template: `%s | Poseidon Transfer`,
     },
     description: t("description"),
-    metadataBase: new URL(baseUrl),
+    metadataBase: new URL(DOMAIN),
     alternates: {
       canonical: canonicalUrl,
       languages: {
-        "en-US": `${baseUrl}/en-US`,
-        el: `${baseUrl}/el`,
+        "en-US": `${DOMAIN}/en-US`,
+        el: `${DOMAIN}/el`,
       },
     },
     keywords: [
-      "transfer",
-      "greece",
-      "athens",
-      "private transfer",
-      "airport transfer",
-      "tourism",
-      "travel",
+      "Athens VIP transfer service",
+      "Luxury transportation Athens Greece",
+      "Private driver Athens",
+      "Executive car service Athens",
+      "Premium Athens tours",
+      "Professional chauffeur services Greece",
+      "Poseidon transfer Athens",
+      "Luxury Athens sightseeing",
+      "Private tours Athens Greece",
+      "Athens to Delphi private transfer",
+      "VIP hotel shuttle Athens",
+      "Athens cruise port transfer",
+      "City center private car Athens",
+      "English speaking driver Athens",
+      "5-star transfer service Greece",
     ],
     authors: [{ name: "Poseidon Transfer" }],
     creator: "Poseidon Transfer",
@@ -100,7 +108,7 @@ const Home = () => {
       <ToursSection />
       <AboutSection />
       <TestimonialsSection />
-      <BookingSection />
+      <BookingWizardSection />
       <ContactSection />
     </main>
   );
