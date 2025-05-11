@@ -23,11 +23,12 @@ const WhatsAppButton = ({ phoneNumber }: WhatsAppButtonProps) => {
   }, []);
 
   // Format the phone number to ensure it's in the correct format for WhatsApp
+  // Remove all non-numeric characters
   const formattedPhoneNumber = phoneNumber.replace(/\D/g, "");
 
   return (
     <a
-      href={`https://web.whatsapp.com/send?phone=${formattedPhoneNumber}&text=Hello, I would like to book a transfer.`}
+      href={`https://wa.me/${formattedPhoneNumber}?text=Hello, I would like to book a transfer.`}
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
