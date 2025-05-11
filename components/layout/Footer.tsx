@@ -14,9 +14,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <h3 className="text-2xl font-bold gold-text">Poseidon Transfers</h3>
-            <p className="text-secondary-foreground/80 max-w-xs">
-              {t("description")}
-            </p>
+            <p className="text-secondary-foreground/80 max-w-xs">{t("description")}</p>
             <div className="flex space-x-4 pt-2">
               <Link
                 href="https://instagram.com"
@@ -37,47 +35,30 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-lg font-medium mb-4 text-secondary-foreground">
-              {t("quickLinks")}
-            </h4>
+            <h4 className="text-lg font-medium mb-4 text-secondary-foreground">{t("quickLinks")}</h4>
             <ul className="space-y-2">
               <li>
-                <Link
-                  href="/"
-                  className="text-secondary-foreground/80 hover:text-primary transition-colors"
-                >
+                <Link href="/" className="text-secondary-foreground/80 hover:text-primary transition-colors">
                   Home
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/#services"
-                  className="text-secondary-foreground/80 hover:text-primary transition-colors"
-                >
+                <Link href="/#services" className="text-secondary-foreground/80 hover:text-primary transition-colors">
                   Services
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/#fleet"
-                  className="text-secondary-foreground/80 hover:text-primary transition-colors"
-                >
+                <Link href="/#fleet" className="text-secondary-foreground/80 hover:text-primary transition-colors">
                   Our Fleet
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/#tours"
-                  className="text-secondary-foreground/80 hover:text-primary transition-colors"
-                >
+                <Link href="/#tours" className="text-secondary-foreground/80 hover:text-primary transition-colors">
                   Tours
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/#about"
-                  className="text-secondary-foreground/80 hover:text-primary transition-colors"
-                >
+                <Link href="/#about" className="text-secondary-foreground/80 hover:text-primary transition-colors">
                   About Us
                 </Link>
               </li>
@@ -86,48 +67,31 @@ const Footer = () => {
 
           {/* Services */}
           <div>
-            <h4 className="text-lg font-medium mb-4 text-secondary-foreground">
-              {t("services")}
-            </h4>
+            <h4 className="text-lg font-medium mb-4 text-secondary-foreground">{t("services")}</h4>
             <ul className="space-y-2">
               <li>
-                <Link
-                  href="/#services"
-                  className="text-secondary-foreground/80 hover:text-primary transition-colors"
-                >
+                <Link href="/#services" className="text-secondary-foreground/80 hover:text-primary transition-colors">
                   Athens Airport Transfers
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/#services"
-                  className="text-secondary-foreground/80 hover:text-primary transition-colors"
-                >
+                <Link href="/#services" className="text-secondary-foreground/80 hover:text-primary transition-colors">
                   Business Travel
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/#services"
-                  className="text-secondary-foreground/80 hover:text-primary transition-colors"
-                >
+                <Link href="/#services" className="text-secondary-foreground/80 hover:text-primary transition-colors">
                   Guided Tours
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/#services"
-                  className="text-secondary-foreground/80 hover:text-primary transition-colors"
-                >
+                <Link href="/#services" className="text-secondary-foreground/80 hover:text-primary transition-colors">
                   Wedding & Event Transfers
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/#services"
-                  className="text-secondary-foreground/80 hover:text-primary transition-colors"
-                >
-                  Island & Port Transfers
+                <Link href="/#services" className="text-secondary-foreground/80 hover:text-primary transition-colors">
+                  Port Transfers
                 </Link>
               </li>
             </ul>
@@ -135,15 +99,11 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h4 className="text-lg font-medium mb-4 text-secondary-foreground">
-              {t("contact")}
-            </h4>
+            <h4 className="text-lg font-medium mb-4 text-secondary-foreground">{t("contact")}</h4>
             <ul className="space-y-4">
               <li className="flex items-start">
                 <Phone className="h-5 w-5 mr-2 text-primary" />
-                <span className="text-secondary-foreground/80">
-                  {PHONE_NUMBER}
-                </span>
+                <span className="text-secondary-foreground/80">{PHONE_NUMBER}</span>
               </li>
               <li className="flex items-start">
                 <Mail className="h-5 w-5 mr-2 text-primary" />
@@ -151,9 +111,7 @@ const Footer = () => {
               </li>
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 mr-2 text-primary flex-shrink-0" />
-                <span className="text-secondary-foreground/80">
-                  123 Kifisias Avenue, Marousi, Athens 15123, Greece
-                </span>
+                <span className="text-secondary-foreground/80">123 Kifisias Avenue, Marousi, Athens 15123, Greece</span>
               </li>
             </ul>
           </div>
@@ -165,16 +123,10 @@ const Footer = () => {
             © {currentYear} Poseidon Transfers. {t("rights")}
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <Link
-              href="/privacy-policy"
-              className="text-sm text-secondary-foreground/70 hover:text-primary"
-            >
+            <Link href="/privacy-policy" className="text-sm text-secondary-foreground/70 hover:text-primary">
               {t("privacy")}
             </Link>
-            <Link
-              href="/terms"
-              className="text-sm text-secondary-foreground/70 hover:text-primary"
-            >
+            <Link href="/terms" className="text-sm text-secondary-foreground/70 hover:text-primary">
               {t("terms")}
             </Link>
           </div>
