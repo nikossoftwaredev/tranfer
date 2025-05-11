@@ -2,12 +2,12 @@
 
 import { useTranslations } from "next-intl";
 import { Label } from "../../ui/label";
-import { Calendar, Clock } from "lucide-react";
 import { useBookingWizard } from "../../../contexts/BookingWizardContext";
 import { LocationAutocomplete } from "../../ui/LocationAutocomplete";
 import { PlacePrediction } from "../../../server_actions/googleSearchActions";
-import { InputWithIcon } from "@/components/ui/input-with-icon";
 import { cn } from "@/lib/utils";
+import { DatePicker } from "@/components/ui/date-picker";
+import { TimePicker } from "@/components/ui/time-picker";
 
 const JourneyDetailsStep = () => {
   const t = useTranslations("Booking");
@@ -75,15 +75,7 @@ const JourneyDetailsStep = () => {
             {t("form.date")}
             <span className="ml-1 text-primary font-medium">*</span>
           </Label>
-          <InputWithIcon
-            icon={<Calendar className="h-5 w-5 text-primary" />}
-            type="date"
-            id="date"
-            value={formState.date ? formState.date.toISOString().split("T")[0] : ""}
-            onChange={(e) => handleDateChange(new Date(e.target.value))}
-            required
-            className="w-full"
-          />
+          <DatePicker date={formState.date || new Date()} setDate={handleDateChange} placeholder="Select date" />
         </div>
 
         <div className="space-y-2">
@@ -91,15 +83,7 @@ const JourneyDetailsStep = () => {
             {t("form.time")}
             <span className="ml-1 text-primary font-medium">*</span>
           </Label>
-          <InputWithIcon
-            icon={<Clock className="h-5 w-5 text-primary" />}
-            type="time"
-            id="time"
-            value={formState.time}
-            onChange={(e) => handleTimeChange(e.target.value)}
-            required
-            className="w-full"
-          />
+          <TimePicker value={formState.time} onChange={handleTimeChange} />
         </div>
       </div>
     </div>

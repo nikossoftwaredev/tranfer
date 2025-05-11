@@ -70,17 +70,6 @@ ${formData.message}
 
 export const sendTelegramBookingMessage = async (formData: BookingFormState) => {
   try {
-    const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-    const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
-
-    if (!TOKEN || !CHAT_ID) {
-      console.error("Telegram bot token or chat ID is missing");
-      return {
-        success: false,
-        message: "Telegram configuration is missing",
-      };
-    }
-
     // Format date for display
     let formattedDate = "Not specified";
     if (formData.date) {
@@ -100,62 +89,41 @@ export const sendTelegramBookingMessage = async (formData: BookingFormState) => 
     const isTourBooking = !!formData.selectedTour;
     const tourGuideInfo = isTourBooking && formData.includeGuide ? "Yes (Professional licensed guide)" : "No";
 
-    // Create message text
+    // Create message text in markdown format (compatible with sendToTelegram)
     const messageText = `
-🚨 NEW BOOKING 🚨
+🚨 *NEW BOOKING* 🚨
 
-👤 Customer: ${formData.fullName}
-✉️ Email: ${formData.email}
-📱 Phone: ${formData.countryCode} ${formData.phone}
-${formData.passport ? `🛂 Passport: ${formData.passport}` : ""}
+👤 Customer: ${makeCopiable(formData.fullName)}
+✉️ Email: ${makeCopiable(formData.email)}
+📱 Phone: ${makeCopiable(`${formData.countryCode} ${formData.phone}`)}
+${formData.passport ? `🛂 Passport: ${makeCopiable(formData.passport)}` : ""}
 
-📍 From: ${pickupLocation}
-📍 To: ${dropoffLocation}
-🗓️ Date: ${formattedDate}
-⏰ Time: ${formData.time || "Not specified"}
+📍 From: ${makeCopiable(pickupLocation)}
+📍 To: ${makeCopiable(dropoffLocation)}
+🗓️ Date: ${makeCopiable(formattedDate)}
+⏰ Time: ${makeCopiable(formData.time || "Not specified")}
 
-${isTourBooking ? `🏛️ Tour: ${formData.selectedTour}` : ""}
-${isTourBooking ? `🎭 Tour Guide: ${tourGuideInfo}` : ""}
+${isTourBooking ? `🏛️ Tour: ${makeCopiable(formData.selectedTour)}` : ""}
+${isTourBooking ? `🎭 Tour Guide: ${makeCopiable(tourGuideInfo)}` : ""}
 
-👥 Passengers: ${formData.passengers}
-🧳 Luggage: ${formData.luggage}
-👶 Child Seats: ${formData.childSeats}
-✈️ Flight: ${formData.flightNumber || "Not specified"}
-🚘 Vehicle: ${formData.selectedVehicle || "Not specified"}
+👥 Passengers: ${makeCopiable(formData.passengers)}
+🧳 Luggage: ${makeCopiable(formData.luggage)}
+👶 Child Seats: ${makeCopiable(formData.childSeats)}
+✈️ Flight: ${makeCopiable(formData.flightNumber || "Not specified")}
+🚘 Vehicle: ${makeCopiable(formData.selectedVehicle || "Not specified")}
 
-${formData.notes ? `📝 Notes: ${formData.notes}` : ""}
+${formData.notes ? `📝 Notes:\n\`\`\`\n${formData.notes}\n\`\`\`` : ""}
 `;
 
-    // Send message
-    const telegramApiUrl = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
-    const response = await fetch(telegramApiUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        chat_id: CHAT_ID,
-        text: messageText,
-        parse_mode: "HTML",
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!data.ok) {
-      console.error("Failed to send Telegram message:", data);
-      return {
-        success: false,
-        message: "Failed to send Telegram notification",
-      };
-    }
+    // Use the existing sendToTelegram function
+    await sendToTelegram(messageText);
 
     return {
       success: true,
       message: "Telegram notification sent successfully",
     };
   } catch (error) {
-    console.error("Error sending Telegram message:", error);
+    console.error("Error sending Telegram booking message:", error);
     return {
       success: false,
       message: "Failed to send Telegram notification",
