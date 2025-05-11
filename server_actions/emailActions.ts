@@ -2,7 +2,7 @@
 
 import nodemailer from "nodemailer";
 import { BookingFormState } from "../contexts/BookingWizardContext";
-import { EMAIL } from "../lib/data/config";
+import { EMAIL, PHONE_NUMBER } from "../lib/data/config";
 
 type SendEmailParams = {
   to: string;
@@ -85,6 +85,10 @@ export const sendBookingConfirmationEmail = async (formData: BookingFormState) =
     const pickupLocation = formData.pickupLocation?.structured_formatting?.main_text || "Not specified";
     const dropoffLocation = formData.dropoffLocation?.structured_formatting?.main_text || "Not specified";
 
+    // Create WhatsApp link (remove spaces and non-numeric characters except +)
+    const whatsappNumber = PHONE_NUMBER.replace(/\s+/g, "");
+    const whatsappLink = `https://wa.me/${whatsappNumber}`;
+
     // Build plain text email content (fallback)
     const subject = `Transfer Booking Confirmation`;
     const body = `
@@ -109,7 +113,7 @@ export const sendBookingConfirmationEmail = async (formData: BookingFormState) =
       
       Thank you for choosing our service!
       
-      If you need to make any changes to your booking, please contact us.
+      If you need to make any changes to your booking, please contact us at ${PHONE_NUMBER} or via WhatsApp at ${whatsappLink}.
     `;
 
     // Build HTML email content with better styling
@@ -181,6 +185,19 @@ export const sendBookingConfirmationEmail = async (formData: BookingFormState) =
           padding: 15px;
           border-radius: 8px;
           margin-top: 20px;
+        }
+        .whatsapp-btn {
+          display: inline-block;
+          background-color: #25D366;
+          color: white;
+          padding: 10px 15px;
+          border-radius: 6px;
+          text-decoration: none;
+          font-weight: bold;
+          margin-top: 10px;
+        }
+        .whatsapp-btn:hover {
+          background-color: #128C7E;
         }
       </style>
     </head>
@@ -288,7 +305,8 @@ export const sendBookingConfirmationEmail = async (formData: BookingFormState) =
         
         <div class="contact">
           <p><strong>Need to make changes to your booking?</strong></p>
-          <p>Please contact our customer service team.</p>
+          <p>Please contact our customer service team at ${PHONE_NUMBER}.</p>
+          <a href="${whatsappLink}" class="whatsapp-btn" target="_blank">Contact us on WhatsApp</a>
         </div>
         
         <div class="footer">

@@ -27,7 +27,7 @@ const WhatsAppButton = ({ phoneNumber }: WhatsAppButtonProps) => {
 
   return (
     <a
-      href={`https://wa.me/${formattedPhoneNumber}`}
+      href={`https://web.whatsapp.com/send?phone=${formattedPhoneNumber}&text=Hello, I would like to book a transfer.`}
       target="_blank"
       rel="noopener noreferrer"
       className={cn(

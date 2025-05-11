@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import SectionHeading from "../ui/SectionHeading";
 import { VehicleConfig, vehicles } from "../../lib/data/vehicles";
 import { useVehicle } from "../../contexts/VehicleContext";
-import { Card, CardHeader, CardContent, CardFooter, CardTitle } from "../ui/card";
+import { Card, CardHeader, CardContent, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 
 type VehicleProps = VehicleConfig;
@@ -49,11 +49,12 @@ const VehicleCard = ({ image, model, capacity, luggage, tags = [], description }
   return (
     <Card
       className={cn(
-        "overflow-hidden transition-all duration-300 hover:shadow-xl group",
+        "overflow-hidden transition-all duration-300 hover:shadow-xl group cursor-pointer",
         isSelected ? "border-primary border-2 shadow-primary/20 shadow-md" : "hover:translate-y-[-4px]"
       )}
+      onClick={handleSelectVehicle}
     >
-      {/* Vehicle Image with Tags Overlay */}
+      {/* Vehicle Image with Selected Badge */}
       <div className="h-56 w-full relative overflow-hidden">
         <Image
           src={image}
@@ -65,23 +66,6 @@ const VehicleCard = ({ image, model, capacity, luggage, tags = [], description }
           priority={isSelected}
         />
 
-        {/* Tags at top */}
-        {tags.length > 0 && (
-          <div className="absolute top-0 left-0 right-0 p-4 z-20">
-            <div className="flex gap-2 flex-wrap justify-start">
-              {tags.map((tag, index) => (
-                <Badge
-                  key={index}
-                  variant="outline"
-                  className="bg-primary/10 text-primary border-0 shadow-sm backdrop-blur-sm font-medium px-3 py-1 rounded-full"
-                >
-                  {getTagTranslation(tag)}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* Selected Badge */}
         {isSelected && (
           <Badge variant="default" className="absolute top-4 right-4 shadow-md z-30 font-medium px-3 py-1 rounded-full">
@@ -90,40 +74,43 @@ const VehicleCard = ({ image, model, capacity, luggage, tags = [], description }
         )}
       </div>
 
+      {/* Tags */}
+      {tags.length > 0 && (
+        <div className="px-4 pt-4 pb-1">
+          <div className="flex flex-wrap gap-1.5">
+            {tags.map((tag, index) => (
+              <Badge
+                key={index}
+                variant="outline"
+                className="bg-primary/5 text-primary text-xs border-primary/10 font-medium px-2 py-0.5 rounded"
+              >
+                {getTagTranslation(tag)}
+              </Badge>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Content */}
       <CardHeader className="pb-0 pt-3">
         <CardTitle className="text-xl font-bold">{model}</CardTitle>
       </CardHeader>
 
       <CardContent>
-        <div className="flex items-center gap-6 text-sm mb-3 mt-4">
-          <div className="flex items-center gap-2 bg-muted p-2 px-3 rounded-full">
-            <Users className="h-4 w-4 text-primary" />
+        <div className="flex items-center text-sm mb-3 mt-2">
+          <div className="flex items-center">
+            <Users className="h-4 w-4 text-primary mr-1" />
             <span className="font-medium">{capacityNumber}</span>
           </div>
-          <div className="flex items-center gap-2 bg-muted p-2 px-3 rounded-full">
-            <Briefcase className="h-4 w-4 text-primary" />
+          <div className="mx-3 h-4 w-px bg-muted-foreground/20"></div>
+          <div className="flex items-center">
+            <Briefcase className="h-4 w-4 text-primary mr-1" />
             <span className="font-medium">{luggageNumber}</span>
           </div>
         </div>
 
-        {description && <div className="mb-5 text-sm text-muted-foreground line-clamp-2">{description}</div>}
+        {description && <div className="text-sm text-muted-foreground line-clamp-2">{description}</div>}
       </CardContent>
-
-      {/* Book Button */}
-      <CardFooter className="pt-0 pb-6">
-        <button
-          onClick={handleSelectVehicle}
-          className={cn(
-            "w-full py-2.5 text-center text-sm font-medium rounded-md shadow-sm transition-all duration-200",
-            isSelected
-              ? "bg-secondary text-secondary-foreground hover:bg-secondary/90"
-              : "bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-md"
-          )}
-        >
-          {isSelected ? "Selected" : t("bookVehicle")}
-        </button>
-      </CardFooter>
     </Card>
   );
 };
