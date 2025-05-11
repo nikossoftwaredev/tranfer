@@ -27,7 +27,7 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-2xl text-white">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4">
-            <span className="gold-text block mb-1 sm:mb-2">Athens VIP Transfer Service</span>
+            <span className="gold-text block mb-1 sm:mb-2">Athens VIP Transfer</span>
             <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
               Luxury Private Transfers & Tours in Greece
             </span>

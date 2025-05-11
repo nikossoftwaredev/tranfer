@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       },
     },
     keywords: [
-      "Athens VIP transfer service",
+      "Athens VIP transfer",
       "Luxury transportation Athens Greece",
       "Private driver Athens",
       "Executive car service Athens",
