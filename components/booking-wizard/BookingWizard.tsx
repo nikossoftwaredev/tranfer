@@ -11,8 +11,9 @@ import JourneyDetailsStep from "./steps/JourneyDetailsStep";
 import TravelPreferencesStep from "./steps/TravelPreferencesStep";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
-import { ArrowLeft, Loader2, CheckCircle } from "lucide-react";
+import { ArrowLeft, Loader2, CheckCircle, User, MapPin, Settings } from "lucide-react";
 import { tours } from "../../lib/data/tours";
+import { cn } from "@/lib/utils";
 
 type BookingWizardProps = {
   tourSlug?: string;
@@ -29,6 +30,64 @@ const BookingWizard = ({ tourSlug }: BookingWizardProps) => {
     <BookingWizardProvider initialTour={initialTour}>
       <BookingWizardContent />
     </BookingWizardProvider>
+  );
+};
+
+// Step indicator component
+const StepIndicator = ({ currentStep }: { currentStep: string }) => {
+  const steps = [
+    { id: "personalInfo", label: "Personal Info", icon: User },
+    { id: "journeyDetails", label: "Journey Details", icon: MapPin },
+    { id: "travelPreferences", label: "Preferences", icon: Settings },
+  ];
+
+  const currentIndex = steps.findIndex((step) => step.id === currentStep);
+
+  return (
+    <div className="mb-8">
+      <div className="flex items-center justify-between">
+        {steps.map((step, index) => {
+          const StepIcon = step.icon;
+          const isActive = index === currentIndex;
+          const isCompleted = index < currentIndex;
+
+          return (
+            <div key={step.id} className="flex flex-col items-center w-1/3">
+              <div className="relative flex items-center justify-center">
+                <div
+                  className={cn(
+                    "w-10 h-10 rounded-full flex items-center justify-center z-10 transition-colors",
+                    isActive
+                      ? "bg-primary text-primary-foreground"
+                      : isCompleted
+                      ? "bg-primary/80 text-primary-foreground"
+                      : "bg-muted text-muted-foreground"
+                  )}
+                >
+                  <StepIcon className="h-5 w-5" />
+                </div>
+                {index < steps.length - 1 && (
+                  <div
+                    className={cn(
+                      "absolute top-1/2 left-10 h-0.5 w-[calc(100%-2.5rem)] -translate-y-1/2 z-0 transition-colors",
+                      isCompleted ? "bg-primary" : "bg-muted"
+                    )}
+                  />
+                )}
+              </div>
+              <span
+                className={cn(
+                  "text-xs mt-2 font-medium text-center",
+                  isActive ? "text-primary" : isCompleted ? "text-primary/80" : "text-muted-foreground"
+                )}
+              >
+                {step.label}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 };
 
@@ -95,11 +154,6 @@ const BookingWizardContent = () => {
 
   return (
     <div className="container mx-auto px-4">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("title")}</h2>
-        <p className="text-muted-foreground max-w-2xl mx-auto">{t("description")}</p>
-      </div>
-
       {/* Content */}
       <div className="max-w-4xl mx-auto">
         <Card className="bg-background/80 backdrop-blur-sm border-2 min-h-[400px]">
@@ -115,6 +169,9 @@ const BookingWizardContent = () => {
               </>
             ) : (
               <>
+                {/* Step Indicator */}
+                <StepIndicator currentStep={currentStep} />
+
                 {/* Step content with step title at the top */}
                 <div className="mb-8">
                   <div className="flex items-center gap-3 mb-6">
@@ -150,11 +207,11 @@ const BookingWizardContent = () => {
                       variant="default"
                       onClick={handleSubmit}
                       disabled={isSubmitting || !isStepComplete(currentStep)}
-                      className="w-full"
+                      className="w-full py-6 text-lg"
                     >
                       {isSubmitting ? (
                         <>
-                          <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                          <Loader2 className="h-5 w-5 animate-spin mr-2" />
                           {t("form.submitting")}
                         </>
                       ) : (
@@ -164,10 +221,10 @@ const BookingWizardContent = () => {
                   ) : (
                     <Button
                       type="button"
-                      variant="outline"
+                      variant="default"
                       onClick={nextStep}
                       disabled={!isStepComplete(currentStep)}
-                      className="w-full"
+                      className="w-full py-6 text-lg"
                     >
                       Continue
                     </Button>
