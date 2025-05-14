@@ -90,6 +90,7 @@ export default async function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="icon" href="/favicon.ico" />
 
         {/* Add preload for critical resources */}
         <link rel="preload" href="/images/hero-greece.jpg" as="image" />
@@ -104,6 +105,7 @@ export default async function RootLayout({
           gtag('config', 'AW-17068303985');
         `}
       </Script>
+
       <body className="min-h-screen antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <VehicleProvider>

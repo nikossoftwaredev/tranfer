@@ -20,6 +20,7 @@
     "@radix-ui/react-toast": "^1.2.7",
     "@types/lodash.debounce": "^4.0.9",
     "@types/nodemailer": "^6.4.17",
+    "@vercel/analytics": "^1.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
